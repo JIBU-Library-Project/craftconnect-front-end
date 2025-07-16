@@ -1,0 +1,88 @@
+const categories = [
+  {
+    id: "1",
+    name: "Plumbing",
+    icon: "fas fa-faucet",
+    bgColor: "#dbeafe",
+    color: "#3b82f6",
+  },
+  {
+    id: "2",
+    name: "Electrical",
+    icon: "fas fa-bolt",
+    bgColor: "#fef3c7",
+    color: "#f59e0b",
+  },
+  {
+    id: "3",
+    name: "Painting",
+    icon: "fas fa-paint-roller",
+    bgColor: "#fee2e2",
+    color: "#ef4444",
+  },
+  {
+    id: "4",
+    name: "Carpentry",
+    icon: "fas fa-ruler-combined",
+    bgColor: "#dcfce7",
+    color: "#22c55e",
+  },
+  {
+    id: "5",
+    name: "Tailoring",
+    icon: "fas fa-tshirt",
+    bgColor: "#ede9fe",
+    color: "#8b5cf6",
+  },
+  {
+    id: "6",
+    name: "Masonry",
+    icon: "fas fa-trowel",
+    bgColor: "#cffafe",
+    color: "#06b6d4",
+  },
+  {
+    id: "7",
+    name: "HVAC",
+    icon: "fas fa-fan",
+    bgColor: "#e0f2fe",
+    color: "#0ea5e9",
+  },
+  {
+    id: "8",
+    name: "Roofing",
+    icon: "fas fa-home",
+    bgColor: "#ffedd5",
+    color: "#f97316",
+  },
+  {
+    id: "9",
+    name: "Automotive",
+    icon: "fas fa-car",
+    bgColor: "#fce7f3",
+    color: "#ec4899",
+  },
+  {
+    id: "10",
+    name: "Cleaning",
+    icon: "fas fa-broom",
+    bgColor: "#f0fdf4",
+    color: "#10b981",
+  },
+  {
+    id: "11",
+    name: "Gardening",
+    icon: "fas fa-seedling",
+    bgColor: "#ecfccb",
+    color: "#84cc16",
+  },
+  {
+    id: "12",
+    name: "Beauty",
+    icon: "fas fa-spa",
+    bgColor: "#fdf2f8",
+    color: "#f472b6",
+  },
+];
+
+export default categories;
