@@ -223,7 +223,7 @@ const ArtisanJobsPage = () => {
 
       {/* Job Cards - Consistent Card Design */}
       {filteredJobs.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 text-center">
+        <div className="bg-white rounded-xl border  border-gray-200 p-6 sm:p-8 text-center">
           <div className="max-w-md mx-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -254,7 +254,7 @@ const ArtisanJobsPage = () => {
           {filteredJobs.map((job) => (
             <div
               key={job.id}
-              className="bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-sm transition-shadow overflow-hidden"
+              className="bg-white rounded-xl border border-gray-200 shadow-2xl hover:shadow-sm transition-shadow overflow-hidden"
             >
               <div className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">

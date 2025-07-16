@@ -115,7 +115,7 @@ function ArtisanVerificationPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
         <div className="p-6 md:p-8">
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -130,11 +130,19 @@ function ArtisanVerificationPage() {
               {verificationRequirements.map((req) => (
                 <div
                   key={req.id}
-                  className={`border rounded-lg p-4 ${req.required ? "border-indigo-200 bg-indigo-50" : "border-gray-200"}`}
+                  className={`border rounded-lg p-4 ${
+                    req.required
+                      ? "border-indigo-200 bg-indigo-50"
+                      : "border-gray-200"
+                  }`}
                 >
                   <div className="flex items-start">
                     <div
-                      className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${req.required ? "bg-indigo-100 text-indigo-600" : "bg-gray-100 text-gray-500"}`}
+                      className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                        req.required
+                          ? "bg-indigo-100 text-indigo-600"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
                     >
                       {req.required ? (
                         <svg
@@ -191,7 +199,9 @@ function ArtisanVerificationPage() {
                   </label>
                   <select
                     {...register("idType", { required: "ID type is required" })}
-                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.idType ? "border-red-500" : ""}`}
+                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+                      errors.idType ? "border-red-500" : ""
+                    }`}
                   >
                     <option value="">Select ID Type</option>
                     {idTypes.map((type) => (
@@ -216,7 +226,9 @@ function ArtisanVerificationPage() {
                     {...register("idNumber", {
                       required: "ID number is required",
                     })}
-                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.idNumber ? "border-red-500" : ""}`}
+                    className={`w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+                      errors.idNumber ? "border-red-500" : ""
+                    }`}
                     placeholder="Enter your ID number"
                   />
                   {errors.idNumber && (

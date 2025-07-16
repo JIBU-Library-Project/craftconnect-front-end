@@ -346,6 +346,207 @@ Quotes provided upon request.`,
 Pricing excludes fixtures and materials.
 All work is insured and guaranteed.`,
   },
+  {
+    id: "art_1001",
+    name: "Yaw Appiah",
+    email: "yaw.appiah@example.com",
+    profilePic: "/profiles/plumber1.jpg",
+    role: "artisan",
+    businessName: "Appiah Plumbing Services",
+    craft: "Plumber",
+    description:
+      "Licensed plumber specializing in leak repairs, bathroom fittings, and residential plumbing installations.",
+    rating: 4.9,
+    reviewCount: 40,
+    hourlyRate: 35,
+    specialties: ["Leak Repairs", "Pipe Installations", "Bathroom Fittings"],
+    location: "Takoradi, Western Region",
+    experience: "12 years",
+    whatsapp: "+233208765432",
+    phone: "+233208765432",
+    accountStatus: "Active",
+    verificationStatus: "pending",
+    portfolio: [
+      "https://images.unsplash.com/photo-1597092960613-210ae312f79e",
+      "https://images.unsplash.com/photo-1581579185169-1b42c1fca735",
+    ],
+    stats: {
+      completedJobs: 65,
+      pendingJobs: 3,
+      declinedJobs: 2,
+      cancellationRate: 1.8,
+    },
+    reviews: [
+      {
+        id: "rev_1001",
+        jobId: "job-501",
+        rating: 5,
+        comment:
+          "Fixed my leaking kitchen pipe efficiently, highly professional service.",
+        date: "2025-04-15T09:00:00Z",
+        user: {
+          id: "user_2001",
+          name: "Akosua Danso",
+          profilePic: "/profiles/user1.jpg",
+        },
+      },
+    ],
+    services: [
+      {
+        id: "svc_1001",
+        service: "Leak Repairs",
+        description:
+          "Quick and professional leak detection and repair for home and office plumbing.",
+        price: "GHS 200/hr",
+        estimatedTime: "Varies by issue",
+      },
+      {
+        id: "svc_1002",
+        service: "Bathroom Fittings",
+        description:
+          "Installation and maintenance of showers, sinks, and toilet systems.",
+        price: "GHS 300/hr",
+        estimatedTime: "Varies by project",
+      },
+    ],
+    pricingNotes: `Rates depend on project complexity.
+Material costs are separate.
+Free inspection available for larger jobs.`,
+  },
+  {
+    id: "art_1002",
+    name: "Kwame Boateng",
+    email: "kwame.boateng@example.com",
+    profilePic: "/profiles/carpenter1.jpg",
+    role: "artisan",
+    businessName: "Boateng Carpentry Works",
+    craft: "Carpenter",
+    description:
+      "Expert carpenter providing custom furniture, door installations, and wood repairs with attention to detail.",
+    rating: 4.7,
+    reviewCount: 33,
+    hourlyRate: 40,
+    specialties: ["Custom Furniture", "Door Installations", "Wood Repairs"],
+    location: "Accra, Greater Accra Region",
+    experience: "8 years",
+    whatsapp: "+233209876543",
+    phone: "+233209876543",
+    accountStatus: "Active",
+    verificationStatus: "verified",
+    portfolio: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc",
+      "https://images.unsplash.com/photo-1598300052219-d7a93c9a326d",
+    ],
+    stats: {
+      completedJobs: 48,
+      pendingJobs: 2,
+      declinedJobs: 1,
+      cancellationRate: 2.5,
+    },
+    reviews: [
+      {
+        id: "rev_1002",
+        jobId: "job-502",
+        rating: 5,
+        comment:
+          "Built a beautiful custom bookshelf for my home, great craftsmanship.",
+        date: "2025-05-10T14:30:00Z",
+        user: {
+          id: "user_2002",
+          name: "Sarah Owusu",
+          profilePic: "/profiles/user2.jpg",
+        },
+      },
+    ],
+    services: [
+      {
+        id: "svc_1003",
+        service: "Custom Furniture",
+        description:
+          "Design and build custom furniture tailored to your space.",
+        price: "GHS 350/hr",
+        estimatedTime: "Project dependent",
+      },
+      {
+        id: "svc_1004",
+        service: "Door Installations",
+        description:
+          "Professional door fitting and repairs for homes and offices.",
+        price: "GHS 250/hr",
+        estimatedTime: "Varies by installation",
+      },
+    ],
+    pricingNotes: `Minimum service: 1 hour.
+Wood and hardware costs excluded from hourly rate.
+Quotes provided upon request.`,
+  },
+  {
+    id: "art_1003",
+    name: "Ama Serwaa",
+    email: "ama.serwaa@example.com",
+    profilePic: "/profiles/electrician1.jpg",
+    role: "artisan",
+    businessName: "Serwaa Electrical Services",
+    craft: "Electrician",
+    description:
+      "Certified electrician offering wiring, lighting installations, and electrical repairs for residential and commercial properties.",
+    rating: 4.8,
+    reviewCount: 29,
+    hourlyRate: 45,
+    specialties: ["Wiring", "Lighting Installations", "Electrical Repairs"],
+    location: "Kumasi, Ashanti Region",
+    experience: "9 years",
+    whatsapp: "+233201234567",
+    phone: "+233201234567",
+    accountStatus: "Active",
+    verificationStatus: "verified",
+    portfolio: [
+      "https://images.unsplash.com/photo-1581091870621-6c176c02cf0d",
+      "https://images.unsplash.com/photo-1567016532254-cbc21f60c480",
+    ],
+    stats: {
+      completedJobs: 54,
+      pendingJobs: 3,
+      declinedJobs: 0,
+      cancellationRate: 1.2,
+    },
+    reviews: [
+      {
+        id: "rev_1003",
+        jobId: "job-503",
+        rating: 5,
+        comment:
+          "Installed new lights in my shop quickly and safely, will Request Service again.",
+        date: "2025-06-02T11:15:00Z",
+        user: {
+          id: "user_2003",
+          name: "Yaw Mensah",
+          profilePic: "/profiles/user3.jpg",
+        },
+      },
+    ],
+    services: [
+      {
+        id: "svc_1005",
+        service: "Wiring",
+        description:
+          "Full wiring services for new constructions and renovations.",
+        price: "GHS 300/hr",
+        estimatedTime: "Varies by property size",
+      },
+      {
+        id: "svc_1006",
+        service: "Lighting Installations",
+        description:
+          "Safe and neat lighting installations for homes and offices.",
+        price: "GHS 280/hr",
+        estimatedTime: "Varies by project",
+      },
+    ],
+    pricingNotes: `Project inspection is free.
+Pricing excludes fixtures and materials.
+All work is insured and guaranteed.`,
+  },
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

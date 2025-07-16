@@ -2,8 +2,11 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
- function LoginPage() {
+export default function LoginPage() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -12,79 +15,86 @@ import { useForm } from "react-hook-form";
 
   const onSubmit = (data) => {
     console.log(data);
-    // Add your API call or authentication logic here
+    // Handle API login here
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0c0c0c] px-4">
-      <div className="w-full max-w-md bg-[#181818] rounded-2xl p-8 shadow-xl">
-        <div className="flex flex-col items-center space-y-2 mb-8">
-          <div className="text-3xl font-bold text-white">CraftConnect</div>
-          <div className="text-gray-400">Login with your credentials</div>
-          <div className="text-sm text-gray-600">Glad to have you back!</div>
+    <div className="min-h-screen w-screen flex items-center justify-center px-4 py-10 loginpage">
+      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+        {/* Header */}
+        <div className="flex flex-col items-center space-y-1 mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
+          <p className="text-gray-600">Login with your credentials</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* Email */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1" htmlFor="email">
+            <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
               Email
             </label>
             <input
               id="email"
               type="email"
               {...register("email", { required: "Email is required" })}
-              className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
               placeholder="you@example.com"
+              className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
             )}
           </div>
 
+          {/* Password */}
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="block text-gray-400 text-sm" htmlFor="password">
+              <label className="block text-gray-700 font-medium" htmlFor="password">
                 Password
               </label>
-              <a
-                href="/forgot-password"
-                className="text-sm text-[#4ade80] hover:underline"
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-sm text-[#b67f0a] hover:underline"
               >
                 Forgot password?
-              </a>
+              </button>
             </div>
             <input
               id="password"
               type="password"
               {...register("password", { required: "Password is required" })}
-              className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
               placeholder="********"
+              className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-green-400 to-yellow-400 text-black font-semibold hover:opacity-90 transition"
+            className="w-full py-3 rounded-lg bg-[#171812] text-white font-medium hover:bg-[#81704f] transition"
           >
-            Sign in
+            Sign In
           </button>
         </form>
 
+        {/* Signup Link */}
         <div className="mt-6 text-center">
-          <p className="text-gray-400 text-sm">
-            Don’t have an account?{' '}
-            <a href="/signup" className="text-[#4ade80] hover:underline">
-              Sign up
-            </a>
+          <p className="text-gray-600 text-sm">
+            Don’t have an account?{" "}
+            <button
+              onClick={() => navigate("/signup")}
+              type="button"
+              className="text-[#b67f0a] font-medium hover:underline"
+            >
+              Sign up here
+            </button>
           </p>
         </div>
       </div>
     </div>
   );
 }
-
-
-export default LoginPage

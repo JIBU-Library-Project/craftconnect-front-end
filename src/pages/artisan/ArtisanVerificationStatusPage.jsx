@@ -101,7 +101,7 @@ function ArtisanVerificationStatusPage() {
         Verification Status
       </h1>
 
-      <div className="bg-white rounded-lg shadow border border-neutral-200">
+      <div className="bg-white rounded-lg shadow-xl border border-neutral-200">
         <div className="p-5 sm:p-6">
           {/* Status Banner */}
           <div className={`flex items-start p-4 rounded ${config.color} mb-6`}>

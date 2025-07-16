@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router";
-import {
-  User,
-  Briefcase,
-  Star,
-  ArrowLeft,
-  LogOut,
-  Menu,
-} from "lucide-react";
+import { User, Briefcase, Star, ArrowLeft, LogOut, Menu } from "lucide-react";
 
 function UserDashboardLayout() {
   const navigate = useNavigate();
@@ -25,7 +18,11 @@ function UserDashboardLayout() {
       path: "/homeowner/my-jobs",
       icon: <Briefcase size={20} />,
     },
-    { name: "My Reviews", path: "/homeowner/user-reviews", icon: <Star size={20} /> },
+    {
+      name: "My Reviews",
+      path: "/homeowner/user-reviews",
+      icon: <Star size={20} />,
+    },
   ];
 
   const handleLogout = () => {
@@ -140,4 +137,4 @@ function UserDashboardLayout() {
   );
 }
 
-export default UserDashboardLayout
+export default UserDashboardLayout;
