@@ -10,25 +10,15 @@ body{
   overflow-x: hidden;
 } 
 
-
-
 .loginpage {
-  position: relative;
-  overflow: hidden; /* Ensure pseudo-element is contained */
-}
-
-.loginpage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
- background-image: url('../src/assets/loginbg.jpg');
+  background-image: url('../src/assets/loginbg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(90px);
-  transform: scale(1.05); /* Prevent edge cropping */
-  z-index: -1; /* Place behind content */
+
 }
+
+
 
 .outlet {
   position: relative;
@@ -44,24 +34,6 @@ body{
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(90px);
-  transform: scale(1.05); /* Prevent edge cropping */
-  z-index: -1; /* Place behind content */
-}
-
-.artisanpage {
-  position: relative;
-  overflow: hidden; /* Ensure pseudo-element is contained */
-}
-
-.artisanpage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
- background-image: url('../src/assets/loginbg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(9px);
   transform: scale(1.05); /* Prevent edge cropping */
   z-index: -1; /* Place behind content */
 }
