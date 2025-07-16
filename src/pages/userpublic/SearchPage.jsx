@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
-import ArtisansCard from "../../components/ArtisansCard"
+import ArtisansCard from "../../components/ArtisansCard";
 
 import { publicArtisanProfiles as artisans } from "../../data/dummyData";
 
@@ -114,7 +114,7 @@ const SearchPage = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar Filters */}
         <aside className="lg:w-1/4">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 sticky top-24 space-y-6">
+          <div className="bg-[#fff]/90 drop-shadow-sm rounded-xl border border-gray-200 p-5 sm:p-6 sticky top-24 space-y-6">
             <h2 className="text-lg font-semibold text-gray-800">Filters</h2>
 
             {/* Location Filter */}

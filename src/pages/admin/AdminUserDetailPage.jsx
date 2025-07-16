@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { reviews, users, artisans } from "../../data/dummyData";
 
-
 function AdminUserDetailPage() {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -72,13 +71,21 @@ function AdminUserDetailPage() {
                 <div className="flex items-center mt-2">
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full
-                    ${user.role === "artisan" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}
+                    ${
+                      user.role === "artisan"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
                   >
                     {user.role === "artisan" ? "Artisan" : "Homeowner"}
                   </span>
                   <span
                     className={`ml-2 px-2 py-1 text-xs font-medium rounded-full
-                    ${user.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}
+                    ${
+                      user.status === "active"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
                   >
                     {user.status}
                   </span>
@@ -152,7 +159,9 @@ function AdminUserDetailPage() {
                   <select
                     {...register("status", { required: "Status is required" })}
                     defaultValue={user.status}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${errors.status ? "border-red-500" : ""}`}
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+                      errors.status ? "border-red-500" : ""
+                    }`}
                   >
                     <option value="active">Active</option>
                     <option value="suspended">Suspended</option>
@@ -206,7 +215,11 @@ function AdminUserDetailPage() {
                           {[...Array(5)].map((_, i) => (
                             <span
                               key={i}
-                              className={`${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
+                              className={`${
+                                i < review.rating
+                                  ? "text-yellow-500"
+                                  : "text-gray-300"
+                              }`}
                             >
                               ★
                             </span>
@@ -214,8 +227,16 @@ function AdminUserDetailPage() {
                         </div>
                         <span
                           className={`text-xs px-2 py-1 rounded-full
-                          ${review.status === "approved" ? "bg-green-100 text-green-800" : ""}
-                          ${review.status === "pending" ? "bg-yellow-100 text-yellow-800" : ""}`}
+                          ${
+                            review.status === "approved"
+                              ? "bg-green-100 text-green-800"
+                              : ""
+                          }
+                          ${
+                            review.status === "pending"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : ""
+                          }`}
                         >
                           {review.status}
                         </span>
@@ -241,4 +262,4 @@ function AdminUserDetailPage() {
   );
 }
 
-export default AdminUserDetailPage
+export default AdminUserDetailPage;

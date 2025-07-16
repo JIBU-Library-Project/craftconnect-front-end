@@ -17,10 +17,12 @@ function AdminReviewListPage() {
   const filteredReviews = AdminReview.filter((review) => {
     const status = getStatus(review.rating);
     const matchesFilter = filter === "all" || status === filter;
-    
+
     const matchesSearch =
       review.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.artisan.businessName.toLowerCase().includes(searchTerm.toLowerCase());
+      review.artisan.businessName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
     return matchesFilter && matchesSearch;
   });
@@ -83,12 +85,12 @@ function AdminReviewListPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <img 
-                            className="h-10 w-10 rounded-full object-cover" 
-                            src={review.user.profilePic} 
+                          <img
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={review.user.profilePic}
                             alt={review.user.name}
                             onError={(e) => {
-                              e.target.onerror = null; 
+                              e.target.onerror = null;
                               e.target.src = "/profiles/default-user.jpg";
                             }}
                           />
@@ -106,12 +108,12 @@ function AdminReviewListPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <img 
-                            className="h-10 w-10 rounded-full object-cover" 
-                            src={review.artisan.profilePic} 
+                          <img
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={review.artisan.profilePic}
                             alt={review.artisan.businessName}
                             onError={(e) => {
-                              e.target.onerror = null; 
+                              e.target.onerror = null;
                               e.target.src = "/profiles/default-artisan.jpg";
                             }}
                           />
@@ -131,7 +133,11 @@ function AdminReviewListPage() {
                         {[...Array(5)].map((_, i) => (
                           <span
                             key={i}
-                            className={`text-lg ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
+                            className={`text-lg ${
+                              i < review.rating
+                                ? "text-yellow-500"
+                                : "text-gray-300"
+                            }`}
                           >
                             ★
                           </span>
@@ -141,8 +147,16 @@ function AdminReviewListPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                        ${status === "Excellent" ? "bg-green-100 text-green-800" : ""}
-                        ${status === "Fair" ? "bg-yellow-100 text-yellow-800" : ""}
+                        ${
+                          status === "Excellent"
+                            ? "bg-green-100 text-green-800"
+                            : ""
+                        }
+                        ${
+                          status === "Fair"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : ""
+                        }
                         ${status === "Bad" ? "bg-red-100 text-red-800" : ""}`}
                       >
                         {status}
@@ -167,4 +181,4 @@ function AdminReviewListPage() {
   );
 }
 
-export default AdminReviewListPage
+export default AdminReviewListPage;

@@ -44,6 +44,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ArtisanReviewsPage from "./pages/artisan/ArtisanReviewsPage";
 
 
 
@@ -74,6 +75,7 @@ function App() {
         { path: "profile/edit", element: <ArtisanProfileEditPage /> },
         { path: "verification", element: <ArtisanVerificationPage /> },
         { path: "verify/status", element: <ArtisanVerificationStatusPage /> },
+        { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
       ],
     },
 

@@ -10,8 +10,8 @@ const ArtisanServicesViewPage = () => {
     typeof pricingNotes === "string"
       ? pricingNotes.split("\n").filter((line) => line.trim() !== "")
       : Array.isArray(pricingNotes)
-        ? pricingNotes
-        : [];
+      ? pricingNotes
+      : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
@@ -38,7 +38,7 @@ const ArtisanServicesViewPage = () => {
           {services.map((service) => (
             <div
               key={service.id}
-              className="bg-white border border-neutral-200 rounded-lg p-4 shadow-sm hover:shadow transition"
+              className="bg-white border border-neutral-200 rounded-lg p-4 shadow-xl hover:shadow transition"
             >
               <h2 className="text-lg font-semibold text-neutral-800 mb-1">
                 {service.service}
@@ -64,7 +64,7 @@ const ArtisanServicesViewPage = () => {
       )}
 
       {/* Pricing Notes */}
-      <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 sm:p-6">
+      <div className="bg-blue-50 border shadow-2xl border-blue-100 rounded-lg p-4 sm:p-6">
         <h2 className="text-lg font-semibold text-blue-800 mb-2">
           Pricing Notes
         </h2>

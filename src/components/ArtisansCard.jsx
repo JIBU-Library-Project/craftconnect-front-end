@@ -144,4 +144,4 @@ const ArtisanCard = ({ artisan }) => {
   );
 };
 
-export default ArtisanCard
+export default ArtisanCard;

@@ -4,6 +4,7 @@ import BenefitsSection from "../../components/sections/BenefitsSection";
 import CategoriesSection from "../../components/sections/CategoriesSection";
 import TestimonialSlider from "../../components/TestimonialSlider";
 import testimonials from "../../data/testimonials";
+import Footer from "../../components/Footer";
 
 const HomePage = () => {
   return (
@@ -40,6 +41,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 };

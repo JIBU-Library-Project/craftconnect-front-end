@@ -181,10 +181,10 @@ const PublicArtisanProfilePage = () => {
                   {tab === "reviews"
                     ? `Reviews (${artisan.reviewCount})`
                     : tab === "overview"
-                      ? "Overview"
-                      : tab === "portfolio"
-                        ? "Portfolio"
-                        : "Services & Pricing"}
+                    ? "Overview"
+                    : tab === "portfolio"
+                    ? "Portfolio"
+                    : "Services & Pricing"}
                   {activeTab === tab && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
                   )}
@@ -318,7 +318,11 @@ const PublicArtisanProfilePage = () => {
                           <button
                             type="button"
                             key={star}
-                            className={`${star <= (hover || rating) ? "text-amber-400" : "text-gray-300"} mx-1`}
+                            className={`${
+                              star <= (hover || rating)
+                                ? "text-amber-400"
+                                : "text-gray-300"
+                            } mx-1`}
                             onClick={() => setRating(star)}
                             onMouseEnter={() => setHover(star)}
                             onMouseLeave={() => setHover(rating)}
@@ -516,7 +520,7 @@ const PublicArtisanProfilePage = () => {
   );
 };
 
-export default PublicArtisanProfilePage
+export default PublicArtisanProfilePage;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE
 
@@ -544,7 +548,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
 
   return (
     <div className="fixed inset-0 bg-[#000]/90 drop-shadow-6xl bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-sm w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-6 md:p-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg md:text-xl font-semibold text-gray-800">
@@ -724,7 +728,5 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     </div>
   );
 };
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE

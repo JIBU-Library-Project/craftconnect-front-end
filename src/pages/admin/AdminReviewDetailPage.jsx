@@ -77,7 +77,9 @@ function AdminReviewDetailPage() {
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
-                      className={`text-xl ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
+                      className={`text-xl ${
+                        i < review.rating ? "text-yellow-500" : "text-gray-300"
+                      }`}
                     >
                       ★
                     </span>
@@ -189,4 +191,4 @@ function AdminReviewDetailPage() {
   );
 }
 
-export default AdminReviewDetailPage
+export default AdminReviewDetailPage;

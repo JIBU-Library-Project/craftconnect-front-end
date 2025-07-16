@@ -20,7 +20,7 @@ function ArtisanProfilePage() {
   } = defaultValues;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6  py-6 sm:py-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
@@ -47,7 +47,7 @@ function ArtisanProfilePage() {
         </button>
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
+      <div className="bg-white border shadow-2xl border-neutral-200 rounded-lg  overflow-hidden">
         <div className="p-5 sm:p-6">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Profile Image & Contact */}

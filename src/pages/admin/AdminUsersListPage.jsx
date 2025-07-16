@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { users, artisans } from "../../data/dummyData"
-
-
-
-
+import { users, artisans } from "../../data/dummyData";
 
 function AdminUsersListPage() {
   const navigate = useNavigate();
@@ -13,15 +9,17 @@ function AdminUsersListPage() {
 
   // Combine users and artisans
   const allUsers = [...users, ...artisans];
-  
-  const filteredUsers = allUsers.filter(user => {
-    const matchesFilter = filter === "all" || 
-                         (filter === "homeowner" && user.role === "homeowner") || 
-                         (filter === "artisan" && user.role === "artisan");
-    
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
+  const filteredUsers = allUsers.filter((user) => {
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "homeowner" && user.role === "homeowner") ||
+      (filter === "artisan" && user.role === "artisan");
+
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+
     return matchesFilter && matchesSearch;
   });
 
@@ -83,24 +81,40 @@ function AdminUsersListPage() {
                         <div className="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10" />
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {user.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${user.role === "artisan" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                      ${
+                        user.role === "artisan"
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
                     >
                       {user.role === "artisan" ? "Artisan" : "Homeowner"}
                     </span>
                     {user.role === "artisan" && (
-                      <div className="text-xs text-gray-500 mt-1">{user.businessName}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {user.businessName}
+                      </div>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${user.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                      ${
+                        user.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
                     >
                       {user.status}
                     </span>
@@ -135,4 +149,4 @@ function AdminUsersListPage() {
   );
 }
 
-export default AdminUsersListPage
+export default AdminUsersListPage;

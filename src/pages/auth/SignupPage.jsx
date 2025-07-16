@@ -1,10 +1,11 @@
-// src/pages/SignUp.jsx
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
-function SignupPage() {
+export default function SignupPage() {
   const [role, setRole] = useState("User");
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -12,29 +13,51 @@ function SignupPage() {
     formState: { errors },
   } = useForm();
 
+  const password = watch("password");
+
+  const craftOptions = [
+    "Plumber",
+    "Electrician",
+    "Tailor",
+    "Carpenter",
+    "Mason",
+    "Painter",
+    "Welder",
+    "Hairdresser",
+    "Shoe Maker",
+    "Blacksmith",
+    "Potter",
+    "Weaver",
+    "Jeweler",
+    "Baker",
+    "Mechanic",
+    "Cooker"
+  ];
+
   const onSubmit = (data) => {
     console.log(data);
-    // Handle registration API call here
+    // Handle your API call here
   };
 
-  const password = watch("password");
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0c0c0c] px-4">
-      <div className="w-full max-w-2xl bg-[#181818] rounded-2xl p-8 shadow-xl">
-        <div className="flex flex-col items-center space-y-2 mb-6">
-          <div className="text-3xl font-bold text-white">CraftConnect</div>
-          <div className="text-gray-400">Create your account</div>
+    <div className=" loginpage min-h-screen w-screen flex items-center justify-center px-4 py-10 bg-gray-700">
+      <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+        {/* Title */}
+        <div className="flex flex-col items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-700">CraftConnect</h1>
+          <p className="text-gray-600">Create your account</p>
         </div>
 
+        {/* Role toggle */}
         <div className="flex justify-center space-x-4 mb-6">
           {["User", "Artisan"].map((r) => (
             <button
               key={r}
               onClick={() => setRole(r)}
-              className={`px-4 py-2 rounded-full ${
+              className={`px-4 py-2 rounded-full hover:cursor-pointer font-medium transition ${
                 role === r
-                  ? "bg-green-500 text-black"
-                  : "bg-[#121212] text-white"
+                  ? "bg-[#171717] text-white hover:bg-[#81704f] "
+                  : "bg-[#262722]/15 text-gray-700 hover:bg-[#ddddddda] "
               }`}
             >
               {r === "User" ? "User/HomeOwner" : "Artisan"}
@@ -42,48 +65,33 @@ function SignupPage() {
           ))}
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* Name */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1">
+            <label className="block text-gray-700 font-medium mb-1">
               Full Name
             </label>
             <input
-              {...register("fullName", { required: "Full name is required" })}
+              {...register("name", { required: "Name is required" })}
               placeholder="Your full name"
-              className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
+              className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.fullName.message}
-              </p>
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
 
-          {role === "User" && (
-            <div>
-              <label className="block text-gray-400 text-sm mb-1">
-                Username
-              </label>
-              <input
-                {...register("username", { required: "Username is required" })}
-                placeholder="Your username"
-                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
-              />
-              {errors.username && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.username.message}
-                </p>
-              )}
-            </div>
-          )}
-
+          {/* Email */}
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Email</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email
+            </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
+              className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -92,86 +100,91 @@ function SignupPage() {
             )}
           </div>
 
+          {/* Artisan fields */}
           {role === "Artisan" && (
             <>
               <div>
-                <label className="block text-gray-400 text-sm mb-1">
-                  Trade
+                <label className="block text-gray-700 font-medium mb-1">
+                  Business Name
                 </label>
                 <input
-                  {...register("trade", { required: "Trade is required" })}
-                  placeholder="e.g tailoring, plumbing"
-                  className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
+                  {...register("businessName", {
+                    required: "Business name is required",
+                  })}
+                  placeholder="Your business name"
+                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
-                {errors.trade && (
+                {errors.businessName && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.trade.message}
+                    {errors.businessName.message}
                   </p>
                 )}
               </div>
+
               <div>
-                <label className="block text-gray-400 text-sm mb-1">
-                  Phone (Ghana)
+                <label className="block text-gray-700 font-medium mb-1">
+                  Primary Craft
                 </label>
-                <input
-                  {...register("phone", { required: "Phone is required" })}
-                  placeholder="+233XXXXXXXXX"
-                  className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
-                />
-                {errors.phone && (
+                <select
+                  {...register("craft", {
+                    required: "Please select your primary craft",
+                  })}
+                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  <option value="">Select your craft</option>
+                  {craftOptions.map((craft) => (
+                    <option key={craft} value={craft}>
+                      {craft}
+                    </option>
+                  ))}
+                </select>
+                {errors.craft && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
+                    {errors.craft.message}
                   </p>
                 )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-gray-400 text-sm mb-1">
-                    Years of Experience
-                  </label>
-                  <select
-                    {...register("experience", {
-                      required: "Experience is required",
-                    })}
-                    className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
-                  >
-                    <option value="">Select experience</option>
-                    {Array.from({ length: 15 }, (_, i) => (
-                      <option key={i + 1} value={`${i + 1}`}>
-                        {i + 1}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.experience && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.experience.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-gray-400 text-sm mb-1">
-                    Location
-                  </label>
-                  <input
-                    {...register("location", {
-                      required: "Location is required",
-                    })}
-                    placeholder="Your location"
-                    className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
-                  />
-                  {errors.location && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.location.message}
-                    </p>
-                  )}
-                </div>
               </div>
             </>
           )}
 
+          {/* Phone and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-gray-700 font-medium mb-1">
+                Phone
+              </label>
+              <input
+                {...register("phone", { required: "Phone is required" })}
+                placeholder="+233XXXXXXXXX"
+                className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              />
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Location
+              </label>
+              <input
+                {...register("location", { required: "Location is required" })}
+                placeholder="Your location"
+                className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              />
+              {errors.location && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.location.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Passwords */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
                 Password
               </label>
               <input
@@ -181,7 +194,7 @@ function SignupPage() {
                   minLength: { value: 8, message: "Minimum 8 characters" },
                 })}
                 placeholder="********"
-                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
+                className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">
@@ -190,7 +203,7 @@ function SignupPage() {
               )}
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-gray-700 font-medium mb-1">
                 Confirm Password
               </label>
               <input
@@ -201,7 +214,7 @@ function SignupPage() {
                     value === password || "Passwords do not match",
                 })}
                 placeholder="********"
-                className="w-full px-4 py-3 rounded-lg bg-[#121212] text-white border border-[#2a2a2a] focus:outline-none focus:border-[#4ade80]"
+                className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">
@@ -211,25 +224,27 @@ function SignupPage() {
             </div>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-green-400 to-yellow-400 text-black font-semibold hover:opacity-90 transition"
+            className="w-full bg-[#171812] text-white py-3 rounded-lg font-medium hover:bg-[#81704f] transition"
           >
-            Sign up
+            Sign Up
           </button>
 
-          <div className="mt-4 text-center">
-            <p className="text-gray-400 text-sm">
-              Already have an account?{" "}
-              <a href="/login" className="text-[#4ade80] hover:underline">
-                Login
-              </a>
-            </p>
-          </div>
+          {/* Link to login */}
+          <p className="text-center text-gray-600 text-sm mt-4">
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="text-[#b67f0a] font-medium "
+            >
+              Login here
+            </button>
+          </p>
         </form>
       </div>
     </div>
   );
 }
-
-export default SignupPage;

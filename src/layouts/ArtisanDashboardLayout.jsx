@@ -11,11 +11,7 @@ import {
   Edit,
   Star,
 } from "lucide-react";
-import {artisanProfile} from '../data/dummyData'
-
-
-
-
+import { artisanProfile } from "../data/dummyData";
 
 const ArtisanDashboardLayout = () => {
   const location = useLocation();
@@ -62,16 +58,16 @@ const ArtisanDashboardLayout = () => {
       label: "Verification Status",
     },
     {
-      path: "/artisan/verify/reviews",
+      path: "/artisan/artisan-reviews",
       icon: <Star className="w-5 h-5" />,
       label: "Reviews",
     },
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans">
+    <div className=" //outlet flex h-screen bg-[#f9f9f8]  font-sans">
       {/* Sidebar - Clean Modern */}
-      <div className="w-20 md:w-64 bg-white border-r border-gray-200 flex flex-col">
+      <div className="w-20 md:w-64 bg-white shadow-sm //border-r-4 //border-indigo-600 flex flex-col">
         {/* Logo */}
         <div className="p-4 flex items-center justify-center md:justify-start">
           <div className="w-10 h-10 rounded-md bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg">
@@ -126,7 +122,7 @@ const ArtisanDashboardLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200">
+        <header className="bg-[#ffffff] /10   border-b-4 shadow-xl border-indigo-800">
           <div className="flex items-center justify-between px-6 py-4">
             <h1 className="text-xl font-semibold text-gray-800 capitalize">
               {location.pathname.split("/").pop() || "Dashboard"}
@@ -148,8 +144,8 @@ const ArtisanDashboardLayout = () => {
         </header>
 
         {/* Content Area */}
-        <main className="flex-1  overflow-y-auto ">
-          <div className="max-w-5xl mx-auto">
+        <main className=" flex-1 overflow-y-auto pt-7 ">
+          <div className=" max-w-5xl mx-auto ">
             <Outlet />
           </div>
         </main>
