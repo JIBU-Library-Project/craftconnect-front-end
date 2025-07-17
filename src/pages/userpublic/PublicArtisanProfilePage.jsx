@@ -69,8 +69,8 @@ const PublicArtisanProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Modern Gradient Header */}
-      <div className="bg-gradient-to-r from-neutral-800  to-neutral-700  text-white py-8 md:py-12">
-        <div className="container mx-auto px-4 md:px-6">
+      <div className="loginpage  bg-gradient-to-r from-neutral-800  to-neutral-700  text-white py-8 md:py-12">
+        <div className="container mx-auto pt-7 px-4 md:px-6 min-h-60">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
             {/* Profile Picture */}
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg">

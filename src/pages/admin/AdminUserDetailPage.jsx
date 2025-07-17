@@ -155,20 +155,9 @@ function AdminUserDetailPage() {
                   </select>
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2 text-sm">
-                    Admin Notes
-                  </label>
-                  <textarea
-                    name="adminNotes"
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#272822] focus:border-transparent"
-                    placeholder="Add notes about this user..."
-                    defaultValue={user.adminNotes || ""}
-                  ></textarea>
-                </div>
+                
 
-                <div className="flex justify-end">
+                <div className="flex pt-10 justify-end">
                   <button
                     type="submit"
                     className="px-4 py-2 bg-[#272822] text-white rounded-lg hover:bg-[#3E3D32] text-sm"
