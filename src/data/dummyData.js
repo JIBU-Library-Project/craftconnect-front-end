@@ -6,6 +6,7 @@ export const users = [
     email: "kwame@example.com",
     profilePic: "/profiles/user1.jpg",
     role: "user",
+    accountStatus: "Suspended",
     joinedDate: "2023-05-15T08:30:00Z",
     lastLogin: "2023-07-20T14:25:00Z",
     reviews: ["rev_001", "rev_003"],
@@ -13,12 +14,14 @@ export const users = [
     location: "Accra, Osu",
     phone: "0244123456",
   },
+  
   {
     id: "user_456",
     name: "Ama Boateng",
     email: "ama@example.com",
     profilePic: "/profiles/user2.jpg",
     role: "user",
+    accountStatus: "Active",
     joinedDate: "2023-06-20T10:15:00Z",
     lastLogin: "2023-07-18T09:45:00Z",
     reviews: ["rev_002"],
@@ -46,7 +49,7 @@ export const artisans = [
     specialties: ["Traditional Carvings", "Furniture", "Sculptures"], // Added
     location: "Kumasi, Ashanti Region", // Added
     experience: "10 years", // Added
-    isVerified: true, // Added
+   accountStatus: "Active",
     whatsapp: "+233201234567", // Added
     phone: "+233201234567", // Added
     portfolio: [
@@ -57,7 +60,7 @@ export const artisans = [
     joinedDate: "2023-04-10T09:20:00Z",
     lastLogin: "2023-07-19T16:30:00Z",
     status: "active",
-    verificationStatus: "verified",
+    verificationStatus: "Verified",
     completedJobs: 42,
     jobs: ["job-1", "job-3"],
     reviews: ["rev_001"],
@@ -79,7 +82,7 @@ export const artisans = [
     specialties: ["Kente Cloth", "Custom Designs", "Textile Dyeing"], // Added
     location: "Accra, Greater Accra", // Added
     experience: "8 years", // Added
-    isVerified: true, // Added
+   accountStatus: "Active",
     whatsapp: "+233202345678", // Added
     phone: "+233202345678", // Added
     portfolio: [
@@ -90,7 +93,7 @@ export const artisans = [
     joinedDate: "2023-03-22T14:10:00Z",
     lastLogin: "2023-07-21T11:20:00Z",
     status: "active",
-    verificationStatus: "pending",
+    verificationStatus: "Pending",
     completedJobs: 67,
     jobs: ["job-2"],
     reviews: ["rev_002", "rev_003"],

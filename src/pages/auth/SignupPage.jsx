@@ -31,7 +31,7 @@ export default function SignupPage() {
     "Jeweler",
     "Baker",
     "Mechanic",
-    "Cooker"
+    "Cooker",
   ];
 
   const onSubmit = (data) => {
@@ -41,7 +41,7 @@ export default function SignupPage() {
 
   return (
     <div className=" loginpage min-h-screen w-screen flex items-center justify-center px-4 py-10 bg-gray-700">
-      <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+      <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#fffffffe] /90">
         {/* Title */}
         <div className="flex flex-col items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-700">CraftConnect</h1>
@@ -56,7 +56,7 @@ export default function SignupPage() {
               onClick={() => setRole(r)}
               className={`px-4 py-2 rounded-full hover:cursor-pointer font-medium transition ${
                 role === r
-                  ? "bg-[#171717] text-white hover:bg-[#81704f] "
+                  ? "bg-[#4b158d] text-white hover:bg-[#aa47bc] "
                   : "bg-[#262722]/15 text-gray-700 hover:bg-[#ddddddda] "
               }`}
             >
@@ -227,7 +227,7 @@ export default function SignupPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-[#171812] text-white py-3 rounded-lg font-medium hover:bg-[#81704f] transition"
+            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition"
           >
             Sign Up
           </button>
@@ -238,7 +238,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="text-[#b67f0a] font-medium "
+              className=" text-[#4b158d] font-medium "
             >
               Login here
             </button>

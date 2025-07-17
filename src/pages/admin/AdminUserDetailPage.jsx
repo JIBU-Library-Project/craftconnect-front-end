@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
-import { reviews, users, artisans } from "../../data/dummyData";
+import { users } from "../../data/dummyData";
 
 function AdminUserDetailPage() {
   const navigate = useNavigate();
@@ -11,9 +11,8 @@ function AdminUserDetailPage() {
     formState: { errors },
   } = useForm();
 
-  // Find user in both users and artisans
-  const user = [...users, ...artisans].find((u) => u.id === userId);
-  const userReviews = reviews.filter((r) => r.userId === userId);
+  // Find user in users data
+  const user = users.find((u) => u.id === userId);
 
   if (!user) {
     return (
@@ -23,7 +22,7 @@ function AdminUserDetailPage() {
         </h2>
         <button
           onClick={() => navigate("/admin/users")}
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="px-4 py-2 bg-[#272822] text-white rounded hover:bg-[#3E3D32]"
         >
           Back to Users
         </button>
@@ -33,7 +32,6 @@ function AdminUserDetailPage() {
 
   const onSubmit = (data) => {
     console.log("User update:", data);
-    // In real app: API call to update user
     navigate("/admin/users");
   };
 
@@ -41,7 +39,7 @@ function AdminUserDetailPage() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <button
         onClick={() => navigate("/admin/users")}
-        className="flex items-center text-indigo-600 hover:text-indigo-800 mb-6"
+        className="flex items-center text-[#272822] hover:text-[#3E3D32] mb-6"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,46 +58,41 @@ function AdminUserDetailPage() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 md:p-8">
-          <div className="flex flex-col md:flex-row justify-between items-start mb-8">
-            <div className="flex items-center mb-4 md:mb-0">
-              <div className="bg-gray-200 border-2 border-dashed rounded-xl w-20 h-20" />
-              <div className="ml-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {user.name}
-                </h2>
-                <p className="text-gray-600">{user.email}</p>
-                <div className="flex items-center mt-2">
-                  <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full
-                    ${
-                      user.role === "artisan"
-                        ? "bg-purple-100 text-purple-800"
-                        : "bg-blue-100 text-blue-800"
-                    }`}
-                  >
-                    {user.role === "artisan" ? "Artisan" : "Homeowner"}
-                  </span>
-                  <span
-                    className={`ml-2 px-2 py-1 text-xs font-medium rounded-full
-                    ${
-                      user.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {user.status}
-                  </span>
-                </div>
-              </div>
+          <div className="flex items-center mb-8">
+            <div className="w-20 h-20 rounded-xl overflow-hidden">
+              <img 
+                src={user.profilePic} 
+                alt={user.name}
+                className="w-full h-full object-cover"
+              />
             </div>
-
-            <div className="flex gap-2">
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
-                Message
-              </button>
-              <button className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200">
-                Edit Profile
-              </button>
+            <div className="ml-6">
+              <h2 className="text-2xl font-bold text-gray-800">
+                {user.name}
+              </h2>
+              <p className="text-gray-600">{user.email}</p>
+              <div className="flex items-center mt-2">
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full
+                  ${
+                    user.role === "admin"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-blue-100 text-blue-800"
+                  }`}
+                >
+                  {user.role}
+                </span>
+                <span
+                  className={`ml-2 px-2 py-1 text-xs font-medium rounded-full
+                  ${
+                    user.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {user.status}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -108,6 +101,7 @@ function AdminUserDetailPage() {
               <h3 className="font-medium text-gray-800 mb-3">
                 Account Information
               </h3>
+              
               <dl className="space-y-3">
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-500">Joined Date</dt>
@@ -121,29 +115,22 @@ function AdminUserDetailPage() {
                     {new Date(user.lastLogin).toLocaleDateString()}
                   </dd>
                 </div>
-                {user.role === "artisan" && (
-                  <>
-                    <div className="flex justify-between">
-                      <dt className="text-sm text-gray-500">Business</dt>
-                      <dd className="text-sm text-gray-900">
-                        {user.businessName}
-                      </dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-sm text-gray-500">Craft</dt>
-                      <dd className="text-sm text-gray-900">{user.craft}</dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="text-sm text-gray-500">Rating</dt>
-                      <dd className="text-sm text-gray-900">
-                        <span className="text-yellow-500">★</span> {user.rating}
-                        <span className="text-gray-400 ml-1">
-                          ({user.completedJobs} jobs)
-                        </span>
-                      </dd>
-                    </div>
-                  </>
-                )}
+                <div className="flex justify-between">
+                  <dt className="text-sm text-gray-500">Phone</dt>
+                  <dd className="text-sm text-gray-900">{user.phone || "-"}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-sm text-gray-500">Location</dt>
+                  <dd className="text-sm text-gray-900">
+                    {user.location || "-"}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-sm text-gray-500">Account Status</dt>
+                  <dd className="text-sm text-gray-900">
+                    {user.accountStatus || "-"}
+                  </dd>
+                </div>
               </dl>
             </div>
 
@@ -159,13 +146,12 @@ function AdminUserDetailPage() {
                   <select
                     {...register("status", { required: "Status is required" })}
                     defaultValue={user.status}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#272822] focus:border-transparent ${
                       errors.status ? "border-red-500" : ""
                     }`}
                   >
-                    <option value="active">Active</option>
-                    <option value="suspended">Suspended</option>
-                    <option value="pending">Pending Verification</option>
+                    <option value="Active">Activate</option>
+                    <option value="Suspended">Suspend</option>
                   </select>
                 </div>
 
@@ -174,87 +160,24 @@ function AdminUserDetailPage() {
                     Admin Notes
                   </label>
                   <textarea
-                    {...register("adminNotes")}
+                    name="adminNotes"
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    placeholder="Add notes about this account..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#272822] focus:border-transparent"
+                    placeholder="Add notes about this user..."
+                    defaultValue={user.adminNotes || ""}
                   ></textarea>
                 </div>
 
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                    className="px-4 py-2 bg-[#272822] text-white rounded-lg hover:bg-[#3E3D32] text-sm"
                   >
                     Update Account
                   </button>
                 </div>
               </form>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-medium text-gray-800 mb-3">
-              {user.role === "artisan" ? "Reviews Received" : "Reviews Posted"}
-            </h3>
-
-            {userReviews.length === 0 ? (
-              <div className="bg-gray-50 p-8 text-center rounded-lg">
-                <p className="text-gray-500">No reviews found</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {userReviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="border border-gray-200 rounded-lg p-4"
-                  >
-                    <div className="flex justify-between">
-                      <div className="flex items-center">
-                        <div className="flex mr-2">
-                          {[...Array(5)].map((_, i) => (
-                            <span
-                              key={i}
-                              className={`${
-                                i < review.rating
-                                  ? "text-yellow-500"
-                                  : "text-gray-300"
-                              }`}
-                            >
-                              ★
-                            </span>
-                          ))}
-                        </div>
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full
-                          ${
-                            review.status === "approved"
-                              ? "bg-green-100 text-green-800"
-                              : ""
-                          }
-                          ${
-                            review.status === "pending"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : ""
-                          }`}
-                        >
-                          {review.status}
-                        </span>
-                      </div>
-                      <span className="text-sm text-gray-500">
-                        {new Date(review.date).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-gray-700">{review.comment}</p>
-                    {user.role === "artisan" && (
-                      <p className="text-sm text-gray-500 mt-2">
-                        By {review.userName}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </div>

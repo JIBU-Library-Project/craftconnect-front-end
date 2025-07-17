@@ -43,7 +43,7 @@ function ArtisanVerificationStatusPage() {
       color: "bg-green-100 text-green-800",
       action: {
         text: "Go to Dashboard",
-        handler: () => navigate("/artisan/dashboard"),
+        handler: () => navigate("/artisan"),
       },
     },
     rejected: {

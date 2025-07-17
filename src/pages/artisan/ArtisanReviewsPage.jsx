@@ -112,7 +112,7 @@ const ArtisanReviewsPage = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6 mb-8">
+      <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-6 mb-8">
         <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between">
           {/* Average Rating */}
           <div className="flex items-center mb-6 md:mb-0">

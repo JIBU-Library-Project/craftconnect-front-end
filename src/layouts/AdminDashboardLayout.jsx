@@ -1,4 +1,3 @@
-// AdminLayout.jsx
 import React, { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router";
 import {
@@ -8,130 +7,146 @@ import {
   CheckCircle,
   BarChart2,
   Settings,
-  ArrowLeft,
   LogOut,
   Menu,
+  X,
+  ChevronDown,
+  Search,
+ 
 } from "lucide-react";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   const menuItems = [
-    { name: "Dash", path: "/admin", icon: <LayoutDashboard size={20} /> },
-    { name: "Reviews", path: "/admin/reviews", icon: <Star size={20} /> },
-    { name: "Users", path: "/admin/users", icon: <Users size={20} /> },
-    {
-      name: "Verify",
-      path: "/admin/verification",
-      icon: <CheckCircle size={20} />,
-    },
-    { name: "Reports", path: "/admin/reports", icon: <BarChart2 size={20} /> },
-    { name: "Settings", path: "/admin/settings", icon: <Settings size={20} /> },
+    { path: "/admin", icon: <LayoutDashboard className="w-5 h-5" />, label: "Dashboard" },
+    { path: "/admin/reviews", icon: <Star className="w-5 h-5" />, label: "Reviews" },
+    { path: "/admin/users", icon: <Users className="w-5 h-5" />, label: "Users" },
+    { path: "/admin/artisans", icon: <Users className="w-5 h-5" />, label: "Artisans" },
+    { path: "/admin/verification", icon: <CheckCircle className="w-5 h-5" />, label: "Verification" },
+    { path: "/admin/reports", icon: <BarChart2 className="w-5 h-5" />, label: "Reports" },
+    { path: "/admin/settings", icon: <Settings className="w-5 h-5" />, label: "Settings" },
   ];
 
-  const handleLogout = () => {
-    // clear auth/token if needed
-    navigate("/login");
-  };
-
-  const isMobile = window.innerWidth < 768;
+  const handleLogout = () => navigate("/login");
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans">
-      {/* Sidebar */}
-      <div
-        className={`${
-          sidebarOpen || !isMobile ? "w-48" : "w-16"
-        } bg-white border-r border-gray-200 shadow-sm flex flex-col transition-all duration-300 fixed md:static z-40 h-full`}
-      >
-        {/* Logo & Toggle */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          {(sidebarOpen || !isMobile) && (
-            <span className="text-base font-semibold text-gray-800">Admin</span>
-          )}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded hover:bg-gray-100 text-gray-600 md:hidden"
-          >
-            <Menu size={20} />
-          </button>
-        </div>
+    <div className="flex h-screen bg-white text-gray-900 font-sans overflow-hidden">
+      {/* Mobile menu button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-2 rounded-md bg-white shadow-md text-gray-600"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-1 py-4 space-y-1">
+      {/* White Sidebar */}
+      <div className={`fixed md:relative z-40 w-64 bg-white text-gray-800 transition-all duration-300 ease-in-out 
+        ${mobileMenuOpen ? 'left-0' : '-left-full'} md:left-0 h-full flex flex-col border-r border-gray-200`}>
+        <div className="p-6 flex items-center">
+          <div className="w-10 h-10 rounded-md bg-[#272822] flex items-center justify-center text-white font-bold text-lg">A</div>
+          <span className="ml-3 text-xl font-semibold text-gray-800">AdminHub</span>
+        </div>
+        
+        {/* Navigation with #272822 select options */}
+        <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => (
             <button
-              key={item.name}
+              key={item.path}
               onClick={() => {
                 navigate(item.path);
-                if (isMobile) setSidebarOpen(false);
+                setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-center md:justify-start p-3 rounded-lg transition-all ${
-                location.pathname === item.path
-                  ? "bg-indigo-50 text-indigo-600 font-semibold"
-                  : "text-gray-600 hover:bg-gray-100"
+              className={`w-full flex items-center p-3 rounded-lg transition-all ${
+                isActive(item.path) 
+                  ? "bg-[#272822] text-white shadow-sm border-l-4 border-[#272822]" 
+                  : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
               }`}
             >
-              {item.icon}
-              {(sidebarOpen || !isMobile) && (
-                <span className="ml-2 text-sm">{item.name}</span>
-              )}
+              <span className={`text-[18px] ${isActive(item.path) ? "text-white" : "text-gray-600"}`}>
+                {item.icon}
+              </span>
+              <span className="ml-3">{item.label}</span>
             </button>
           ))}
         </nav>
-
-        {/* Bottom Actions */}
-        <div className="p-2 border-t border-gray-200 flex flex-col gap-2">
-          <button
-            onClick={handleLogout}
-            className="flex items-center justify-center md:justify-start w-full p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-all"
+        
+        {/* Profile section */}
+        <div className="p-4 border-t border-gray-200 mt-auto">
+          <div 
+            className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
+            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
           >
-            <LogOut size={20} />
-            {(sidebarOpen || !isMobile) && (
-              <span className="ml-2 text-sm">Logout</span>
-            )}
-          </button>
-
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center justify-center md:justify-start w-full p-2 text-gray-600 hover:text-indigo-600 hover:bg-gray-100 rounded transition-all"
-          >
-            <ArrowLeft size={20} />
-            {(sidebarOpen || !isMobile) && (
-              <span className="ml-2 text-sm">Back</span>
-            )}
-          </button>
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold">
+                A
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-gray-800">Admin</p>
+                <p className="text-xs text-gray-500">Super User</p>
+              </div>
+            </div>
+            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+          </div>
+          
+          {/* Profile dropdown with #272822 accents */}
+          {profileDropdownOpen && (
+            <div className="mt-2 py-2 bg-white rounded-lg shadow-lg border border-gray-200">
+              
+              
+              
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#272822] hover:text-white group"
+              >
+                <LogOut className="w-4 h-4 mr-3 text-gray-500 group-hover:text-white" />
+                Sign Out
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden p-2 rounded hover:bg-gray-100 text-gray-600"
-            >
-              <Menu size={20} />
-            </button>
-            <h2 className="text-lg font-semibold text-gray-800 capitalize">
-              {location.pathname.split("/").pop() || "Dashboard"}
-            </h2>
-          </div>
-          <div className="flex items-center gap-2 pr-2">
-            <div className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
-              A
+      {/* White Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden bg-white">
+        {/* Top header */}
+        <header className="bg-white border-b border-gray-200 shadow-sm z-30">
+          <div className="flex items-center justify-between px-6 py-4">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold capitalize text-gray-800">
+                {location.pathname.split("/").pop() || "Dashboard"}
+              </h1>
             </div>
-            <span className="text-gray-700 hidden md:inline">Admin</span>
+            
+            <div className="flex items-center space-x-4">
+              {/* Search bar with #272822 focus */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  className="w-64 pl-10 pr-4 py-2 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#272822] focus:bg-white border border-gray-200"
+                />
+              </div>
+              
+              {/* Admin profile */}
+              <div className="flex items-center space-x-2 bg-gray-50 hover:bg-[#272822] hover:text-white px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-gray-200">
+                <span className="text-sm font-medium">Admin Panel</span>
+              </div>
+            </div>
           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 ml-10 overflow-y-auto p-4 md:p-6 bg-gray-50">
-          <div className="max-w-7xl mx-auto">
+        {/* Main content area */}
+        <main className="flex-1 overflow-y-auto pt-6 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </main>

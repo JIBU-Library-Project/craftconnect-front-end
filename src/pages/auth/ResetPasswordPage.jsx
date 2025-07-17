@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
   const password = watch("password");
 
   const onSubmit = (data) => {
@@ -16,7 +21,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center px-4 py-10 loginpage">
-      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
           <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
@@ -26,25 +31,10 @@ export default function ResetPasswordPage() {
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              {...register("email", { required: "Email is required" })}
-              placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+         
 
           {/* New Password & Confirm Password */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1  gap-4">
             <div>
               <label className="block text-gray-700 font-medium mb-1">
                 New Password
@@ -89,7 +79,7 @@ export default function ResetPasswordPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#171812] text-white font-medium hover:bg-[#81704f] transition"
+            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
           >
             Reset Password
           </button>
@@ -101,7 +91,7 @@ export default function ResetPasswordPage() {
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="text-[#b67f0a] font-medium hover:underline"
+                className=" text-[#4b158d] font-medium hover:underline"
               >
                 Login here
               </button>

@@ -45,6 +45,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ArtisanReviewsPage from "./pages/artisan/ArtisanReviewsPage";
+import ArtisanContactPage from "./pages/artisan/ArtisanContactPage";
 
 
 
@@ -76,6 +77,7 @@ function App() {
         { path: "verification", element: <ArtisanVerificationPage /> },
         { path: "verify/status", element: <ArtisanVerificationStatusPage /> },
         { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
+         { path: "contact", element: <ArtisanContactPage /> },
       ],
     },
 
@@ -105,8 +107,9 @@ function App() {
         { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
         { path: "users", element: <AdminUsersListPage /> },
         { path: "users/:userId", element: <AdminUserDetailPage /> },
-        { path: "artisan", element: <AdminArtisansListPage /> },
-        { path: "artisan/:artisanId", element: <AdminArtisanDetailPage /> },
+        { path: "artisans", element: <AdminArtisansListPage /> },
+        { path: "artisans/:artisanId", element: <AdminArtisanDetailPage /> },
+       
       ],
     },
 

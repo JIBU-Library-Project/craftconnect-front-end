@@ -164,7 +164,7 @@ const UserJobsPage = () => {
           </div>
           <button
             onClick={() => navigate("/search")}
-            className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm text-sm sm:text-base text-center"
+            className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm text-sm sm:text-base text-center"
           >
             Request A Service
           </button>

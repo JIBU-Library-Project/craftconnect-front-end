@@ -54,7 +54,7 @@ const UserDashboardPage = () => {
             </div>
             <button
               onClick={card.onClick}
-              className="mt-4 bg-indigo-600 text-white text-sm sm:text-base px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full text-center"
+              className="mt-4 bg-[#f05335] text-white text-sm sm:text-base px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors w-full text-center"
             >
               {card.buttonText}
             </button>
