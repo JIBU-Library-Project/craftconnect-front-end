@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import RatingStars from "../../components/RatingStars";
@@ -526,13 +527,49 @@ export default PublicArtisanProfilePage;
 
 
 
+
+
 const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const [previewImages, setPreviewImages] = useState([]);
+  const images = watch("images");
+
+  useEffect(() => {
+    if (images && images.length > 0) {
+      const imageArray = Array.from(images).map((file) => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
+      setPreviewImages(imageArray);
+    } else {
+      setPreviewImages([]);
+    }
+  }, [images]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+      setPreviewImages([]);
+    }
+  }, [isOpen, reset]);
+
+  const removeImage = (index) => {
+    const newFiles = Array.from(images);
+    newFiles.splice(index, 1);
+
+    const dataTransfer = new DataTransfer();
+    newFiles.forEach((file) => dataTransfer.items.add(file));
+
+    setValue("images", dataTransfer.files, { shouldValidate: true });
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -541,6 +578,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
       console.log("Job request submitted:", data);
       onClose();
       reset();
+      setPreviewImages([]);
     } catch (error) {
       console.error("Error submitting job request:", error);
     }
@@ -549,13 +587,13 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-[#000]/90 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-6 md:p-8">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg md:text-xl font-semibold text-gray-800">
-              Request Service from {artisan.businessName}
+              Request Service from {artisan.businessName || "Artisan"}
             </h2>
             <button
               onClick={onClose}
@@ -683,7 +721,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               )}
             </div>
 
-            {/* Upload Images (Required) */}
+            {/* Upload Images */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Images <span className="text-red-500">*</span>
@@ -697,8 +735,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </span>
                 <input
                   {...register("images", {
-                    validate: (files) =>
-                      files && files.length > 0 || "At least one image is required",
+                    required: "At least one image is required",
                   })}
                   type="file"
                   multiple
@@ -711,9 +748,44 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                   {errors.images.message}
                 </p>
               )}
+
+              {previewImages.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-2">
+                  {previewImages.map((item, idx) => (
+                    <div key={idx} className="relative group">
+                      <img
+                        src={item.preview}
+                        alt={`Preview ${idx}`}
+                        className="w-full h-24 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+                        title="Remove"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Buttons */}
+            {/* Action Buttons */}
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 type="button"
@@ -728,7 +800,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium text-white ${
                   isSubmitting
                     ? "bg-blue-400"
-                    : "bg-indigo-600 hover:bg-blue-700"
+                    : "bg-indigo-600 hover:bg-indigo-700"
                 }`}
               >
                 {isSubmitting ? "Submitting..." : "Submit Request"}
@@ -740,6 +812,9 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     </div>
   );
 };
+
+
+
 
 
 
