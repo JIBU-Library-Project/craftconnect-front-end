@@ -28,7 +28,7 @@ const ArtisanJobsPage = () => {
       job.id === selectedJobId
         ? {
             ...job,
-            status: "declined",
+            jobStatus: "declined",
             declineReason: data.reason,
           }
         : job
@@ -42,14 +42,14 @@ const ArtisanJobsPage = () => {
 
   const handleAcceptJob = (jobId) => {
     const updatedJobs = jobs.map((job) =>
-      job.id === jobId ? { ...job, status: "accepted" } : job
+      job.id === jobId ? { ...job, jobStatus: "accepted" } : job
     );
     setJobs(updatedJobs);
   };
 
   const handleCompleteJob = (jobId) => {
     const updatedJobs = jobs.map((job) =>
-      job.id === jobId ? { ...job, status: "completed" } : job
+      job.id === jobId ? { ...job, jobStatus: "completed" } : job
     );
     setJobs(updatedJobs);
   };
@@ -66,20 +66,20 @@ const ArtisanJobsPage = () => {
 
   const getStatusCount = (tab) => {
     return jobs.filter((job) => {
-      if (tab === "completed") return job.status === "completed";
-      if (tab === "active") return job.status === "accepted";
-      if (tab === "cancelled") return job.status === "cancelled";
-      if (tab === "declined") return job.status === "declined";
-      return job.status === "pending";
+      if (tab === "completed") return job.jobStatus === "completed";
+      if (tab === "active") return job.jobStatus === "accepted";
+      if (tab === "cancelled") return job.jobStatus === "cancelled";
+      if (tab === "declined") return job.jobStatus === "declined";
+      return job.jobStatus === "pending";
     }).length;
   };
 
   const filteredJobs = jobs.filter((job) => {
-    if (activeTab === "completed") return job.status === "completed";
-    if (activeTab === "active") return job.status === "accepted";
-    if (activeTab === "cancelled") return job.status === "cancelled";
-    if (activeTab === "declined") return job.status === "declined";
-    return job.status === "pending";
+    if (activeTab === "completed") return job.jobStatus === "completed";
+    if (activeTab === "active") return job.jobStatus === "accepted";
+    if (activeTab === "cancelled") return job.jobStatus === "cancelled";
+    if (activeTab === "declined") return job.jobStatus === "declined";
+    return job.jobsStatus === "pending";
   });
 
   const statusColors = {
@@ -265,11 +265,11 @@ const ArtisanJobsPage = () => {
                       </h3>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          statusColors[job.status]
+                          statusColors[job.jobStatus]
                         }`}
                       >
-                        {job.status.charAt(0).toUpperCase() +
-                          job.status.slice(1)}
+                        {job.jobStatus.charAt(0).toUpperCase() +
+                          job.jobStatus.slice(1)}
                       </span>
                     </div>
 
@@ -365,7 +365,7 @@ const ArtisanJobsPage = () => {
                 {(job.cancellationReason || job.declineReason) && (
                   <div className="mb-4 p-2 sm:p-3 bg-red-50 border-l-4 border-red-500 rounded-r text-xs sm:text-sm">
                     <p className="font-medium text-red-700">
-                      {job.status === "cancelled"
+                      {job.jobStatus === "cancelled"
                         ? "Cancellation Reason:"
                         : "Decline Reason:"}
                     </p>
@@ -384,7 +384,7 @@ const ArtisanJobsPage = () => {
                     View Details
                   </button>
 
-                  {job.status === "pending" && (
+                  {job.jobStatus === "pending" && (
                     <>
                       <button
                         onClick={() => {
@@ -404,7 +404,7 @@ const ArtisanJobsPage = () => {
                     </>
                   )}
 
-                  {job.status === "accepted" && (
+                  {job.jobStatus === "accepted" && (
                     <button
                       onClick={() => handleCompleteJob(job.id)}
                       className="px-2.5 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"

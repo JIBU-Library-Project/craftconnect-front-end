@@ -68,9 +68,11 @@ const UserJobDetailPage = () => {
             </h1>
             <div className="flex items-center mt-2 flex-wrap gap-2">
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[job.status]}`}
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  statusColors[job.jobStatus]
+                }`}
               >
-                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                {job.jobStatus.charAt(0).toUpperCase() + job.jobStatus.slice(1)}
               </span>
               <span className="text-neutral-500 text-sm">
                 Created: {new Date(job.createdAt).toLocaleDateString()}
@@ -219,7 +221,7 @@ const UserJobDetailPage = () => {
 
       {/* Action Buttons */}
       <div className="pt-4 border-t border-neutral-200 flex flex-col sm:flex-row gap-3">
-        {job.status === "accepted" && (
+        {job.jobStatus === "accepted" && (
           <button
             onClick={() => (window.location.href = `tel:${job.artisan.phone}`)}
             className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center justify-center gap-2 text-sm font-medium"
@@ -228,7 +230,7 @@ const UserJobDetailPage = () => {
             Call Artisan
           </button>
         )}
-        {job.status === "completed" && !job.reviewId && (
+        {job.jobStatus === "completed" && !job.reviewId && (
           <button
             onClick={() => navigate(`/homeowner/my-jobs/${job.id}/review`)}
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition flex items-center justify-center gap-2 text-sm font-medium"
@@ -242,4 +244,4 @@ const UserJobDetailPage = () => {
   );
 };
 
-export default UserJobDetailPage
+export default UserJobDetailPage;

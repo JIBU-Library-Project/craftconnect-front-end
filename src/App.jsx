@@ -45,6 +45,12 @@ import SignupPage from "./pages/auth/SignupPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ArtisanReviewsPage from "./pages/artisan/ArtisanReviewsPage";
+import ArtisanContactPage from "./pages/artisan/ArtisanContactPage";
+import AdminUserJobsPage from "./pages/admin/AdminUserJobsPage";
+import AdminUserJobsDetailPage from "./pages/admin/AdminUserJobsDetailPage";
+import AdminArtisanJobsPage from "./pages/admin/AdminArtisanJobsPage";
+import AdminArtisansDetailPage from "./pages/admin/AdminArtisanDetailPage";
+import AdminArtisanJobsDetailPage from "./pages/admin/AdminArtisanJobsDetailPage";
 
 
 
@@ -76,6 +82,7 @@ function App() {
         { path: "verification", element: <ArtisanVerificationPage /> },
         { path: "verify/status", element: <ArtisanVerificationStatusPage /> },
         { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
+         { path: "contact", element: <ArtisanContactPage /> },
       ],
     },
 
@@ -104,9 +111,14 @@ function App() {
         { path: "reviews", element: <AdminReviewListPage /> },
         { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
         { path: "users", element: <AdminUsersListPage /> },
+        { path: "user/jobs/:jobId", element: <AdminUserJobsDetailPage/> },
+        { path: "user/jobs", element: <AdminUserJobsPage /> },
         { path: "users/:userId", element: <AdminUserDetailPage /> },
-        { path: "artisan", element: <AdminArtisansListPage /> },
-        { path: "artisan/:artisanId", element: <AdminArtisanDetailPage /> },
+        { path: "artisans", element: <AdminArtisansListPage /> },
+        { path: "artisan/jobs", element: <AdminArtisanJobsPage /> },
+        { path: "artisan/jobs/:jobId", element: <AdminArtisanJobsDetailPage /> },
+        { path: "artisans/:artisanId", element: <AdminArtisanDetailPage /> },
+       
       ],
     },
 

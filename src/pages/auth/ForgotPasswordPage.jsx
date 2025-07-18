@@ -19,13 +19,14 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center px-4 py-10 loginpage">
-      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
           <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
           <p className="text-gray-600">Forgot your password?</p>
           <p className="text-gray-600 text-sm text-center">
-            Enter your email address below and we will send you a link to reset your password.
+            Enter your email address below and we will send you a link to reset
+            your password.
           </p>
         </div>
 
@@ -52,7 +53,7 @@ export default function ForgotPasswordPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#171812] text-white font-medium hover:bg-[#81704f] transition"
+            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
           >
             Send Reset Link
           </button>
@@ -64,7 +65,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="text-[#b67f0a] font-medium hover:underline"
+                className=" text-[#4b158d] font-medium hover:underline"
               >
                 Login here
               </button>

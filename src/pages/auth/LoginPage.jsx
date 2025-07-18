@@ -20,7 +20,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center px-4 py-10 loginpage">
-      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff]/80">
+      <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
           <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
@@ -31,7 +31,10 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -42,20 +45,25 @@ export default function LoginPage() {
               className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
           {/* Password */}
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="block text-gray-700 font-medium" htmlFor="password">
+              <label
+                className="block text-gray-700 font-medium"
+                htmlFor="password"
+              >
                 Password
               </label>
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm text-[#b67f0a] hover:underline"
+                className="text-sm  text-[#4b158d] hover:underline"
               >
                 Forgot password?
               </button>
@@ -68,14 +76,16 @@ export default function LoginPage() {
               className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#171812] text-white font-medium hover:bg-[#81704f] transition"
+            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
           >
             Sign In
           </button>
@@ -88,7 +98,7 @@ export default function LoginPage() {
             <button
               onClick={() => navigate("/signup")}
               type="button"
-              className="text-[#b67f0a] font-medium hover:underline"
+              className=" text-[#4b158d] font-medium hover:underline"
             >
               Sign up here
             </button>

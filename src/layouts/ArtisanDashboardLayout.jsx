@@ -1,151 +1,145 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router";
-import {
-  Gauge,
-  User,
-  Briefcase,
-  Wrench,
-  ShieldCheck,
-  Bell,
-  Shield,
-  Edit,
-  Star,
+import { 
+  Gauge, User, Briefcase, Wrench, ShieldCheck, 
+  Shield, Edit, Star, Menu, X, LogOut, 
+  ChevronDown, HelpCircle 
 } from "lucide-react";
 import { artisanProfile } from "../data/dummyData";
 
 const ArtisanDashboardLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(`${path}/`);
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
   const logout = () => navigate("/login");
 
   const navItems = [
-    {
-      path: "/artisan",
-      icon: <Gauge className="w-5 h-5" />,
-      label: "Dashboard",
-    },
-    {
-      path: "/artisan/profile",
-      icon: <User className="w-5 h-5" />,
-      label: "Profile",
-    },
-    {
-      path: "/artisan/jobs",
-      icon: <Briefcase className="w-5 h-5" />,
-      label: "Jobs",
-    },
-    {
-      path: "/artisan/services",
-      icon: <Wrench className="w-5 h-5" />,
-      label: "Services",
-    },
-    {
-      path: "/artisan/services-edit",
-      icon: <Edit className="w-5 h-5" />,
-      label: "Add/Edit Serivices",
-    },
-    {
-      path: "/artisan/verification",
-      icon: <ShieldCheck className="w-5 h-5" />,
-      label: "Verification",
-    },
-    {
-      path: "/artisan/verify/status",
-      icon: <Shield className="w-5 h-5" />,
-      label: "Verification Status",
-    },
-    {
-      path: "/artisan/artisan-reviews",
-      icon: <Star className="w-5 h-5" />,
-      label: "Reviews",
-    },
+    { path: "/artisan", icon: <Gauge className="w-5 h-5" />, label: "Dashboard" },
+    { path: "/artisan/profile", icon: <User className="w-5 h-5" />, label: "Profile" },
+    { path: "/artisan/jobs", icon: <Briefcase className="w-5 h-5" />, label: "Jobs" },
+    { path: "/artisan/services", icon: <Wrench className="w-5 h-5" />, label: "Services" },
+    { path: "/artisan/services-edit", icon: <Edit className="w-5 h-5" />, label: "Manage Services" },
+    { path: "/artisan/verification", icon: <ShieldCheck className="w-5 h-5" />, label: "Verification" },
+    { path: "/artisan/verify/status", icon: <Shield className="w-5 h-5" />, label: "Status" },
+    { path: "/artisan/artisan-reviews", icon: <Star className="w-5 h-5" />, label: "Reviews" },
+    { path: "/artisan/contact" },
   ];
 
   return (
-    <div className=" //outlet flex h-screen bg-[#f9f9f8]  font-sans">
-      {/* Sidebar - Clean Modern */}
-      <div className="w-20 md:w-64 bg-white shadow-sm //border-r-4 //border-indigo-600 flex flex-col">
-        {/* Logo */}
-        <div className="p-4 flex items-center justify-center md:justify-start">
-          <div className="w-10 h-10 rounded-md bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg">
-            A
-          </div>
-          <span className="ml-3 text-lg font-semibold text-gray-800 hidden md:block">
-            ArtisanHub
-          </span>
-        </div>
+    <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden">
+      {/* Mobile menu button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-2 rounded-md bg-white shadow-md text-gray-600"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 mt-6 px-2 space-y-1">
+      {/* Sidebar - Deep Indigo */}
+      <div className={`fixed md:relative z-40 w-64 bg-indigo-900 text-white transition-all duration-300 ease-in-out 
+        ${mobileMenuOpen ? 'left-0' : '-left-full'} md:left-0 h-full flex flex-col`}>
+        <div className="p-6 flex items-center">
+          <div className="w-10 h-10 rounded-md bg-indigo-700 flex items-center justify-center text-white font-bold text-lg">A</div>
+          <span className="ml-3 text-xl font-semibold text-white">ArtisanHub</span>
+        </div>
+        
+        {/* Search bar (mobile only) */}
+       
+        
+        <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
               key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`w-full flex items-center p-3 rounded-md transition ${
-                isActive(item.path)
-                  ? "bg-blue-100 text-blue-700 font-medium"
-                  : "text-gray-700 hover:bg-gray-100"
+              onClick={() => {
+                navigate(item.path);
+                setMobileMenuOpen(false);
+              }}
+              className={`w-full flex items-center p-3 rounded-lg transition-all ${
+                isActive(item.path) 
+                  ? "bg-indigo-700 text-white shadow-md" 
+                  : "hover:bg-indigo-800/80 text-indigo-100"
               }`}
             >
               <span className="text-[18px]">{item.icon}</span>
-              <span className="ml-3 hidden md:block">{item.label}</span>
+              <span className="ml-3">{item.label}</span>
             </button>
           ))}
         </nav>
-
-        {/* User Profile */}
-        <div className="p-4 border-t border-gray-100">
-          <div className="flex items-center">
-            <img
-              className="w-10 h-10 rounded-full object-cover border border-gray-300"
-              src={artisanProfile.profilePic}
-              alt={artisanProfile.name}
-            />
-            <div className="ml-3 hidden md:block">
-              <p className="text-sm font-medium text-gray-800">
-                {artisanProfile.name}
-              </p>
-              <button
+        
+        {/* Bottom profile section */}
+        <div className="p-4 border-t border-indigo-800/50">
+          <div 
+            className="flex items-center justify-between p-2 rounded-lg hover:bg-indigo-800/50 cursor-pointer transition"
+            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+          >
+            <div className="flex items-center">
+              <img 
+                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-700" 
+                src={artisanProfile.profilePic} 
+                alt={artisanProfile.name} 
+              />
+              <div className="ml-3">
+                <p className="text-sm font-medium text-white">{artisanProfile.name}</p>
+                <p className="text-xs text-indigo-200">{artisanProfile.businessName}</p>
+              </div>
+            </div>
+            <ChevronDown className={`w-4 h-4 text-indigo-300 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+          </div>
+          
+          {/* Profile dropdown */}
+          {profileDropdownOpen && (
+            <div className="mt-2 py-2 bg-indigo-800 rounded-lg shadow-lg">
+              
+              <button className="w-full flex items-center px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-700/50 "
+              onClick={()=>navigate('/artisan/contact')}>
+                <HelpCircle className="w-4 h-4 mr-3" />
+                Help & Support
+              </button>
+              <button 
                 onClick={logout}
-                className="text-xs text-gray-500 hover:text-gray-700"
+                className="w-full flex items-center px-4 py-2 text-sm text-red-200 hover:bg-indigo-700/50"
               >
-                Sign out →
+                <LogOut className="w-4 h-4 mr-3" />
+                Sign Out
               </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="bg-[#ffffff] /10   border-b-4 shadow-xl border-indigo-800">
+        {/* Top header */}
+        <header className="bg-white border-b border-gray-200 shadow-sm z-30">
           <div className="flex items-center justify-between px-6 py-4">
-            <h1 className="text-xl font-semibold text-gray-800 capitalize">
-              {location.pathname.split("/").pop() || "Dashboard"}
-            </h1>
-            <div className="flex items-center space-x-3">
-              <button className="p-2 rounded-full hover:bg-gray-100 relative">
-                <span className="text-gray-600">
-                  <Bell className="w-5 h-5" />
-                </span>
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-              <button className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full">
-                <span className="text-sm font-medium text-gray-700">
-                  {artisanProfile.businessName}
-                </span>
-              </button>
+            {/* Breadcrumbs */}
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold capitalize text-gray-800">
+                {location.pathname.split("/").pop() || "Dashboard"}
+              </h1>
+            </div>
+            
+            {/* Right side controls */}
+            <div className="flex items-center space-x-4">
+              {/* Search bar (desktop only) */}
+             
+              
+              {/* Business profile (desktop only) */}
+              <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer">
+                <span className="text-sm font-medium text-gray-700">{artisanProfile.businessName}</span>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className=" flex-1 overflow-y-auto pt-7 ">
-          <div className=" max-w-5xl mx-auto ">
+        {/* Main content area */}
+        <main className="flex-1 overflow-y-auto pt-6 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>
         </main>

@@ -35,7 +35,7 @@ function ArtisanVerificationStatusPage() {
       icon: "⏳",
       color: "bg-yellow-100 text-yellow-800",
     },
-    approved: {
+    verified: {
       title: "Verified Successfully!",
       description:
         "Your account is now fully verified. Users can now verify your authenticity.",
@@ -43,7 +43,7 @@ function ArtisanVerificationStatusPage() {
       color: "bg-green-100 text-green-800",
       action: {
         text: "Go to Dashboard",
-        handler: () => navigate("/artisan/dashboard"),
+        handler: () => navigate("/artisan"),
       },
     },
     rejected: {
