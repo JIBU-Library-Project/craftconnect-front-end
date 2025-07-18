@@ -524,6 +524,8 @@ export default PublicArtisanProfilePage;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE
 
+
+
 const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const {
     register,
@@ -547,9 +549,10 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-[#000]/90 drop-shadow-6xl bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-[#000]/90 bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-6 md:p-8">
+          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg md:text-xl font-semibold text-gray-800">
               Request Service from {artisan.businessName}
@@ -574,6 +577,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
             </button>
           </div>
 
+          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Job Title */}
             <div>
@@ -679,10 +683,10 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               )}
             </div>
 
-            {/* Upload Images */}
+            {/* Upload Images (Required) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Upload Images (Optional)
+                Upload Images <span className="text-red-500">*</span>
               </label>
               <label className="flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
                 <span className="text-sm text-gray-600">
@@ -692,13 +696,21 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                   PNG, JPG, GIF up to 10MB
                 </span>
                 <input
-                  {...register("images")}
+                  {...register("images", {
+                    validate: (files) =>
+                      files && files.length > 0 || "At least one image is required",
+                  })}
                   type="file"
                   multiple
                   accept="image/*"
                   className="hidden"
                 />
               </label>
+              {errors.images && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.images.message}
+                </p>
+              )}
             </div>
 
             {/* Buttons */}
@@ -728,5 +740,8 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     </div>
   );
 };
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE

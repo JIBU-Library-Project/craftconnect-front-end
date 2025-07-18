@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
-import { users } from "../../data/dummyData";
+import { adminUserProfiles as users } from "../../data/dummyData";
 
 function AdminUserDetailPage() {
   const navigate = useNavigate();
@@ -60,16 +60,14 @@ function AdminUserDetailPage() {
         <div className="p-6 md:p-8">
           <div className="flex items-center mb-8">
             <div className="w-20 h-20 rounded-xl overflow-hidden">
-              <img 
-                src={user.profilePic} 
+              <img
+                src={user.profilePic}
                 alt={user.name}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="ml-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {user.name}
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
               <p className="text-gray-600">{user.email}</p>
               <div className="flex items-center mt-2">
                 <span
@@ -101,7 +99,7 @@ function AdminUserDetailPage() {
               <h3 className="font-medium text-gray-800 mb-3">
                 Account Information
               </h3>
-              
+
               <dl className="space-y-3">
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-500">Joined Date</dt>
@@ -155,8 +153,6 @@ function AdminUserDetailPage() {
                   </select>
                 </div>
 
-                
-
                 <div className="flex pt-10 justify-end">
                   <button
                     type="submit"
@@ -168,6 +164,45 @@ function AdminUserDetailPage() {
               </form>
             </div>
           </div>
+
+          {/* Stats Section */}
+          {user.stats && (
+            <div className="border border-gray-200 rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-gray-800 mb-4">Job Request Statistics</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="bg-[#141114e1] p-3 rounded-lg">
+                  <p className="text-sm text-gray-100">Total Job Requests</p>
+                  <p className="text-xl font-semibold text-yellow-300">
+                    {user.stats.totalJobs}
+                  </p>
+                </div>
+                <div className="bg-green-900 p-3 rounded-lg">
+                  <p className="text-sm text-gray-100">Completed Job Requests</p>
+                  <p className="text-xl font-semibold text-yellow-300">
+                    {user.stats.completedJobs}
+                  </p>
+                </div>
+                <div className="bg-blue-900 p-3 rounded-lg">
+                  <p className="text-sm text-gray-100">Active Job Requests</p>
+                  <p className="text-xl font-semibold text-yellow-300">
+                    {user.stats.acceptedJobs}
+                  </p>
+                </div>
+                <div className="bg-yellow-900 p-3 rounded-lg">
+                  <p className="text-sm text-gray-100">Pending Job Requests</p>
+                  <p className="text-xl font-semibold text-yellow-300">
+                    {user.stats.pendingJobs}
+                  </p>
+                </div>
+                <div className="bg-red-900 p-3 rounded-lg">
+                  <p className="text-sm text-gray-100">Cancelled Job Requests</p>
+                  <p className="text-xl font-semibold text-yellow-300">
+                    {user.stats.cancelledJobs}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

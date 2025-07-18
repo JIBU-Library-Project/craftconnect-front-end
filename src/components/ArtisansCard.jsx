@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import {
   BadgeCheck,
-  ShieldOff,
+  ShieldAlert,
   Phone,
   MessageCircle,
   MapPin,
@@ -16,23 +16,25 @@ const ArtisanCard = ({ artisan }) => {
   const renderVerificationBadge = () => {
     if (artisan.verificationStatus === "verified") {
       return (
-        <div className="absolute top-2 right-2 bg-indigo-600 text-white px-2 py-0.5 rounded flex items-center text-xs font-medium">
-          <BadgeCheck size={14} className="mr-1" /> Verified
+        <div className="absolute top-2 right-2 bg-[#432dd7] text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm">
+          <BadgeCheck size={14} className="mr-1" />
+          Verified
         </div>
       );
     } else {
       return (
-        <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-0.5 rounded flex items-center text-xs font-medium">
-          <ShieldOff size={14} className="mr-1" /> Not Verified
+        <div className="absolute top-2 right-2 bg-[#e1a816] text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm">
+          <ShieldAlert size={14} className="mr-1" />
+          Unverified
         </div>
       );
     }
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
       <div className="md:flex">
-        {/* Profile Picture */}
+        {/* Profile Picture Section */}
         <div className="md:w-1/4">
           <div className="h-48 md:h-full bg-gray-100 relative">
             <img
@@ -48,7 +50,7 @@ const ArtisanCard = ({ artisan }) => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content Section */}
         <div className="p-5 md:w-3/4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-start flex-wrap gap-2">
@@ -77,7 +79,7 @@ const ArtisanCard = ({ artisan }) => {
                 <div className="flex items-center mt-1">
                   <RatingStars rating={artisan.rating} />
                   <span className="text-gray-600 text-sm ml-2">
-                    {artisan.rating} ({artisan.reviewCount} reviews)
+                    {artisan.rating?.toFixed(1)} ({artisan.reviewCount} reviews)
                   </span>
                 </div>
               </div>
@@ -99,19 +101,21 @@ const ArtisanCard = ({ artisan }) => {
             </p>
 
             {/* Specialties */}
-            <div className="mt-3 flex flex-wrap gap-2">
-              {artisan.specialties?.map((specialty, idx) => (
-                <span
-                  key={idx}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                >
-                  {specialty}
-                </span>
-              ))}
-            </div>
+            {artisan.specialties?.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {artisan.specialties.map((specialty, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                  >
+                    {specialty}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Actions */}
+          {/* Action Buttons */}
           <div className="mt-4 flex flex-wrap gap-2">
             {artisan.whatsapp && (
               <a

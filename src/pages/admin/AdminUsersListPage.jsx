@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { users } from "../../data/dummyData";
+import { adminUserProfiles as users } from "../../data/dummyData";
 
 function AdminUsersListPage() {
   const navigate = useNavigate();

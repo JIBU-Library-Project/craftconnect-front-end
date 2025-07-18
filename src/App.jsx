@@ -46,6 +46,11 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ArtisanReviewsPage from "./pages/artisan/ArtisanReviewsPage";
 import ArtisanContactPage from "./pages/artisan/ArtisanContactPage";
+import AdminUserJobsPage from "./pages/admin/AdminUserJobsPage";
+import AdminUserJobsDetailPage from "./pages/admin/AdminUserJobsDetailPage";
+import AdminArtisanJobsPage from "./pages/admin/AdminArtisanJobsPage";
+import AdminArtisansDetailPage from "./pages/admin/AdminArtisanDetailPage";
+import AdminArtisanJobsDetailPage from "./pages/admin/AdminArtisanJobsDetailPage";
 
 
 
@@ -106,8 +111,12 @@ function App() {
         { path: "reviews", element: <AdminReviewListPage /> },
         { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
         { path: "users", element: <AdminUsersListPage /> },
+        { path: "user/jobs/:jobId", element: <AdminUserJobsDetailPage/> },
+        { path: "user/jobs", element: <AdminUserJobsPage /> },
         { path: "users/:userId", element: <AdminUserDetailPage /> },
         { path: "artisans", element: <AdminArtisansListPage /> },
+        { path: "artisan/jobs", element: <AdminArtisanJobsPage /> },
+        { path: "artisan/jobs/:jobId", element: <AdminArtisanJobsDetailPage /> },
         { path: "artisans/:artisanId", element: <AdminArtisanDetailPage /> },
        
       ],

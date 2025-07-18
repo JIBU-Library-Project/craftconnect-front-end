@@ -11,8 +11,7 @@ import {
   Menu,
   X,
   ChevronDown,
-  Search,
- 
+  Briefcase,
 } from "lucide-react";
 
 function AdminDashboardLayout() {
@@ -21,16 +20,56 @@ function AdminDashboardLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   const menuItems = [
-    { path: "/admin", icon: <LayoutDashboard className="w-5 h-5" />, label: "Dashboard" },
-    { path: "/admin/reviews", icon: <Star className="w-5 h-5" />, label: "Reviews" },
-    { path: "/admin/users", icon: <Users className="w-5 h-5" />, label: "Users" },
-    { path: "/admin/artisans", icon: <Users className="w-5 h-5" />, label: "Artisans" },
-    { path: "/admin/verification", icon: <CheckCircle className="w-5 h-5" />, label: "Verification" },
-    { path: "/admin/reports", icon: <BarChart2 className="w-5 h-5" />, label: "Reports" },
-    { path: "/admin/settings", icon: <Settings className="w-5 h-5" />, label: "Settings" },
+    {
+      path: "/admin",
+      icon: <LayoutDashboard className="w-5 h-5" />,
+      label: "Dashboard",
+    },
+    {
+      path: "/admin/reviews",
+      icon: <Star className="w-5 h-5" />,
+      label: "Reviews",
+    },
+    {
+      path: "/admin/users",
+      icon: <Users className="w-5 h-5" />,
+      label: "Users",
+    },
+    {
+      path: "/admin/artisans",
+      icon: <Users className="w-5 h-5" />,
+      label: "Artisans",
+    },
+     {
+      path: "/admin/user/jobs",
+      icon: <Briefcase className="w-5 h-5" />,
+      label: "User Jobs Requests",
+    },
+     {
+      path: "/admin/artisan/jobs",
+      icon: <Briefcase className="w-5 h-5" />,
+      label: "User Jobs Requests",
+    },
+    {
+      path: "/admin/verification",
+      icon: <CheckCircle className="w-5 h-5" />,
+      label: "Verification",
+    },
+    {
+      path: "/admin/reports",
+      icon: <BarChart2 className="w-5 h-5" />,
+      label: "Reports",
+    },
+    {
+      path: "/admin/settings",
+      icon: <Settings className="w-5 h-5" />,
+      label: "Settings",
+    },
+   
   ];
 
   const handleLogout = () => navigate("/login");
@@ -39,22 +78,34 @@ function AdminDashboardLayout() {
     <div className="flex h-screen bg-white text-gray-900 font-sans overflow-hidden">
       {/* Mobile menu button */}
       <div className="md:hidden fixed top-4 left-4 z-50">
-        <button 
+        <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 rounded-md bg-white shadow-md text-gray-600"
         >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileMenuOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </button>
       </div>
 
       {/* White Sidebar */}
-      <div className={`fixed md:relative z-40 w-64 bg-white text-gray-800 transition-all duration-300 ease-in-out 
-        ${mobileMenuOpen ? 'left-0' : '-left-full'} md:left-0 h-full flex flex-col border-r border-gray-200`}>
+      <div
+        className={`fixed md:relative z-40 w-64 bg-white text-gray-800 transition-all duration-300 ease-in-out 
+        ${
+          mobileMenuOpen ? "left-0" : "-left-full"
+        } md:left-0 h-full flex flex-col border-r border-gray-200`}
+      >
         <div className="p-6 flex items-center">
-          <div className="w-10 h-10 rounded-md bg-[#272822] flex items-center justify-center text-white font-bold text-lg">A</div>
-          <span className="ml-3 text-xl font-semibold text-gray-800">AdminHub</span>
+          <div className="w-10 h-10 rounded-md bg-[#272822] flex items-center justify-center text-white font-bold text-lg">
+            A
+          </div>
+          <span className="ml-3 text-xl font-semibold text-gray-800">
+            AdminHub
+          </span>
         </div>
-        
+
         {/* Navigation with #272822 select options */}
         <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => (
@@ -65,22 +116,26 @@ function AdminDashboardLayout() {
                 setMobileMenuOpen(false);
               }}
               className={`w-full flex items-center p-3 rounded-lg transition-all ${
-                isActive(item.path) 
-                  ? "bg-[#272822] text-white shadow-sm border-l-4 border-[#272822]" 
+                isActive(item.path)
+                  ? "bg-[#272822] text-white shadow-sm border-l-4 border-[#272822]"
                   : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
               }`}
             >
-              <span className={`text-[18px] ${isActive(item.path) ? "text-white" : "text-gray-600"}`}>
+              <span
+                className={`text-[18px] ${
+                  isActive(item.path) ? "text-white" : "text-gray-600"
+                }`}
+              >
                 {item.icon}
               </span>
               <span className="ml-3">{item.label}</span>
             </button>
           ))}
         </nav>
-        
+
         {/* Profile section */}
         <div className="p-4 border-t border-gray-200 mt-auto">
-          <div 
+          <div
             className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
           >
@@ -93,16 +148,17 @@ function AdminDashboardLayout() {
                 <p className="text-xs text-gray-500">Super User</p>
               </div>
             </div>
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`w-4 h-4 text-gray-500 transition-transform ${
+                profileDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
           </div>
-          
+
           {/* Profile dropdown with #272822 accents */}
           {profileDropdownOpen && (
             <div className="mt-2 py-2 bg-white rounded-lg shadow-lg border border-gray-200">
-              
-              
-              
-              <button 
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#272822] hover:text-white group"
               >
@@ -120,22 +176,14 @@ function AdminDashboardLayout() {
         <header className="bg-white border-b border-gray-200 shadow-sm z-30">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold capitalize text-gray-800">
+              {/* <h1 className="text-xl font-semibold capitalize text-gray-800">
                 {location.pathname.split("/").pop() || "Dashboard"}
-              </h1>
+              </h1> */}
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {/* Search bar with #272822 focus */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input 
-                  type="text" 
-                  placeholder="Search..." 
-                  className="w-64 pl-10 pr-4 py-2 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#272822] focus:bg-white border border-gray-200"
-                />
-              </div>
-              
+
               {/* Admin profile */}
               <div className="flex items-center space-x-2 bg-gray-50 hover:bg-[#272822] hover:text-white px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-gray-200">
                 <span className="text-sm font-medium">Admin Panel</span>
@@ -145,7 +193,7 @@ function AdminDashboardLayout() {
         </header>
 
         {/* Main content area */}
-        <main className="flex-1 overflow-y-auto pt-6 bg-white">
+        <main className="flex-1 overflow-y-auto pt-6 bg-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>

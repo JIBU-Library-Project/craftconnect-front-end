@@ -12,17 +12,12 @@ import {
 
 import { artisanJobs } from "../../data/dummyData"; // replace with your correct import
 
-
 const ArtisanJobDetailPage = () => {
   const navigate = useNavigate();
   const { jobId } = useParams();
   const job = artisanJobs.find((job) => job.id === jobId);
   const [selectedImage, setSelectedImage] = useState(null);
 
-
-
-
-  
   if (!job) {
     return (
       <div className="max-w-screen-sm mx-auto px-4 py-12 text-center">
@@ -72,9 +67,11 @@ const ArtisanJobDetailPage = () => {
             </h1>
             <div className="flex items-center mt-2 space-x-2">
               <span
-                className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[job.status]}`}
+                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                  statusColors[job.jobStatus]
+                }`}
               >
-                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                {job.jobStatus.charAt(0).toUpperCase() + job.jobStatus.slice(1)}
               </span>
               <span className="text-gray-500 text-xs">
                 Posted: {new Date(job.createdAt).toLocaleDateString()}
@@ -226,7 +223,7 @@ const ArtisanJobDetailPage = () => {
       </div>
 
       {/* Actions */}
-      {job.status === "accepted" && (
+      {job.jobStatus === "accepted" && (
         <div className="bg-white rounded-xl shadow p-5 flex flex-col sm:flex-row gap-3">
           <button
             onClick={() => (window.location.href = `tel:${job.user.phone}`)}

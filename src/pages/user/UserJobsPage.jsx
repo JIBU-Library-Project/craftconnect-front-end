@@ -26,7 +26,7 @@ const UserJobsPage = () => {
       job.id === selectedJobId
         ? {
             ...job,
-            status: "cancelled",
+            jobStatus: "cancelled",
             cancellationReason: data.reason,
           }
         : job
@@ -50,20 +50,20 @@ const UserJobsPage = () => {
 
   const getStatusCount = (tab) => {
     return jobs.filter((job) => {
-      if (tab === "completed") return job.status === "completed";
-      if (tab === "active") return job.status === "accepted";
-      if (tab === "cancelled") return job.status === "cancelled";
-      if (tab === "declined") return job.status === "declined";
-      return job.status === "pending";
+      if (tab === "completed") return job.jobStatus === "completed";
+      if (tab === "active") return job.jobStatus === "accepted";
+      if (tab === "cancelled") return job.jobStatus === "cancelled";
+      if (tab === "declined") return job.jobStatus === "declined";
+      return job.jobStatus === "pending";
     }).length;
   };
 
   const filteredJobs = jobs.filter((job) => {
-    if (activeTab === "completed") return job.status === "completed";
-    if (activeTab === "active") return job.status === "accepted";
-    if (activeTab === "cancelled") return job.status === "cancelled";
-    if (activeTab === "declined") return job.status === "declined";
-    return job.status === "pending";
+    if (activeTab === "completed") return job.jobStatus === "completed";
+    if (activeTab === "active") return job.jobStatus === "accepted";
+    if (activeTab === "cancelled") return job.jobStatus === "cancelled";
+    if (activeTab === "declined") return job.jobStatus === "declined";
+    return job.jobStatus === "pending";
   });
 
   const statusColors = {
@@ -256,11 +256,11 @@ const UserJobsPage = () => {
                       </h3>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          statusColors[job.status]
+                          statusColors[job.jobStatus]
                         }`}
                       >
-                        {job.status.charAt(0).toUpperCase() +
-                          job.status.slice(1)}
+                        {job.jobStatus.charAt(0).toUpperCase() +
+                          job.jobStatus.slice(1)}
                       </span>
                     </div>
 
@@ -293,7 +293,7 @@ const UserJobsPage = () => {
 
                 {/* Artisan Information - Responsive Layout */}
                 {job.artisan &&
-                  !["cancelled", "declined"].includes(job.status) && (
+                  !["cancelled", "declined"].includes(job.jobStatus) && (
                     <div className="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center mb-2 sm:mb-3">
                         <div className="bg-indigo-100 text-indigo-800 rounded-xl w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-bold text-xs sm:text-sm">
@@ -360,7 +360,7 @@ const UserJobsPage = () => {
                 {(job.cancellationReason || job.declineReason) && (
                   <div className="mb-4 p-2 sm:p-3 bg-red-50 border-l-4 border-red-500 rounded-r text-xs sm:text-sm">
                     <p className="font-medium text-red-700">
-                      {job.status === "cancelled"
+                      {job.jobStatus === "cancelled"
                         ? "Cancellation Reason:"
                         : "Decline Reason:"}
                     </p>
@@ -379,7 +379,7 @@ const UserJobsPage = () => {
                     View Details
                   </button>
 
-                  {job.status === "pending" && (
+                  {job.jobStatus === "pending" && (
                     <button
                       onClick={() => {
                         setSelectedJobId(job.id);
@@ -391,7 +391,7 @@ const UserJobsPage = () => {
                     </button>
                   )}
 
-                  {job.status === "completed" && !job.reviewId && (
+                  {job.jobStatus === "completed" && !job.reviewId && (
                     <button
                       onClick={() =>
                         navigate(`/homeowner/my-jobs/${job.id}/review`)
@@ -402,7 +402,7 @@ const UserJobsPage = () => {
                     </button>
                   )}
 
-                  {job.status === "completed" && job.reviewId && (
+                  {job.jobStatus === "completed" && job.reviewId && (
                     <button
                       onClick={() =>
                         navigate(`/homeowner/my-jobs/${job.id}/review`)

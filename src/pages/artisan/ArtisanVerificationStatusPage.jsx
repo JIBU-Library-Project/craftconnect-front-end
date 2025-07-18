@@ -35,7 +35,7 @@ function ArtisanVerificationStatusPage() {
       icon: "⏳",
       color: "bg-yellow-100 text-yellow-800",
     },
-    approved: {
+    verified: {
       title: "Verified Successfully!",
       description:
         "Your account is now fully verified. Users can now verify your authenticity.",

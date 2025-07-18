@@ -22,9 +22,9 @@ function AdminVerificationPage() {
   const filteredRequests = requests.filter((request) => {
     const matchesFilter =
       filter === "all" ||
-      (filter === "pending" && request.status === "pending") ||
-      (filter === "approved" && request.status === "approved");
-
+      (filter === "pending" && request.verificationStatus === "pending") ||
+      (filter === "verified" && request.verificationStatus === "verified") ||
+      (filter === "rejected" && request.verificationStatus === "rejected");
     const matchesSearch =
       request.artisanName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,8 +44,8 @@ function AdminVerificationPage() {
           Verification Requests
         </h1>
         <p className="text-gray-600 mt-2">
-          {requests.filter((r) => r.status === "pending").length} pending
-          requests
+          {requests.filter((r) => r.verificationStatus === "pending").length}{" "}
+          pending requests
         </p>
       </div>
 
@@ -65,7 +65,8 @@ function AdminVerificationPage() {
           >
             <option value="all">All Requests</option>
             <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
       </div>
@@ -139,17 +140,22 @@ function AdminVerificationPage() {
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                         ${
-                          request.status === "pending"
+                          request.verificationStatus === "pending"
                             ? "bg-yellow-100 text-yellow-800"
                             : ""
                         }
                         ${
-                          request.status === "approved"
+                          request.verificationStatus === "rejected"
+                            ? "bg-red-400 text-white"
+                            : ""
+                        }
+                        ${
+                          request.verificationStatus === "verified"
                             ? "bg-green-100 text-green-800"
                             : ""
                         }`}
                       >
-                        {request.status}
+                        {request.verificationStatus}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm font-medium">
