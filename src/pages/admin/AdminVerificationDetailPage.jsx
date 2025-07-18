@@ -101,7 +101,7 @@ function AdminVerificationDetailPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 md:p-8">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-2xl font-bold text-indigo-600">
               Verification Review
             </h2>
             <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">

@@ -35,11 +35,11 @@ function AdminArtisanJobsPage() {
       declined: { color: "bg-red-100 text-red-800", text: "Declined" },
       completed: { color: "bg-green-100 text-green-800", text: "Completed" },
       cancelled: { color: "bg-gray-100 text-gray-800", text: "Cancelled" },
-      accepted: { color: "bg-blue-100 text-blue-800", text: "Accepted" },
+      accepted: { color: "bg-indigo-100 text-indigo-800", text: "Accepted" },
     };
     return (
       <span
-        className={`px-2 py-1 text-xs font-medium rounded-full ${statusMap[status]?.color || "bg-gray-100"}`}
+        className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusMap[status]?.color || "bg-gray-100 text-gray-800"}`}
       >
         {statusMap[status]?.text || status}
       </span>
@@ -47,20 +47,20 @@ function AdminArtisanJobsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <div className="flex flex-col gap-4 mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Artisan Job Management</h1>
+        <h1 className="text-2xl font-bold text-indigo-600">Artisan Job Management</h1>
         <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             placeholder="Search jobs, user, or artisan..."
-            className="px-4 py-2 border border-gray-300 rounded-lg w-full"
+            className="px-4 py-2 rounded-lg border border-gray-300 w-full focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <select
-            className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto"
+            className="px-4 py-2 rounded-lg border border-gray-300 w-full sm:w-auto focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -79,74 +79,74 @@ function AdminArtisanJobsPage() {
         {filteredJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex flex-col gap-3"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition duration-200"
           >
             {/* Title & Budget */}
             <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-base font-semibold text-gray-800">{job.title}</h2>
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold text-gray-800">{job.title}</h2>
                 {statusBadge(job.jobStatus)}
               </div>
-              <div className="text-sm font-semibold text-gray-700">{job.budget}</div>
+              <div className="text-base font-bold text-emerald-600">{job.budget}</div>
             </div>
 
             {/* Dates & Location */}
-            <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+            <div className="flex flex-wrap gap-3 text-sm text-gray-600 mt-2">
               <div className="flex items-center">
-                <Calendar size={14} className="mr-1 text-gray-400" />
+                <Calendar size={16} className="mr-1 text-indigo-500" />
                 {formatDate(job.scheduledAt)}
               </div>
               {job.location && (
                 <div className="flex items-center">
-                  <MapPin size={14} className="mr-1 text-gray-400" />
+                  <MapPin size={16} className="mr-1 text-indigo-500" />
                   {job.location}
                 </div>
               )}
             </div>
 
             {/* Artisan Info */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm text-gray-700 bg-gray-50 p-2 rounded">
-              <div className="flex items-center gap-1">
-                <Building2 size={14} className="text-gray-400" />
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-3 bg-gray-50 p-2 rounded">
+              <div className="flex items-center gap-1 text-gray-700">
+                <Building2 size={16} className="text-indigo-500" />
                 <span className="font-medium">Artisan:</span> {job.artisanName} ({job.businessName})
               </div>
               {job.artisanLocation && (
-                <div className="flex items-center gap-1">
-                  <MapPin size={14} className="text-gray-400" />
+                <div className="flex items-center gap-1 text-gray-700">
+                  <MapPin size={16} className="text-indigo-500" />
                   {job.artisanLocation}
                 </div>
               )}
             </div>
 
             {/* User Info */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 text-sm text-gray-700 bg-gray-50 p-2 rounded">
-              <div className="flex items-center gap-1">
-                <UserIcon size={14} className="text-gray-400" />
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2 bg-gray-50 p-2 rounded">
+              <div className="flex items-center gap-1 text-gray-700">
+                <UserIcon size={16} className="text-indigo-500" />
                 <span className="font-medium">User:</span> {job.user.name}
               </div>
-              <div className="flex items-center gap-1">
-                <Phone size={14} className="text-gray-400" />
+              <div className="flex items-center gap-1 text-gray-700">
+                <Phone size={16} className="text-indigo-500" />
                 {job.user.phone}
               </div>
             </div>
 
             {/* Decline & Cancellation Reasons */}
             {job.cancellationReason && (
-              <div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-2 rounded text-xs">
+              <div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-2 rounded text-xs mt-2">
                 Cancellation Reason: {job.cancellationReason}
               </div>
             )}
             {job.declineReason && (
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-2 rounded text-xs">
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 p-2 rounded text-xs mt-2">
                 Decline Reason: {job.declineReason}
               </div>
             )}
 
             {/* View Details Button */}
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-3">
               <button
-                onClick={() => navigate(`/admin/artisans/jobs/${job.id}`)}
-                className="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-700"
+                onClick={() => navigate(`/admin/artisan/jobs/${job.id}`)}
+                className="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-sm font-medium text-white transition"
               >
                 View Details
               </button>
@@ -158,7 +158,7 @@ function AdminArtisanJobsPage() {
       {/* No Results */}
       {filteredJobs.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-          <p className="text-gray-500">No artisan jobs found matching your criteria</p>
+          <p className="text-gray-500">No artisan jobs found matching your criteria.</p>
         </div>
       )}
     </div>
