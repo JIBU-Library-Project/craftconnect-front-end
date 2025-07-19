@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   BadgeCheck,
   ShieldAlert,
@@ -11,7 +11,39 @@ import {
 import RatingStars from "./RatingStars";
 
 const ArtisanCard = ({ artisan }) => {
+  const navigate = useNavigate();
+
   if (!artisan) return null;
+
+  // Check if user is logged in (using localStorage)
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  const handleAction = (action) => {
+    if (!isLoggedIn) {
+      // Redirect to login with return URL
+      navigate("/login", { state: { from: window.location.pathname } });
+      return false;
+    }
+    return true;
+  };
+
+  const handleWhatsApp = () => {
+    if (handleAction("whatsapp")) {
+      window.open(`https://wa.me/${artisan.whatsapp}`, "_blank");
+    }
+  };
+
+  const handlePhoneCall = () => {
+    if (handleAction("phone")) {
+      window.location.href = `tel:${artisan.phone}`;
+    }
+  };
+
+  const handleViewProfile = () => {
+    if (handleAction("profile")) {
+      navigate(`/artisan/${artisan.id}`);
+    }
+  };
 
   const renderVerificationBadge = () => {
     if (artisan.verificationStatus === "verified") {
@@ -118,29 +150,27 @@ const ArtisanCard = ({ artisan }) => {
           {/* Action Buttons */}
           <div className="mt-4 flex flex-wrap gap-2">
             {artisan.whatsapp && (
-              <a
-                href={`https://wa.me/${artisan.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={handleWhatsApp}
                 className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
               >
                 <MessageCircle size={16} className="mr-1" /> WhatsApp
-              </a>
+              </button>
             )}
             {artisan.phone && (
-              <a
-                href={`tel:${artisan.phone}`}
+              <button
+                onClick={handlePhoneCall}
                 className="bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
               >
                 <Phone size={16} className="mr-1" /> Call Now
-              </a>
+              </button>
             )}
-            <Link
-              to={`/artisan/${artisan.id}`}
-              className="border border-neutral-300 text-neutral-700 hover:bg-neutral-100 px-3 py-1.5 rounded text-sm transition-colors"
+            <button
+              onClick={handleViewProfile}
+              className="border border-neutral-300 hover:bg-neutral-100 text-neutral-700 px-3 py-1.5 rounded text-sm transition-colors"
             >
               View Profile
-            </Link>
+            </button>
           </div>
         </div>
       </div>

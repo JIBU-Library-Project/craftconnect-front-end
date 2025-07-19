@@ -19,7 +19,7 @@ function UserDashboardLayout() {
     { path: "/homeowner/user-profile", icon: <User className="w-5 h-5" />, label: "Profile/Stats" },
     { path: "/homeowner/my-jobs", icon: <Briefcase className="w-5 h-5" />, label: "My Jobs" },
     { path: "/homeowner/user-reviews", icon: <Star className="w-5 h-5" />, label: "My Reviews" },
-    { path: "/homeowner/user-profile/edit", },
+
   ];
 
   const handleLogout = () => navigate("/login");
