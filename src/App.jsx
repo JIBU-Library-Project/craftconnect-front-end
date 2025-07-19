@@ -51,6 +51,7 @@ import AdminUserJobsDetailPage from "./pages/admin/AdminUserJobsDetailPage";
 import AdminArtisanJobsPage from "./pages/admin/AdminArtisanJobsPage";
 import AdminArtisansDetailPage from "./pages/admin/AdminArtisanDetailPage";
 import AdminArtisanJobsDetailPage from "./pages/admin/AdminArtisanJobsDetailPage";
+import UserProfileEditPage from "./pages/user/UserProfileEditPage";
 
 
 
@@ -96,6 +97,7 @@ function App() {
         { path: "my-jobs/:jobId", element: <UserJobDetailPage /> },
         { path: "my-jobs/:id/review", element: <LeaveReviewPage /> },
         { path: "user-profile", element: <UserProfilePage /> },
+        { path: "user-profile/edit", element: <UserProfileEditPage /> },
         { path: "user-reviews", element: <UserReviewsPage /> },
       ],
     },

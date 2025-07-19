@@ -1,14 +1,17 @@
-*{
+* {
   /* font-family: "epilogue"; */
   /* font-family: 'Urbanist', sans-serif; */
-  font-family: 'Rubik', sans-serif;
-   /* font-family: 'Work Sans', sans-serif; */
+  /* font-family: 'Rubik', sans-serif; */
+  font-family: 'BR Sonoma', sans-serif;
+  /* font-family: 'Retro Morey', sans-serif; */
+/* font-family: 'Right Swipe Personal Use', sans-serif; */
+  /* font-family: 'Work Sans', sans-serif; */
 }
 
 
-body{
+body {
   overflow-x: hidden;
-} 
+}
 
 .loginpage {
   background-image: url('../src/assets/loginblur.jpg');
@@ -18,11 +21,28 @@ body{
 
 }
 
+.card {
+  background-image: url('../src/assets/card.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+
+.hero {
+  background-image: url('../src/assets/img1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
 
 
 .outlet {
   position: relative;
-  overflow: hidden; /* Ensure pseudo-element is contained */
+  overflow: hidden;
+  /* Ensure pseudo-element is contained */
 }
 
 .outlet::before {
@@ -34,6 +54,8 @@ body{
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(90px);
-  transform: scale(1.05); /* Prevent edge cropping */
-  z-index: -1; /* Place behind content */
+  transform: scale(1.05);
+  /* Prevent edge cropping */
+  z-index: -1;
+  /* Place behind content */
 }

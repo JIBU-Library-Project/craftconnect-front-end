@@ -617,7 +617,7 @@ Complimentary safety inspection.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const userProfilee = {
+export const userProfile = {
   id: "user_123",
   name: "Kwame Asare",
   email: "kwame@example.com",
@@ -629,9 +629,10 @@ export const userProfilee = {
   phone: "0244123456",
   stats: {
     totalJobs: 5,
+    acceptedJobs: 5,
     completedJobs: 3,
     pendingJobs: 1,
-    cancelledJobs: 1,
+    cancelledJobs: 1
   },
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -824,81 +825,76 @@ export const userJobs = [
   {
     id: "job-1",
     title: "Fix leaking kitchen sink",
-    description:
-      "The kitchen sink is leaking near the pipe joint and needs urgent repair to prevent water damage to the cabinet below.",
+    description: "The kitchen sink has been leaking near the pipe joint for 2 days. Need urgent assistance. The leak is causing water damage to the cabinet below. Looking for a professional plumber with experience in pipe repairs.",
     budget: "GHS 250",
     scheduledAt: "2023-10-25T10:00:00Z",
     createdAt: "2023-10-20T08:30:00Z",
     location: "Accra, Spintex Road",
-    userName: "Babs Serwaa",
-    userPhone: "+233 24 123 4567",
     userId: "user_123",
     artisanId: "art_789",
-    jobStatus: "pending",
+    jobStatus: "declined",
     declineReason: "",
-    cancellationReason: "",
+    cancellationReason: "I have an urgent meeting to attend",
     images: [
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1621544402532-78c290378588?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
+      "https://images.unsplash.com/photo-1621544402532-78c290378588"
     ],
     artisan: {
       businessName: "Kofi Plumbing Services",
       rating: 4.7,
-      completedJobs: 42,
-    },
+      phone: "+233 24 123 4567",
+      email: "kofi.plumbing@example.com",
+    }
   },
   {
     id: "job-2",
-    title: "Air Conditioner Installation",
-    description:
-      "Need a professional to install a new 1.5hp split air conditioner in the living room and test functionality.",
-    budget: "GHS 600",
+    title: "Install new ceiling fan",
+    description: "Need a qualified electrician to install a new ceiling fan in my living room. I already purchased the fan unit. Requires proper wiring and secure mounting. The ceiling is concrete.",
+    budget: "GHS 180",
     scheduledAt: "2023-11-02T14:00:00Z",
-    createdAt: "2023-10-28T12:45:00Z",
-    location: "Kumasi, Ahodwo",
-    userName: "Akua Mensah",
-    userPhone: "+233 20 987 6543",
-    userId: "user_456",
-    artisanId: "art_321",
-    jobStatus: "accepted",
+    createdAt: "2023-10-28T09:15:00Z",
+    location: "Accra, East Legon",
+    userId: "user_123",
+    artisanId: "art_456",
+    jobStatus: "completed",
     declineReason: "",
     cancellationReason: "",
     images: [
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85f?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae",
+      "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91"
     ],
     artisan: {
-      businessName: "CoolTech Installations",
+      businessName: "Ama Electrical Works",
       rating: 4.9,
-      completedJobs: 58,
-    },
+      phone: "+233 55 987 6543",
+      email: "ama.electrical@example.com",
+    }
   },
   {
     id: "job-3",
-    title: "Electrical Wiring for New Shop",
-    description:
-      "Need complete electrical wiring for a small retail shop including sockets, lighting, and main switch installation.",
-    budget: "GHS 1500",
-    scheduledAt: "2023-11-15T09:00:00Z",
-    createdAt: "2023-11-01T10:00:00Z",
-    location: "Takoradi, Market Circle",
-    userName: "Yaw Boateng",
-    userPhone: "+233 55 765 4321",
-    userId: "user_789",
-    artisanId: "art_654",
-    jobStatus: "declined",
-    declineReason: "Client budget too low for required materials.",
+    title: "Repair broken bedroom window",
+    description: "The wooden window frame in my master bedroom is broken and needs replacement. Looking for a carpenter who can match the existing design and install weatherproofing.",
+    budget: "GHS 320",
+    scheduledAt: "2023-11-10T09:30:00Z",
+    createdAt: "2023-11-05T11:45:00Z",
+    location: "Accra, Cantonments",
+    userId: "user_123",
+    artisanId: "art_321",
+    jobStatus: "pending",
+    declineReason: "",
     cancellationReason: "",
     images: [
-      "https://images.unsplash.com/photo-1592496001020-7aab2b90331e?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1622372738946-62e02505feb3",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
     ],
     artisan: {
-      businessName: "LightWave Electricals",
+      businessName: "Yaw Carpentry Solutions",
       rating: 4.5,
-      completedJobs: 73,
-    },
-  },
+      phone: "+233 27 456 7890",
+      email: "yaw.carpentry@example.com",
+    }
+  }
 ];
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

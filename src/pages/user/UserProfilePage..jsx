@@ -1,223 +1,237 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { FiCamera, FiTrash2, FiX } from "react-icons/fi";
 
-const UserProfilePage = () => {
-  const userProfile = {
-    id: "user_123",
+const UserProfileEditPage = () => {
+  const fileInputRef = useRef(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
+
+  // Sample user data
+  const userData = {
     name: "Kwame Asare",
-    email: "kwame@example.com",
     profilePic: "/profiles/user1.jpg",
-    role: "user",
-    joinedDate: "2023-05-15T08:30:00Z",
-    lastLogin: "2023-07-20T14:25:00Z",
-    location: "Accra, Osu",
     phone: "0244123456",
-    stats: {
-      totalJobs: 5,
-      completedJobs: 3,
-      pendingJobs: 1,
-      cancelledJobs: 1,
-    },
+    location: "Accra, Osu"
   };
 
-  const userReviews = [
-    {
-      id: "rev_006",
-      jobId: "job-4",
-      rating: 4,
-      comment: "Very good, minor finishing issues but overall nice.",
-      date: "2024-07-02T08:20:00Z",
-      artisan: {
-        id: "art_789",
-        name: "Yaw Boateng",
-        profilePic: "/profiles/artisan1.jpg",
-      },
-    },
-    {
-      id: "rev_007",
-      jobId: "job-5",
-      rating: 1,
-      comment: "Terrible service, would not recommend.",
-      date: "2024-08-15T12:40:00Z",
-      artisan: {
-        id: "art_987",
-        name: "Abena Darko",
-        profilePic: "/profiles/artisan2.jpg",
-      },
-    },
-    {
-      id: "rev_010",
-      jobId: "job-8",
-      rating: 5,
-      comment: "Outstanding work! The piece exceeded my expectations.",
-      date: "2024-09-10T14:55:00Z",
-      artisan: {
-        id: "art_123",
-        name: "Kofi Mensah",
-        profilePic: "/profiles/artisan4.jpg",
-      },
-    },
-  ];
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      name: userData.name,
+      phone: userData.phone,
+      location: userData.location
+    }
+  });
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setPreviewImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setShowRemoveConfirm(false);
+  };
+
+  const onSubmit = (data) => {
+    console.log("Form submitted:", data);
+    // Handle form submission
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-      {/* Profile Summary */}
-      <div className="bg-white rounded-lg border border-gray-100 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3 sm:gap-4">
-          <img
-            src={userProfile.profilePic}
-            alt={userProfile.name}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-gray-200"
-          />
-          <div>
-            <h2 className="text-lg sm:text-xl font-semibold">
-              {userProfile.name}
-            </h2>
-            <p className="text-gray-600 text-sm sm:text-base">
-              {userProfile.email}
-            </p>
-            <p className="text-xs sm:text-sm text-gray-500">
-              {userProfile.location}
-            </p>
-            <p className="text-xs sm:text-sm text-gray-500">
-              Member since {formatDate(userProfile.joinedDate)}
-            </p>
-          </div>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Edit Profile</h1>
+        <Link
+          to="/user/profile"
+          className="flex items-center gap-1 text-gray-600 hover:text-gray-900 text-sm font-medium"
+        >
+          <FiX size={18} /> Cancel
+        </Link>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white rounded-lg border border-gray-100 p-3 sm:p-4 text-center">
-          <p className="text-gray-500 text-xs sm:text-sm">Total Jobs</p>
-          <p className="text-xl sm:text-2xl font-bold">
-            {userProfile.stats.totalJobs}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-100 p-3 sm:p-4 text-center">
-          <p className="text-gray-500 text-xs sm:text-sm">Completed</p>
-          <p className="text-xl sm:text-2xl font-bold">
-            {userProfile.stats.completedJobs}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-100 p-3 sm:p-4 text-center">
-          <p className="text-gray-500 text-xs sm:text-sm">Pending</p>
-          <p className="text-xl sm:text-2xl font-bold">
-            {userProfile.stats.pendingJobs}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-100 p-3 sm:p-4 text-center">
-          <p className="text-gray-500 text-xs sm:text-sm">Cancelled</p>
-          <p className="text-xl sm:text-2xl font-bold">
-            {userProfile.stats.cancelledJobs}
-          </p>
-        </div>
-      </div>
-
-      {/* Contact Information */}
-      <div className="bg-white rounded-lg border border-gray-100 p-4 sm:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
-          Contact Information
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm sm:text-base">
-          <p>
-            <span className="font-medium">Phone:</span> {userProfile.phone}
-          </p>
-          <p>
-            <span className="font-medium">Email:</span> {userProfile.email}
-          </p>
-          <p>
-            <span className="font-medium">Location:</span>{" "}
-            {userProfile.location}
-          </p>
-          <p>
-            <span className="font-medium">Last Login:</span>{" "}
-            {formatDate(userProfile.lastLogin)}
-          </p>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="bg-white rounded-lg border border-gray-100 p-4 sm:p-6">
-        <div className="flex justify-between items-center mb-3 sm:mb-4">
-          <h2 className="text-lg sm:text-xl font-semibold">Recent Reviews</h2>
-          <Link
-            to="/user/reviews"
-            className="text-blue-600 text-sm hover:text-blue-800"
-          >
-            View All
-          </Link>
-        </div>
-        <div className="space-y-3 sm:space-y-4">
-          {userReviews.length > 0 ? (
-            userReviews.map((review) => (
-              <div
-                key={review.id}
-                className="border-b border-gray-100 pb-3 sm:pb-4 last:border-0"
-              >
-                <div className="flex items-start gap-3 mb-1">
-                  <img
-                    src={review.artisan.profilePic}
-                    alt={review.artisan.name}
-                    className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                  />
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-medium text-sm sm:text-base">
-                        {review.artisan.name}
-                      </h3>
-                      <span className="flex items-center text-yellow-500 text-sm sm:text-base">
-                        ⭐ {review.rating}
-                      </span>
-                    </div>
-                    <p className="text-gray-700 text-sm sm:text-base">
-                      {review.comment}
-                    </p>
-                    <p className="text-gray-500 text-xs sm:text-sm">
-                      {formatDate(review.date)}
-                    </p>
-                  </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Profile Picture */}
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Profile Picture
+          </label>
+          
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="relative group">
+              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg relative">
+                <img
+                  src={previewImage || userData.profilePic}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <FiCamera className="text-white text-2xl" />
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm sm:text-base">
-              You haven't left any reviews yet
-            </p>
+              
+              {previewImage && (
+                <button
+                  type="button"
+                  onClick={() => setShowRemoveConfirm(true)}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-md"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              )}
+            </div>
+
+            <div className="flex-1 w-full">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="profile-upload"
+              />
+              <label
+                htmlFor="profile-upload"
+                className="block w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-indigo-500 transition-colors text-center"
+              >
+                <div className="flex flex-col items-center justify-center gap-1">
+                  <FiCamera className="text-gray-400 text-xl" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {previewImage ? "Change photo" : "Upload new photo"}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    JPG, PNG up to 2MB
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Name */}
+        <div className="space-y-2">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            Full Name
+          </label>
+          <div className="relative">
+            <input
+              id="name"
+              type="text"
+              className={`block w-full px-4 py-3 rounded-lg border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              {...register("name", { required: "Name is required" })}
+            />
+          </div>
+          {errors.name && (
+            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
           )}
         </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white rounded-lg border border-gray-100 p-4 sm:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
-          Quick Actions
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            to="/search"
-            className="bg-green-50 text-green-700 px-4 py-3 rounded-lg hover:bg-green-100 transition-colors text-center font-medium"
-          >
-            Request A Service
-          </Link>
-          <Link
-            to="/homeowner/my-jobs"
-            className="bg-blue-50 text-blue-700 px-4 py-3 rounded-lg hover:bg-blue-100 transition-colors text-center font-medium"
-          >
-            View My Jobs
-          </Link>
+        {/* Phone */}
+        <div className="space-y-2">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            Phone Number
+          </label>
+          <div className="relative">
+            <input
+              id="phone"
+              type="tel"
+              className={`block w-full px-4 py-3 rounded-lg border ${
+                errors.phone ? "border-red-500" : "border-gray-300"
+              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              {...register("phone", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9]{10}$/,
+                  message: "Please enter a valid 10-digit phone number"
+                }
+              })}
+            />
+          </div>
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+          )}
         </div>
-      </div>
+
+        {/* Location */}
+        <div className="space-y-2">
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+            Location
+          </label>
+          <div className="relative">
+            <input
+              id="location"
+              type="text"
+              className={`block w-full px-4 py-3 rounded-lg border ${
+                errors.location ? "border-red-500" : "border-gray-300"
+              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
+              {...register("location", { required: "Location is required" })}
+            />
+          </div>
+          {errors.location && (
+            <p className="mt-1 text-sm text-red-600">{errors.location.message}</p>
+          )}
+        </div>
+
+        {/* Form Actions */}
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6">
+          <Link
+            to="/user/profile"
+            className="px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center"
+          >
+            Cancel
+          </Link>
+          <button
+            type="submit"
+            className="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+
+      {/* Remove Image Confirmation Modal */}
+      {showRemoveConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Remove Profile Picture?
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to remove your profile picture?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowRemoveConfirm(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default UserProfilePage;
+export default UserProfileEditPage;

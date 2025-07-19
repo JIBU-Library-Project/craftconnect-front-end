@@ -444,62 +444,50 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-            {/* Pricing Tab */}
-            {activeTab === "pricing" && (
-              <div className="space-y-8">
-                <h2 className="text-xl font-bold text-gray-800">
-                  Services & Pricing
-                </h2>
+          {/* Pricing Tab */}
+{activeTab === "pricing" && (
+  <div className="space-y-6">
+    <h2 className="text-xl font-bold text-gray-800">Services & Pricing</h2>
 
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Service
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Description
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Price
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Time
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {artisan.services.map((service, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-4 py-4 whitespace-nowrap font-medium text-gray-900">
-                            {service.service}
-                          </td>
-                          <td className="px-4 py-4 text-gray-500">
-                            {service.description}
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                            {service.price}
-                          </td>
-                          <td className="px-4 py-4 whitespace-nowrap text-gray-500">
-                            {service.estimatedTime}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+    <div className="grid gap-4 sm:grid-cols-2">
+      {artisan.services.map((service, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-xl shadow border border-gray-200 p-4 flex flex-col justify-between hover:shadow-md transition-shadow"
+        >
+          <div className="mb-3">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              {service.service}
+            </h3>
+            <p className="text-gray-600 text-sm">{service.description}</p>
+          </div>
 
-                <div className="bg-blue-50 p-5 rounded-lg">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Pricing Notes
-                  </h3>
-                  <p className="text-gray-600 whitespace-pre-line">
-                    {artisan.pricingNotes}
-                  </p>
-                </div>
-              </div>
-            )}
+          <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100 text-sm text-gray-700">
+            <div>
+              <span className="block font-medium">Price</span>
+              <span>{service.price}</span>
+            </div>
+            <div>
+              <span className="block font-medium">Estimated Time</span>
+              <span>{service.estimatedTime}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {artisan.pricingNotes && (
+      <div className="bg-blue-50 p-5 rounded-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          Pricing Notes
+        </h3>
+        <p className="text-gray-700 whitespace-pre-line text-sm">
+          {artisan.pricingNotes}
+        </p>
+      </div>
+    )}
+  </div>
+)}
 
             {/* Report Button */}
             <div className="text-right mt-6">

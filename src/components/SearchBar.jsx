@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
+const locations = [
+  "Accra",
+  "Kumasi",
+  "Tema",
+  "Takoradi",
+  "Cape Coast",
+  // Easily add more here later
+];
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,32 +24,62 @@ const SearchBar = () => {
   return (
     <form
       onSubmit={handleSearch}
-      className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-2 flex"
+      className="max-w-2xl mx-auto bg-white rounded-full shadow-lg flex items-center p-2 space-x-2 border border-gray-300 transition hover:shadow-xl"
     >
-      <input
-        type="text"
-        placeholder="Search for plumbers, electricians, tailors..."
-        className="flex-grow px-4 py-3 text-gray-800 focus:outline-none rounded-l-lg"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <select
-        className="px-4 py-3 text-gray-600 border-l border-gray-200 focus:outline-none"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      >
-        <option value="">All Locations</option>
-        <option value="Accra">Accra</option>
-        <option value="Kumasi">Kumasi</option>
-        <option value="Tema">Tema</option>
-        <option value="Takoradi">Takoradi</option>
-        <option value="Cape Coast">Cape Coast</option>
-      </select>
+      <div className="flex-grow">
+        <input
+          type="text"
+          placeholder="Search for plumbers, electricians, tailors..."
+          className="w-full px-4 py-3 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      <div className="relative">
+        <select
+          className="
+      appearance-none
+      px-4 py-3
+      rounded-full
+      border border-gray-300
+      bg-white
+      text-gray-700
+      focus:outline-none focus:ring-2 focus:ring-indigo-500
+      transition
+      pr-10
+    "
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        >
+          <option value="">All Locations</option>
+          {locations.map((loc, idx) => (
+            <option key={idx} value={loc}>
+              {loc}
+            </option>
+          ))}
+        </select>
+        {/* Dropdown arrow */}
+        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+          <svg
+            className="h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
       <button
         type="submit"
-        className="bg-indigo-600 text-white px-6 py-3 rounded-r-lg hover:bg-blue-700 font-medium"
+        className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full transition"
       >
-        <i className="fas fa-search mr-2"></i>Search
+        <MagnifyingGlassIcon className="h-5 w-5" />
       </button>
     </form>
   );

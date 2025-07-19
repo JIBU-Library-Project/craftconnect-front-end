@@ -11,7 +11,7 @@ const Layout = () => {
     
       <Navbar />
      
-      <main className="flex-grow //bg-[#e1d6d2] outlet ">
+      <main className="flex-grow bg-[#ffffff]  ">
         <Outlet />
       </main>
       {/* <Footer /> */}
