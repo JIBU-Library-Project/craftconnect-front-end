@@ -9,18 +9,22 @@ import {
   Hammer,
 } from "lucide-react";
 import RatingStars from "./RatingStars";
+import { useAuth } from "../services/hooks";
+import { toast } from "react-toastify";
 
 const ArtisanCard = ({ artisan }) => {
-  const navigate = useNavigate();
+  const { user } = useAuth();
+   const navigate = useNavigate();
 
   if (!artisan) return null;
 
   // Check if user is logged in (using localStorage)
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const isLoggedIn = user;
 
   const handleAction = (action) => {
     if (!isLoggedIn) {
       // Redirect to login with return URL
+      toast.success("Login to contact artisan")
       navigate("/login", { state: { from: window.location.pathname } });
       return false;
     }
