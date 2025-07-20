@@ -3,13 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../queries/authQueries";
 import { toast } from "react-toastify";
 import { useAuth } from "../../services/hooks";
-import { useState } from "react";
-
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [isloggin, setisLogging] = useState (false);
 
   const {
     register,
@@ -37,8 +34,6 @@ export default function LoginPage() {
     }
   };
 
-  setisLogging(true);
-
   return (
     <div className="min-h-screen w-screen flex items-center justify-center px-4 py-10 loginpage">
       <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
@@ -54,8 +49,7 @@ export default function LoginPage() {
           <div>
             <label
               className="block text-gray-700 font-medium mb-1"
-              htmlFor="email"
-            >
+              htmlFor="email">
               Email
             </label>
             <input
@@ -77,15 +71,13 @@ export default function LoginPage() {
             <div className="flex justify-between items-center mb-1">
               <label
                 className="block text-gray-700 font-medium"
-                htmlFor="password"
-              >
+                htmlFor="password">
                 Password
               </label>
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm  text-[#4b158d] hover:underline"
-              >
+                className="text-sm  text-[#4b158d] hover:underline">
                 Forgot password?
               </button>
             </div>
@@ -106,9 +98,8 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
-          >
-            {isloggin ? "Logging..." : "Sign In"}
+            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition">
+            Sign In
           </button>
         </form>
 
@@ -119,8 +110,7 @@ export default function LoginPage() {
             <button
               onClick={() => navigate("/signup")}
               type="button"
-              className=" text-[#4b158d] font-medium hover:underline"
-            >
+              className=" text-[#4b158d] font-medium hover:underline">
               Sign up here
             </button>
           </p>

@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 export default function SignupPage() {
   const [role, setRole] = useState("User");
   const navigate = useNavigate();
-  const [isSubmitting, setisSubmitting] = useState(false);
 
   const {
     register,
@@ -56,8 +55,6 @@ export default function SignupPage() {
     }
   };
 
-  setisSubmitting(true);
-
   return (
     <div className=" loginpage min-h-screen w-screen flex items-center justify-center px-4 py-10 bg-gray-700">
       <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#fffffffe] /90">
@@ -77,8 +74,7 @@ export default function SignupPage() {
                 role === r
                   ? "bg-[#4b158d] text-white hover:bg-[#aa47bc] "
                   : "bg-[#262722]/15 text-gray-700 hover:bg-[#ddddddda] "
-              }`}
-            >
+              }`}>
               {r === "User" ? "User/HomeOwner" : "Artisan"}
             </button>
           ))}
@@ -148,8 +144,7 @@ export default function SignupPage() {
                   {...register("craft", {
                     required: "Please select your primary craft",
                   })}
-                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
+                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
                   <option value="">Select your craft</option>
                   {craftOptions.map((craft) => (
                     <option key={craft} value={craft}>
@@ -246,9 +241,8 @@ export default function SignupPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition"
-          >
-            {isSubmitting ? "Submitting..." : "Sing Up"}
+            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition">
+            Sign Up
           </button>
 
           {/* Link to login */}
@@ -257,8 +251,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className=" text-[#4b158d] font-medium "
-            >
+              className=" text-[#4b158d] font-medium ">
               Login here
             </button>
           </p>
