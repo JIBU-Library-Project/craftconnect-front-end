@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useSignUp } from "../../queries/authQueries";
+import { toast } from "react-toastify";
 
 export default function SignupPage() {
   const [role, setRole] = useState("User");
@@ -12,6 +14,8 @@ export default function SignupPage() {
     watch,
     formState: { errors },
   } = useForm();
+
+  const signUpMutation = useSignUp();
 
   const password = watch("password");
 
@@ -34,9 +38,21 @@ export default function SignupPage() {
     "Cooker",
   ];
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle your API call here
+  const onSubmit = async (data) => {
+    try {
+      console.log("Submitting login data:", data);
+      const response = await signUpMutation.mutateAsync(data);
+      if (response) {
+        console.log("Signup successful:", response);
+        toast.success("Successfully signed up!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      toast.error(
+        error.response?.data?.error || "Signup failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -58,8 +74,7 @@ export default function SignupPage() {
                 role === r
                   ? "bg-[#4b158d] text-white hover:bg-[#aa47bc] "
                   : "bg-[#262722]/15 text-gray-700 hover:bg-[#ddddddda] "
-              }`}
-            >
+              }`}>
               {r === "User" ? "User/HomeOwner" : "Artisan"}
             </button>
           ))}
@@ -129,8 +144,7 @@ export default function SignupPage() {
                   {...register("craft", {
                     required: "Please select your primary craft",
                   })}
-                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
+                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
                   <option value="">Select your craft</option>
                   {craftOptions.map((craft) => (
                     <option key={craft} value={craft}>
@@ -227,8 +241,7 @@ export default function SignupPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition"
-          >
+            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition">
             Sign Up
           </button>
 
@@ -238,8 +251,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className=" text-[#4b158d] font-medium "
-            >
+              className=" text-[#4b158d] font-medium ">
               Login here
             </button>
           </p>

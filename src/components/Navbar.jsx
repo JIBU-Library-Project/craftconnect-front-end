@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
+import { useAuth } from "../services/hooks";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  
-  const currentUser = "Umar"; // Replace with auth context when ready
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    // Clear auth here if using auth context
+    logout();
     navigate("/");
   };
 
@@ -26,8 +25,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl font-bold flex items-center text-gray-900"
-          >
+            className="text-xl font-bold flex items-center text-gray-900">
             <span>CraftConnect</span>
           </Link>
 
@@ -50,8 +48,7 @@ const Navbar = () => {
                       ? "bg-indigo-50 text-indigo-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`
-                }
-              >
+                }>
                 {label}
               </NavLink>
             ))}
@@ -59,25 +56,23 @@ const Navbar = () => {
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {currentUser ? (
+            {user ? (
               <>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">Hi,</span>
                   <span className="text-sm font-medium text-gray-800">
-                    {currentUser}
+                    {user.name}
                   </span>
                 </div>
                 <Link
                   to="/homeowner"
-                  className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition shadow-md flex items-center gap-1"
-                >
+                  className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition shadow-md flex items-center gap-1">
                   <FiUser size={16} />
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition flex items-center gap-1"
-                >
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition flex items-center gap-1">
                   <FiLogOut size={16} />
                   Logout
                 </button>
@@ -85,8 +80,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition"
-              >
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
                 Login
               </Link>
             )}
@@ -96,8 +90,7 @@ const Navbar = () => {
           <button
             onClick={toggleMobileMenu}
             className="md:hidden p-2 rounded-md text-gray-700 hover:text-gray-900 focus:outline-none"
-            aria-label="Toggle menu"
-          >
+            aria-label="Toggle menu">
             {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
@@ -107,8 +100,7 @@ const Navbar = () => {
       <div
         className={`md:hidden fixed top-16 right-0 w-[60vw] h-fit //h-[calc(100vh-4rem)] bg-white shadow-lg transition-all duration-300 ease-in-out transform ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
+        }`}>
         <div className="h-full overflow-y-auto p-4 space-y-3">
           {[
             { to: "/", label: "Home" },
@@ -128,22 +120,20 @@ const Navbar = () => {
                     ? "bg-indigo-50 text-indigo-600"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`
-              }
-            >
+              }>
               {label}
             </NavLink>
           ))}
 
-          {currentUser ? (
+          {user ? (
             <div className="pt-3 border-t border-gray-200 mt-3 space-y-3">
               <div className="px-4 py-2 text-sm text-gray-500">
-                Logged in as <span className="font-medium">{currentUser}</span>
+                Logged in as <span className="font-medium">{user.name}</span>
               </div>
               <Link
                 to="/homeowner"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
-              >
+                className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md">
                 My Dashboard
               </Link>
               <button
@@ -151,8 +141,7 @@ const Navbar = () => {
                   handleLogout();
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md"
-              >
+                className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md">
                 Logout
               </button>
             </div>
@@ -160,8 +149,7 @@ const Navbar = () => {
             <Link
               to="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md mt-3"
-            >
+              className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md mt-3">
               Login
             </Link>
           )}
@@ -172,8 +160,7 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div
           className="md:hidden fixed inset-0 bg-whit bg-opacity-50 z-40"
-          onClick={toggleMobileMenu}
-        ></div>
+          onClick={toggleMobileMenu}></div>
       )}
     </header>
   );

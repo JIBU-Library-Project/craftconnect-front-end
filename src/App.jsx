@@ -1,4 +1,4 @@
-import {  createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import "./App.css";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/userpublic/HomePage";
@@ -52,8 +52,7 @@ import AdminArtisanJobsPage from "./pages/admin/AdminArtisanJobsPage";
 import AdminArtisansDetailPage from "./pages/admin/AdminArtisanDetailPage";
 import AdminArtisanJobsDetailPage from "./pages/admin/AdminArtisanJobsDetailPage";
 import UserProfileEditPage from "./pages/user/UserProfileEditPage";
-
-
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const router = createBrowserRouter([
@@ -70,57 +69,80 @@ function App() {
 
     // Artisan Dashboard Layout
     {
-      path: "/artisan",
-      element: <ArtisanDashboardLayout />,
+      element: <PrivateRoute roles={["artisan"]} />, // roles optional
       children: [
-        { index: true, element: <ArtisanDashboardPage /> },
-        { path: "profile", element: <ArtisanProfilePage /> },
-        { path: "jobs", element: <ArtisanJobsPage /> },
-        { path: "jobs/view/:jobId", element: <ArtisanJobDetailPage /> },
-        { path: "services", element: <ArtisanServicesViewPage /> },
-        { path: "services-edit", element: <ArtisanAddEditServicesPage /> },
-        { path: "profile/edit", element: <ArtisanProfileEditPage /> },
-        { path: "verification", element: <ArtisanVerificationPage /> },
-        { path: "verify/status", element: <ArtisanVerificationStatusPage /> },
-        { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
-         { path: "contact", element: <ArtisanContactPage /> },
+        {
+          path: "/artisan",
+          element: <ArtisanDashboardLayout />,
+          children: [
+            { index: true, element: <ArtisanDashboardPage /> },
+            { path: "profile", element: <ArtisanProfilePage /> },
+            { path: "jobs", element: <ArtisanJobsPage /> },
+            { path: "jobs/view/:jobId", element: <ArtisanJobDetailPage /> },
+            { path: "services", element: <ArtisanServicesViewPage /> },
+            { path: "services-edit", element: <ArtisanAddEditServicesPage /> },
+            { path: "profile/edit", element: <ArtisanProfileEditPage /> },
+            { path: "verification", element: <ArtisanVerificationPage /> },
+            {
+              path: "verify/status",
+              element: <ArtisanVerificationStatusPage />,
+            },
+            { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
+            { path: "contact", element: <ArtisanContactPage /> },
+          ],
+        },
       ],
     },
 
     // Homeowner Dashboard Layout
     {
-      path: "/homeowner",
-      element: <UserDashboardLayout />,
+      element: <PrivateRoute roles={["user"]} />,
       children: [
-        { index: true, element: <UserDashboardPage /> },
-        { path: "my-jobs", element: <UserJobsPage /> },
-        { path: "my-jobs/:jobId", element: <UserJobDetailPage /> },
-        { path: "my-jobs/:id/review", element: <LeaveReviewPage /> },
-        { path: "user-profile", element: <UserProfilePage /> },
-        { path: "user-profile/edit", element: <UserProfileEditPage /> },
-        { path: "user-reviews", element: <UserReviewsPage /> },
+        {
+          path: "/homeowner",
+          element: <UserDashboardLayout />,
+          children: [
+            { index: true, element: <UserDashboardPage /> },
+            { path: "my-jobs", element: <UserJobsPage /> },
+            { path: "my-jobs/:jobId", element: <UserJobDetailPage /> },
+            { path: "my-jobs/:id/review", element: <LeaveReviewPage /> },
+            { path: "user-profile", element: <UserProfilePage /> },
+            { path: "user-profile/edit", element: <UserProfileEditPage /> },
+            { path: "user-reviews", element: <UserReviewsPage /> },
+          ],
+        },
       ],
     },
 
     // Admin Layout
     {
-      path: "/admin",
-      element: <AdminDashboardLayout />,
+      element: <PrivateRoute roles={["admin"]} />,
       children: [
-        { index: true, element: <AdminDashboardPage /> },
-        { path: "verification", element: <AdminVerificationPage /> },
-        { path: "verify-detail", element: <AdminVerificationDetailPage /> },
-        { path: "reviews", element: <AdminReviewListPage /> },
-        { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
-        { path: "users", element: <AdminUsersListPage /> },
-        { path: "user/jobs/:jobId", element: <AdminUserJobsDetailPage/> },
-        { path: "user/jobs", element: <AdminUserJobsPage /> },
-        { path: "users/:userId", element: <AdminUserDetailPage /> },
-        { path: "artisans", element: <AdminArtisansListPage /> },
-        { path: "artisan/jobs", element: <AdminArtisanJobsPage /> },
-        { path: "artisan/jobs/:jobId", element: <AdminArtisanJobsDetailPage /> },
-        { path: "artisans/:artisanId", element: <AdminArtisanDetailPage /> },
-       
+        {
+          path: "/admin",
+          element: <AdminDashboardLayout />,
+          children: [
+            { index: true, element: <AdminDashboardPage /> },
+            { path: "verification", element: <AdminVerificationPage /> },
+            { path: "verify-detail", element: <AdminVerificationDetailPage /> },
+            { path: "reviews", element: <AdminReviewListPage /> },
+            { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
+            { path: "users", element: <AdminUsersListPage /> },
+            { path: "user/jobs/:jobId", element: <AdminUserJobsDetailPage /> },
+            { path: "user/jobs", element: <AdminUserJobsPage /> },
+            { path: "users/:userId", element: <AdminUserDetailPage /> },
+            { path: "artisans", element: <AdminArtisansListPage /> },
+            { path: "artisan/jobs", element: <AdminArtisanJobsPage /> },
+            {
+              path: "artisan/jobs/:jobId",
+              element: <AdminArtisanJobsDetailPage />,
+            },
+            {
+              path: "artisans/:artisanId",
+              element: <AdminArtisanDetailPage />,
+            },
+          ],
+        },
       ],
     },
 
@@ -134,7 +156,7 @@ function App() {
     {
       path: "*",
       element: (
-        <div className="min-h-screen flex items-center justify-center text-white">
+        <div className="min-h-screen flex items-center justify-center text-black">
           Page Not Found
         </div>
       ),

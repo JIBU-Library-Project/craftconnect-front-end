@@ -1,11 +1,12 @@
-// src/pages/Login.jsx
-
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../queries/authQueries";
+import { toast } from "react-toastify";
+import { useAuth } from "../../services/hooks";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const {
     register,
@@ -13,9 +14,24 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle API login here
+  const loginMutation = useLogin();
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("Submitting login data:", data);
+      const response = await loginMutation.mutateAsync(data);
+      if (response) {
+        console.log("Login successful:", response);
+        toast.success("Successfully logged in!");
+        login(response.user.token);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error(
+        error.response?.data?.error || "Login failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -33,8 +49,7 @@ export default function LoginPage() {
           <div>
             <label
               className="block text-gray-700 font-medium mb-1"
-              htmlFor="email"
-            >
+              htmlFor="email">
               Email
             </label>
             <input
@@ -56,15 +71,13 @@ export default function LoginPage() {
             <div className="flex justify-between items-center mb-1">
               <label
                 className="block text-gray-700 font-medium"
-                htmlFor="password"
-              >
+                htmlFor="password">
                 Password
               </label>
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm  text-[#4b158d] hover:underline"
-              >
+                className="text-sm  text-[#4b158d] hover:underline">
                 Forgot password?
               </button>
             </div>
@@ -85,8 +98,7 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
-          >
+            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition">
             Sign In
           </button>
         </form>
@@ -98,8 +110,7 @@ export default function LoginPage() {
             <button
               onClick={() => navigate("/signup")}
               type="button"
-              className=" text-[#4b158d] font-medium hover:underline"
-            >
+              className=" text-[#4b158d] font-medium hover:underline">
               Sign up here
             </button>
           </p>
