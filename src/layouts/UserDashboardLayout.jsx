@@ -186,8 +186,10 @@ function UserDashboardLayout() {
 
               {/* User profile */}
               <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer transition-colors hover:text-[#f05335]">
-                <span className="text-sm font-medium">Homeowner Account</span>
-              </div>
+  <span className="text-sm font-medium text-gray-700 transition-colors">
+    Welcome, {user?.name}
+  </span>
+</div>
             </div>
           </div>
         </header>
