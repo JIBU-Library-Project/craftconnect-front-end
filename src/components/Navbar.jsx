@@ -18,6 +18,18 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  console.log(user);
+
+  const dashboardLink =
+    user?.role === "artisan"
+      ? "/artisan"
+      : user?.role === "admin"
+      ? "/admin"
+      : "/homeowner";
+
+  const greetingName =
+    user?.role === "artisan" ? user?.businessName : user?.name?.split(" ")[0];
+
   return (
     <header className="bg-white backdrop-blur-2xl sticky top-0 z-50 shadow-sm border-b border-gray-200">
       {/* Desktop Navigation */}
@@ -38,8 +50,6 @@ const Navbar = () => {
               { to: "/search", label: "Find Artisans" },
               { to: "/contact", label: "Contact" },
               { to: "/safety", label: "Safety Tips" },
-              { to: "/artisan", label: "Artisan" },
-              { to: "/admin", label: "Admin" },
             ].map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -64,11 +74,11 @@ const Navbar = () => {
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">Hi,</span>
                   <span className="text-sm font-medium text-gray-800">
-                    {user?.name?.split(" ")[0]}
+                    {greetingName}
                   </span>
                 </div>
                 <Link
-                  to="/homeowner"
+                  to={dashboardLink}
                   className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition shadow-md flex items-center gap-1"
                 >
                   <FiUser size={16} />
@@ -83,12 +93,21 @@ const Navbar = () => {
                 </button>
               </>
             ) : (
-              <Link
-                to="/login"
-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition"
-              >
-                Login
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-gray-100 hover:text-gray-200 transition"
+                >
+                  Signup
+                </Link>
+              </div>
             )}
           </div>
 
@@ -130,8 +149,6 @@ const Navbar = () => {
               { to: "/search", label: "Find Artisans" },
               { to: "/contact", label: "Contact" },
               { to: "/safety", label: "Safety Tips" },
-              { to: "/artisan", label: "Artisan" },
-              { to: "/admin", label: "Admin" },
             ].map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -153,12 +170,10 @@ const Navbar = () => {
               <div className="pt-3 border-t border-gray-200 mt-3 space-y-3">
                 <div className="px-4 py-2 text-sm text-gray-500">
                   Logged in as{" "}
-                  <span className="font-medium">
-                    {user?.name?.split(" ")[0]}
-                  </span>
+                  <span className="font-medium">{greetingName}</span>
                 </div>
                 <Link
-                  to="/homeowner"
+                  to={dashboardLink}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
                 >
@@ -172,13 +187,23 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <Link
-                to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md mt-3"
-              >
-                Login
-              </Link>
+              <div className="mt-3 space-y-2">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
+                >
+                  Signup
+                </Link>
+              </div>
             )}
           </div>
         </>
