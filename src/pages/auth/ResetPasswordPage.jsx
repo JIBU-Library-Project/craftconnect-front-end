@@ -1,8 +1,9 @@
-// src/pages/ResetPasswordPage.jsx
-
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useResetPassword } from "../../queries/authQueries";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+import { useQueryState } from "nuqs";
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -10,13 +11,33 @@ export default function ResetPasswordPage() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm();
   const password = watch("password");
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle reset password API logic here
+  const [token] = useQueryState("token");
+
+  const resetPasswordMutation = useResetPassword();
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("Submitting reset data:", data);
+      const response = await resetPasswordMutation.mutateAsync({
+        payload: data,
+        token,
+      });
+      if (response) {
+        toast.success("Password successfully reset");
+        navigate("/login");
+        reset();
+      }
+    } catch (error) {
+      console.error("Error sending reset request", error);
+      toast.error(
+        error.response?.data?.error || "Reset request failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -31,7 +52,6 @@ export default function ResetPasswordPage() {
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
-         
 
           {/* New Password & Confirm Password */}
           <div className="grid grid-cols-1  gap-4">
@@ -41,16 +61,16 @@ export default function ResetPasswordPage() {
               </label>
               <input
                 type="password"
-                {...register("password", {
+                {...register("newPassword", {
                   required: "Password is required",
                   minLength: { value: 8, message: "Minimum 8 characters" },
                 })}
                 placeholder="********"
                 className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
-              {errors.password && (
+              {errors.newPassword && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
+                  {errors.newPassword.message}
                 </p>
               )}
             </div>
@@ -79,9 +99,12 @@ export default function ResetPasswordPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
-          >
-            Reset Password
+            className="w-full py-3 rounded-lg bg-[#4b158d] flex justify-center text-white font-medium hover:bg-[#aa47bc] transition">
+            {isSubmitting ? (
+              <Loader2 className="animate-spin text-center" />
+            ) : (
+              "Reset Password"
+            )}
           </button>
 
           {/* Link to login */}
@@ -91,8 +114,7 @@ export default function ResetPasswordPage() {
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className=" text-[#4b158d] font-medium hover:underline"
-              >
+                className=" text-[#4b158d] font-medium hover:underline">
                 Login here
               </button>
             </p>

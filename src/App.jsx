@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import "./App.css";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/userpublic/HomePage";
@@ -69,7 +70,7 @@ function App() {
 
     // Artisan Dashboard Layout
     {
-      element: <PrivateRoute roles={["artisan"]} />, // roles optional
+      element: <PrivateRoute roles={["artisan"]} />,
       children: [
         {
           path: "/artisan",
@@ -162,7 +163,11 @@ function App() {
       ),
     },
   ]);
-  return <RouterProvider router={router} />;
+  return (
+    <NuqsAdapter>
+      <RouterProvider router={router} />
+    </NuqsAdapter>
+  );
 }
 
 export default App;

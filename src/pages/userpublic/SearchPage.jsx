@@ -57,7 +57,9 @@ const SearchPage = () => {
         artisan.businessName.toLowerCase().includes(lowerSearch) ||
         artisan.craft?.toLowerCase().includes(lowerSearch) ||
         (artisan.specialties &&
-          artisan.specialties.some((s) => s.toLowerCase().includes(lowerSearch)));
+          artisan.specialties.some((s) =>
+            s.toLowerCase().includes(lowerSearch)
+          ));
 
       // Location matching
       const matchesLocation =
@@ -70,7 +72,8 @@ const SearchPage = () => {
         artisan.craft?.toLowerCase() === craftFilter.toLowerCase();
 
       // Verification status
-      const matchesVerified = !verifiedOnly || artisan.verificationStatus === "verified";
+      const matchesVerified =
+        !verifiedOnly || artisan.verificationStatus === "verified";
 
       // Rating matching
       const matchesRating =
@@ -126,7 +129,7 @@ const SearchPage = () => {
               </label>
               <input
                 type="text"
-                placeholder="Name, craft or specialty"
+                placeholder="Specialty"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -141,8 +144,7 @@ const SearchPage = () => {
               <select
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
                 value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
-              >
+                onChange={(e) => setLocationFilter(e.target.value)}>
                 <option value="">All Locations</option>
                 {LOCATIONS.map((loc) => (
                   <option key={loc} value={loc}>
@@ -160,8 +162,7 @@ const SearchPage = () => {
               <select
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
                 value={craftFilter}
-                onChange={(e) => setCraftFilter(e.target.value)}
-              >
+                onChange={(e) => setCraftFilter(e.target.value)}>
                 <option value="">All Crafts</option>
                 {CRAFTS.map((craft) => (
                   <option key={craft} value={craft}>
@@ -180,8 +181,7 @@ const SearchPage = () => {
                 {RATINGS.map((rating) => (
                   <label
                     key={rating}
-                    className="flex items-center space-x-2 cursor-pointer"
-                  >
+                    className="flex items-center space-x-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={selectedRatings.includes(rating)}
@@ -197,11 +197,7 @@ const SearchPage = () => {
                         />
                       ))}
                       {[...Array(5 - rating)].map((_, idx) => (
-                        <Star
-                          key={idx}
-                          size={16}
-                          className="text-gray-300"
-                        />
+                        <Star key={idx} size={16} className="text-gray-300" />
                       ))}
                       <span className="text-gray-700 text-sm ml-1">
                         & above
@@ -234,14 +230,12 @@ const SearchPage = () => {
             <div className="space-y-2 pt-2">
               <button
                 onClick={handleApplyFilters}
-                className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center"
-              >
+                className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center">
                 Apply Filters
               </button>
               <button
                 onClick={handleResetFilters}
-                className="w-full bg-gray-100 text-gray-700 py-2 rounded-md hover:bg-gray-200 transition"
-              >
+                className="w-full bg-gray-100 text-gray-700 py-2 rounded-md hover:bg-gray-200 transition">
                 Reset All
               </button>
             </div>
@@ -279,8 +273,7 @@ const SearchPage = () => {
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
-                >
+                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
                   Reset Filters
                 </button>
               </div>
@@ -293,4 +286,3 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-
