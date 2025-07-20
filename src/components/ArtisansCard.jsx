@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 const ArtisanCard = ({ artisan }) => {
   const { user } = useAuth();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   if (!artisan) return null;
 
@@ -24,7 +24,7 @@ const ArtisanCard = ({ artisan }) => {
   const handleAction = (action) => {
     if (!isLoggedIn) {
       // Redirect to login with return URL
-      toast.success("Login to contact artisan")
+      toast.success("Login to contact artisan");
       navigate("/login", { state: { from: window.location.pathname } });
       return false;
     }
@@ -142,8 +142,7 @@ const ArtisanCard = ({ artisan }) => {
                 {artisan.specialties.map((specialty, idx) => (
                   <span
                     key={idx}
-                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                  >
+                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
                     {specialty}
                   </span>
                 ))}
@@ -156,23 +155,20 @@ const ArtisanCard = ({ artisan }) => {
             {artisan.whatsapp && (
               <button
                 onClick={handleWhatsApp}
-                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
-              >
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors">
                 <MessageCircle size={16} className="mr-1" /> WhatsApp
               </button>
             )}
             {artisan.phone && (
               <button
                 onClick={handlePhoneCall}
-                className="bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
-              >
+                className="bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors">
                 <Phone size={16} className="mr-1" /> Call Now
               </button>
             )}
             <button
               onClick={handleViewProfile}
-              className="border border-neutral-300 hover:bg-neutral-100 text-neutral-700 px-3 py-1.5 rounded text-sm transition-colors"
-            >
+              className="border border-neutral-300 hover:bg-neutral-100 text-neutral-700 px-3 py-1.5 rounded text-sm transition-colors">
               View Profile
             </button>
           </div>

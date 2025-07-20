@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../queries/authQueries";
 import { toast } from "react-toastify";
 import { useAuth } from "../../services/hooks";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const loginMutation = useLogin();
@@ -98,8 +99,12 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition">
-            Sign In
+            className="w-full py-3 rounded-lg bg-[#4b158d] flex justify-center text-white font-medium hover:bg-[#aa47bc] transition">
+            {isSubmitting ? (
+              <Loader2 className="animate-spin text-center" />
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 

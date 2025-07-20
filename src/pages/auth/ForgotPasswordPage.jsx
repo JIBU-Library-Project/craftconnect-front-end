@@ -1,20 +1,36 @@
-// src/pages/ForgotPasswordPage.jsx
-
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useForgotPassword } from "../../queries/authQueries";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle forgot password API call here
+  const forgotPasswordMutation = useForgotPassword();
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("Submitting reset data:", data);
+      const response = await forgotPasswordMutation.mutateAsync(data);
+      if (response) {
+        console.log("Reset link sent", response);
+        toast.success("Reset link sent. Check email");
+        // navigate("/");
+        reset();
+      }
+    } catch (error) {
+      console.error("Error sending reset request", error);
+      toast.error(
+        error.response?.data?.error || "Reset request failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -53,9 +69,12 @@ export default function ForgotPasswordPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
-          >
-            Send Reset Link
+            className="w-full py-3 rounded-lg bg-[#4b158d] flex justify-center text-white font-medium hover:bg-[#aa47bc] transition">
+            {isSubmitting ? (
+              <Loader2 className="animate-spin text-center" />
+            ) : (
+              "Send Reset Link"
+            )}
           </button>
 
           {/* Back to login */}
@@ -65,8 +84,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className=" text-[#4b158d] font-medium hover:underline"
-              >
+                className=" text-[#4b158d] font-medium hover:underline">
                 Login here
               </button>
             </p>

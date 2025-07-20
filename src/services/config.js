@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://craft-connect-backend.onrender.com/";
+const baseURL = "https://craft-connect-backend.onrender.com";
 
 export const apiClient = axios.create({
   baseURL: baseURL,
