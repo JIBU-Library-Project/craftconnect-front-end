@@ -10,7 +10,6 @@ import {
   X,
   ChevronDown,
   Search,
-  Settings,
   HelpCircle,
   Gauge,
 } from "lucide-react";
@@ -23,8 +22,13 @@ function UserDashboardLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(`${path}/`);
+  // Fix active highlighting
+  const isActive = (path) => {
+    if (path === "/homeowner") {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
 
   const navItems = [
     {
@@ -59,28 +63,22 @@ function UserDashboardLayout() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 rounded-md bg-white shadow-md text-gray-600"
         >
-          {mobileMenuOpen ? (
-            <X className="w-5 h-5" />
-          ) : (
-            <Menu className="w-5 h-5" />
-          )}
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Sidebar - #242424 (gray-900) with #f05335 accents */}
+      {/* Sidebar */}
       <div
-        className={`fixed md:relative z-40 w-64 bg-[#242424] text-gray-200 transition-all duration-300 ease-in-out 
-        ${
+        className={`fixed md:relative z-40 w-64 bg-[#242424] text-gray-200 transition-all duration-300 ease-in-out ${
           mobileMenuOpen ? "left-0" : "-left-full"
         } md:left-0 h-full flex flex-col`}
       >
+        {/* Logo */}
         <div className="p-6 flex items-center">
           <div className="w-10 h-10 rounded-md bg-[#f05335] flex items-center justify-center text-white font-bold text-lg">
             H
           </div>
-          <span className="ml-3 text-xl font-semibold text-white">
-            HomeownerHub
-          </span>
+          <span className="ml-3 text-xl font-semibold text-white">HomeownerHub</span>
         </div>
 
         {/* Search bar (mobile only) */}
@@ -95,6 +93,7 @@ function UserDashboardLayout() {
           </div>
         </div>
 
+        {/* Navigation */}
         <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
@@ -115,7 +114,7 @@ function UserDashboardLayout() {
           ))}
         </nav>
 
-        {/* Bottom profile section */}
+        {/* Profile section */}
         <div className="p-4 border-t border-gray-800">
           <div
             className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-800 cursor-pointer transition"
@@ -139,12 +138,11 @@ function UserDashboardLayout() {
             />
           </div>
 
-          {/* Profile dropdown with #f05335 accents */}
           {profileDropdownOpen && (
             <div className="mt-2 py-2 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
               <button
-                className="w-full flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-[#f05335]/20 hover:text-white group"
                 onClick={() => navigate("/contact")}
+                className="w-full flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-[#f05335]/20 hover:text-white group"
               >
                 <HelpCircle className="w-4 h-4 mr-3 text-gray-400 group-hover:text-[#f05335]" />
                 Help & Support
@@ -170,26 +168,17 @@ function UserDashboardLayout() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header */}
         <header className="bg-white border-b border-gray-200 shadow-sm z-30">
           <div className="flex items-center justify-between px-6 py-4">
-            {/* Breadcrumbs */}
             <div className="flex items-center">
               <h1 className="text-xl font-semibold capitalize text-gray-800">
                 {location.pathname.split("/").pop() || "Dashboard"}
               </h1>
             </div>
-
-            {/* Right side controls */}
-            <div className="flex items-center space-x-4">
-              {/* Search bar (desktop only) */}
-
-              {/* User profile */}
-              <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer transition-colors hover:text-[#f05335]">
-  <span className="text-sm font-medium text-gray-700 transition-colors">
-    Welcome, {user?.name}
-  </span>
-</div>
+            <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer transition-colors hover:text-[#f05335]">
+              <span className="text-sm font-medium text-gray-700 transition-colors">
+                Welcome, {user?.name}
+              </span>
             </div>
           </div>
         </header>

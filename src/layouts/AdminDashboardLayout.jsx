@@ -22,8 +22,13 @@ function AdminDashboardLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(`${path}/`);
+  // Correct active link highlighting
+  const isActive = (path) => {
+    if (path === "/admin") {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
 
   const menuItems = [
     {
@@ -78,23 +83,31 @@ function AdminDashboardLayout() {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="p-2 rounded-md bg-white shadow-md text-gray-600"
         >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileMenuOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </button>
       </div>
 
       {/* Sidebar */}
       <div
-        className={`fixed md:relative z-40 w-64 bg-white text-gray-800 transition-all duration-300 ease-in-out 
-        ${mobileMenuOpen ? "left-0" : "-left-full"} md:left-0 h-full flex flex-col border-r border-gray-200`}
+        className={`fixed md:relative z-40 w-64 bg-white text-gray-800 transition-all duration-300 ease-in-out ${
+          mobileMenuOpen ? "left-0" : "-left-full"
+        } md:left-0 h-full flex flex-col border-r border-gray-200`}
       >
+        {/* Logo */}
         <div className="p-6 flex items-center">
           <div className="w-10 h-10 rounded-md bg-[#4e12bd] flex items-center justify-center text-white font-bold text-lg">
             A
           </div>
-          <span className="ml-3 text-xl font-semibold text-gray-800">AdminHub</span>
+          <span className="ml-3 text-xl font-semibold text-gray-800">
+            AdminHub
+          </span>
         </div>
 
-        {/* Navigation with Indigo active color */}
+        {/* Navigation */}
         <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => (
             <button
@@ -121,7 +134,7 @@ function AdminDashboardLayout() {
           ))}
         </nav>
 
-        {/* Profile */}
+        {/* Profile Section */}
         <div className="p-4 border-t border-gray-200 mt-auto">
           <div
             className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
@@ -159,6 +172,7 @@ function AdminDashboardLayout() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden bg-white">
+        {/* Header */}
         <header className="bg-white border-b border-gray-200 shadow-sm z-30">
           <div className="flex items-center justify-between px-6 py-4">
             <div />
@@ -168,11 +182,12 @@ function AdminDashboardLayout() {
           </div>
         </header>
 
+        {/* Main Area */}
         <main className="flex-1 overflow-y-auto pt-6 bg-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 :px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Outlet />
           </div>
-        </main>lg
+        </main>
       </div>
     </div>
   );

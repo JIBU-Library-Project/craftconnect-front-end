@@ -25,8 +25,13 @@ const ArtisanDashboardLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(`${path}/`);
+  const isActive = (path) => {
+    if (path === "/artisan") {
+      return location.pathname === "/artisan"; // exact match only for dashboard
+    }
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   const logout = () => navigate("/login");
 
   const navItems = [
@@ -89,24 +94,19 @@ const ArtisanDashboardLayout = () => {
         </button>
       </div>
 
-      {/* Sidebar - Deep Indigo */}
+      {/* Sidebar */}
       <div
         className={`fixed md:relative z-40 w-64 bg-indigo-900 text-white transition-all duration-300 ease-in-out 
-        ${
-          mobileMenuOpen ? "left-0" : "-left-full"
-        } md:left-0 h-full flex flex-col`}
+        ${mobileMenuOpen ? "left-0" : "-left-full"} md:left-0 h-full flex flex-col`}
       >
         <div className="p-6 flex items-center">
           <div className="w-10 h-10 rounded-md bg-indigo-700 flex items-center justify-center text-white font-bold text-lg">
             A
           </div>
-          <span className="ml-3 text-xl font-semibold text-white">
-            ArtisanHub
-          </span>
+          <span className="ml-3 text-xl font-semibold text-white">ArtisanHub</span>
         </div>
 
-        {/* Search bar (mobile only) */}
-
+        {/* Navigation Links */}
         <nav className="flex-1 mt-2 px-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
@@ -127,7 +127,7 @@ const ArtisanDashboardLayout = () => {
           ))}
         </nav>
 
-        {/* Bottom profile section */}
+        {/* Bottom Profile Section */}
         <div className="p-4 border-t border-indigo-800/50">
           <div
             className="flex items-center justify-between p-2 rounded-lg hover:bg-indigo-800/50 cursor-pointer transition"
@@ -149,11 +149,10 @@ const ArtisanDashboardLayout = () => {
             />
           </div>
 
-          {/* Profile dropdown */}
           {profileDropdownOpen && (
             <div className="mt-2 py-2 bg-indigo-800 rounded-lg shadow-lg">
               <button
-                className="w-full flex items-center px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-700/50 "
+                className="w-full flex items-center px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-700/50"
                 onClick={() => navigate("/artisan/contact")}
               >
                 <HelpCircle className="w-4 h-4 mr-3" />
@@ -178,33 +177,22 @@ const ArtisanDashboardLayout = () => {
         </div>
       </div>
 
-      {/* Main content */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header */}
         <header className="bg-white border-b border-gray-200 shadow-sm z-30">
           <div className="flex items-center justify-between px-6 py-4">
-            {/* Breadcrumbs */}
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold capitalize text-gray-800">
-                {location.pathname.split("/").pop() || "Dashboard"}
-              </h1>
-            </div>
+            <h1 className="text-xl font-semibold capitalize text-gray-800">
+              {location.pathname.split("/").pop() || "Dashboard"}
+            </h1>
 
-            {/* Right side controls */}
-            <div className="flex items-center space-x-4">
-              {/* Search bar (desktop only) */}
-
-              {/* Business profile (desktop only) */}
-              <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer">
-                <span className="text-sm font-medium text-gray-700">
-                  {user?.businessName || "Artisan"}
-                </span>
-              </div>
+            <div className="hidden md:flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full cursor-pointer">
+              <span className="text-sm font-medium text-gray-700">
+                {user?.businessName || "Artisan"}
+              </span>
             </div>
           </div>
         </header>
 
-        {/* Main content area */}
         <main className="flex-1 overflow-y-auto pt-6 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Outlet />
