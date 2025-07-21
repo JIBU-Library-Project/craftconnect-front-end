@@ -1,45 +1,62 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { v4 as uuidv4 } from "uuid";
-import artisanServices from "../../data/dummyData";
+import {
+  useGetPersonalProfile,
+  useUpdateArtisanProfile,
+} from "../../queries/artisanQueries";
 
 const ArtisanAddEditServicesPage = () => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit, control } = useForm({
-    defaultValues: {
-      services: artisanServices.services,
-      pricingNotes: Array.isArray(artisanServices.pricingNotes)
-        ? artisanServices.pricingNotes.join("\n")
-        : artisanServices.pricingNotes || "",
-    },
-  });
+  // Fetch profile data
+  const { data: profileData, isLoading, refetch } = useGetPersonalProfile();
+  const { mutateAsync: updateProfile } = useUpdateArtisanProfile();
+
+  const { register, handleSubmit, control, reset } = useForm();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "services",
   });
 
+  // Initialize form with fetched data
+  useEffect(() => {
+    if (profileData?.artisan?.services) {
+      reset({
+        services: profileData.artisan.services,
+        pricingNotes: profileData.artisan.pricingNotes || "",
+      });
+    }
+  }, [profileData, reset]);
+
   const onSubmit = async (data) => {
     const processedData = {
-      ...data,
+      services: data.services,
       pricingNotes: data.pricingNotes
-        .split("\n")
-        .map((line) => line.trim())
-        .filter((line) => line !== ""),
+        .replace(/\.\s*/g, ".\n")
+        .trim(),
     };
 
-    console.log("✅ Updated Artisan Services Data:", processedData);
-
-    // 🚀 FUTURE API CALL PLACEHOLDER:
-    // await axios.post("/api/artisan/services", processedData);
-    // or
-    // await updateArtisanServices(processedData);
-
-    alert("Services and pricing notes updated successfully!");
-    navigate("/artisan/services");
+    try {
+      await updateProfile(processedData);
+      await refetch();
+      alert("Services updated successfully!");
+      navigate("/artisan/services");
+    } catch (error) {
+      console.error("Update failed:", error);
+      alert("Failed to update services. Please try again.");
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -94,8 +111,8 @@ const ArtisanAddEditServicesPage = () => {
                     Service Title
                   </label>
                   <input
-                    {...register(`services.${index}.service`)}
-                    placeholder="e.g. Furniture Assembly"
+                    {...register(`services.${index}.service`, { required: true })}
+                    placeholder="e.g. Solar Panel Installation"
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition-all text-sm"
                   />
                 </div>
@@ -119,7 +136,8 @@ const ArtisanAddEditServicesPage = () => {
                     </label>
                     <div className="relative">
                       <input
-                        {...register(`services.${index}.price`)}
+                        type="number"
+                        {...register(`services.${index}.price`, { required: true })}
                         placeholder="250"
                         className="w-full pl-3 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition-all text-sm"
                       />
@@ -184,11 +202,11 @@ const ArtisanAddEditServicesPage = () => {
           <textarea
             {...register("pricingNotes")}
             rows={4}
-            placeholder={`• Prices are estimates and may vary\n• Materials not included\n• Minimum service fee applies`}
+            placeholder={`• Prices may vary depending on system size.\n• Transportation costs may apply.\n• Customer provides safe ladder access.`}
             className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-300 focus:border-gray-400 transition-all text-sm"
           />
           <p className="text-xs text-gray-400 mt-2">
-            Each new line will be displayed as a bullet point on your profile.
+            Each period (.) will automatically be replaced with a new line on save.
           </p>
         </div>
 
@@ -196,6 +214,7 @@ const ArtisanAddEditServicesPage = () => {
         <div className="flex justify-end space-x-3">
           <button
             type="button"
+            onClick={() => navigate("/artisan/services")}
             className="px-6 py-2.5 text-gray-600 hover:text-gray-800 rounded-lg transition-all text-sm"
           >
             Cancel
