@@ -75,6 +75,11 @@ const ArtisanDashboardLayout = () => {
       icon: <Star className="w-5 h-5" />,
       label: "Reviews",
     },
+    {
+      path: "/artisan/media",
+      icon: <Star className="w-5 h-5" />,
+      label: "Media Upload",
+    },
     { path: "/artisan/contact" },
   ];
 

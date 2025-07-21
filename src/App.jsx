@@ -54,6 +54,7 @@ import AdminArtisansDetailPage from "./pages/admin/AdminArtisanDetailPage";
 import AdminArtisanJobsDetailPage from "./pages/admin/AdminArtisanJobsDetailPage";
 import UserProfileEditPage from "./pages/user/UserProfileEditPage";
 import PrivateRoute from "./components/PrivateRoute";
+import ArtisanMediaUpload from "./pages/artisan/ArtisanMediaUpload";
 
 function App() {
   const router = createBrowserRouter([
@@ -90,6 +91,7 @@ function App() {
             },
             { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
             { path: "contact", element: <ArtisanContactPage /> },
+            { path: "media", element: <ArtisanMediaUpload/> },
           ],
         },
       ],
