@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
 import { useGetUserProfile } from "../../queries/userQueries";
 import { Loader2 } from "lucide-react";
@@ -8,12 +8,10 @@ const UserProfilePage = () => {
 
   const { data, isLoading, error } = useGetUserProfile();
 
-  useEffect(() => {
-    if (data) {
-      console.log("Fetched user profile:", data);
-      setUserProfile(data);
-    }
-  }, [data]);
+  setUserProfile(data.user);
+      console.log("Fetched user profile:", data.user);
+     
+  
 
   if (isLoading) {
     return (
@@ -54,18 +52,18 @@ const UserProfilePage = () => {
         <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
             src={userProfile.profilePic || "/default-profile.jpg"}
-            alt={userProfile.name}
+            alt={userProfile.name  || "data not found"}
             className="w-full h-full object-cover"
           />
         </div>
 
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            {userProfile.name}
+            {userProfile.name  || "data not found"}
           </h1>
-          <p className="text-gray-600">{userProfile.email}</p>
+          <p className="text-gray-600">{userProfile.email || "not found"}</p>
           <p className="text-gray-500 text-sm mt-1">
-            Member since {formatDate(userProfile.joinedDate)}
+            Member since {formatDate(userProfile.joinedDate)  || "data not found"}
           </p>
         </div>
       </div>
@@ -75,25 +73,25 @@ const UserProfilePage = () => {
         <div className="bg-white p-4 rounded-lg shadow border border-gray-100 text-center">
           <p className="text-gray-500 text-sm">Total Jobs</p>
           <p className="text-2xl font-bold text-indigo-600">
-            {userProfile.stats.totalJobs}
+            {userProfile.stats.totalJobs || "data not found"}
           </p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow border border-gray-100 text-center">
           <p className="text-gray-500 text-sm">Completed</p>
           <p className="text-2xl font-bold text-green-600">
-            {userProfile.stats.completedJobs}
+            {userProfile.stats.completedJobs || "data not found"}
           </p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow border border-gray-100 text-center">
           <p className="text-gray-500 text-sm">Pending</p>
           <p className="text-2xl font-bold text-yellow-600">
-            {userProfile.stats.pendingJobs}
+            {userProfile.stats.pendingJobs || "data not found"}
           </p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow border border-gray-100 text-center">
           <p className="text-gray-500 text-sm">Cancelled</p>
           <p className="text-2xl font-bold text-red-600">
-            {userProfile.stats.cancelledJobs}
+            {userProfile.stats.cancelledJobs || "data not found"}
           </p>
         </div>
       </div>
@@ -106,19 +104,19 @@ const UserProfilePage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <h3 className="text-sm font-medium text-gray-500">Phone Number</h3>
-            <p className="text-gray-800">{userProfile.phone}</p>
+            <p className="text-gray-800">{userProfile.phone  || "data not found"}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Location</h3>
-            <p className="text-gray-800">{userProfile.location}</p>
+            <p className="text-gray-800">{userProfile.location  || "data not found"}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Account Type</h3>
-            <p className="text-gray-800 capitalize">{userProfile.role}</p>
+            <p className="text-gray-800 capitalize">{userProfile.role || "data not found"}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Last Login</h3>
-            <p className="text-gray-800">{formatDate(userProfile.lastLogin)}</p>
+            <p className="text-gray-800">{formatDate(userProfile.lastLogin)  || "data not found"}</p>
           </div>
         </div>
       </div>

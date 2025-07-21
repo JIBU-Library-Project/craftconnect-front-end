@@ -16,20 +16,17 @@ const ArtisanCard = ({ artisan }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  if (!artisan || typeof artisan !== 'object') {
+  if (!artisan || typeof artisan !== "object") {
     console.error("Invalid artisan data:", artisan);
     return null;
   }
 
- 
   const artisanId = artisan.id || artisan._id;
-
-  // Check if user is logged in
   const isLoggedIn = Boolean(user);
 
-  const handleAction = () => {
+  const requireLogin = () => {
     if (!isLoggedIn) {
-      toast.info("Please login to contact artisan");
+      toast.info("Please sign in to view artisan profile.");
       navigate("/login", { state: { from: window.location.pathname } });
       return false;
     }
@@ -37,18 +34,21 @@ const ArtisanCard = ({ artisan }) => {
   };
 
   const handleWhatsApp = () => {
-    if (handleAction() && artisan.phone) {
+    if (!requireLogin()) return;
+    if (artisan.phone) {
       window.open(`https://wa.me/${artisan.phone}`, "_blank");
     }
   };
 
   const handlePhoneCall = () => {
-    if (handleAction() && artisan.phone) {
+    if (!requireLogin()) return;
+    if (artisan.phone) {
       window.location.href = `tel:${artisan.phone}`;
     }
   };
 
   const handleViewProfile = () => {
+    if (!requireLogin()) return;
     if (artisanId) {
       navigate(`/artisan/${artisanId}`);
     }
@@ -56,13 +56,15 @@ const ArtisanCard = ({ artisan }) => {
 
   const renderVerificationBadge = () => {
     if (!artisan.verificationStatus) return null;
-    
+
     return (
-      <div className={`absolute top-2 right-2 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm ${
-        artisan.verificationStatus === "verified" 
-          ? "bg-[#432dd7]" 
-          : "bg-[#e1a816]"
-      }`}>
+      <div
+        className={`absolute top-2 right-2 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm ${
+          artisan.verificationStatus === "verified"
+            ? "bg-[#432dd7]"
+            : "bg-[#e1a816]"
+        }`}
+      >
         {artisan.verificationStatus === "verified" ? (
           <BadgeCheck size={14} className="mr-1" />
         ) : (
@@ -79,11 +81,13 @@ const ArtisanCard = ({ artisan }) => {
   const businessName = artisan.businessName || "Artisan";
   const location = artisan.location || "Location not specified";
   const craft = artisan.craft || "Craft not specified";
-  const rating = typeof artisan.rating === 'number' ? artisan.rating : 0;
+  const rating = typeof artisan.rating === "number" ? artisan.rating : 0;
   const reviewCount = artisan.reviewCount || 0;
   const hourlyRate = artisan.hourlyRate || "N/A";
   const description = artisan.description || "No description available";
-  const specialties = Array.isArray(artisan.specialties) ? artisan.specialties : [];
+  const specialties = Array.isArray(artisan.specialties)
+    ? artisan.specialties
+    : [];
   const phone = artisan.phone || "";
   const whatsapp = artisan.whatsapp || phone;
 
@@ -150,7 +154,8 @@ const ArtisanCard = ({ artisan }) => {
                 {specialties.slice(0, 3).map((specialty, idx) => (
                   <span
                     key={idx}
-                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                  >
                     {specialty}
                   </span>
                 ))}
