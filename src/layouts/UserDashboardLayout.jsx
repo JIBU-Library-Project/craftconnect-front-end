@@ -16,11 +16,18 @@ import {
 import { useAuth } from "../services/hooks";
 
 function UserDashboardLayout() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setMobileMenuOpen(false);
+  };
 
   // Fix active highlighting
   const isActive = (path) => {
@@ -53,7 +60,7 @@ function UserDashboardLayout() {
     },
   ];
 
-  const handleLogout = () => navigate("/login");
+
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden">

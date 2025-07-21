@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   BadgeCheck,
   ShieldAlert,
@@ -16,15 +16,20 @@ const ArtisanCard = ({ artisan }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  if (!artisan) return null;
+  if (!artisan || typeof artisan !== 'object') {
+    console.error("Invalid artisan data:", artisan);
+    return null;
+  }
 
-  // Check if user is logged in (using localStorage)
-  const isLoggedIn = user;
+ 
+  const artisanId = artisan.id || artisan._id;
 
-  const handleAction = (action) => {
+  // Check if user is logged in
+  const isLoggedIn = Boolean(user);
+
+  const handleAction = () => {
     if (!isLoggedIn) {
-      // Redirect to login with return URL
-      toast.success("Login to contact artisan");
+      toast.info("Please login to contact artisan");
       navigate("/login", { state: { from: window.location.pathname } });
       return false;
     }
@@ -32,50 +37,65 @@ const ArtisanCard = ({ artisan }) => {
   };
 
   const handleWhatsApp = () => {
-    if (handleAction("whatsapp")) {
-      window.open(`https://wa.me/${artisan.whatsapp}`, "_blank");
+    if (handleAction() && artisan.phone) {
+      window.open(`https://wa.me/${artisan.phone}`, "_blank");
     }
   };
 
   const handlePhoneCall = () => {
-    if (handleAction("phone")) {
+    if (handleAction() && artisan.phone) {
       window.location.href = `tel:${artisan.phone}`;
     }
   };
 
   const handleViewProfile = () => {
-    if (handleAction("profile")) {
-      navigate(`/artisan/${artisan.id}`);
+    if (artisanId) {
+      navigate(`/artisan/${artisanId}`);
     }
   };
 
   const renderVerificationBadge = () => {
-    if (artisan.verificationStatus === "verified") {
-      return (
-        <div className="absolute top-2 right-2 bg-[#432dd7] text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm">
+    if (!artisan.verificationStatus) return null;
+    
+    return (
+      <div className={`absolute top-2 right-2 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm ${
+        artisan.verificationStatus === "verified" 
+          ? "bg-[#432dd7]" 
+          : "bg-[#e1a816]"
+      }`}>
+        {artisan.verificationStatus === "verified" ? (
           <BadgeCheck size={14} className="mr-1" />
-          Verified
-        </div>
-      );
-    } else {
-      return (
-        <div className="absolute top-2 right-2 bg-[#e1a816] text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm">
+        ) : (
           <ShieldAlert size={14} className="mr-1" />
-          Unverified
-        </div>
-      );
-    }
+        )}
+        {artisan.verificationStatus === "verified" ? "Verified" : "Unverified"}
+      </div>
+    );
   };
 
+  // Safely get values with fallbacks
+  const profilePic = artisan.profilePic || "/profiles/default-artisan.jpg";
+  const name = artisan.name || artisan.businessName || "Artisan";
+  const businessName = artisan.businessName || "Artisan";
+  const location = artisan.location || "Location not specified";
+  const craft = artisan.craft || "Craft not specified";
+  const rating = typeof artisan.rating === 'number' ? artisan.rating : 0;
+  const reviewCount = artisan.reviewCount || 0;
+  const hourlyRate = artisan.hourlyRate || "N/A";
+  const description = artisan.description || "No description available";
+  const specialties = Array.isArray(artisan.specialties) ? artisan.specialties : [];
+  const phone = artisan.phone || "";
+  const whatsapp = artisan.whatsapp || phone;
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 mb-4">
       <div className="md:flex">
         {/* Profile Picture Section */}
-        <div className="md:w-1/4">
+        <div className="md:w-1/4 relative">
           <div className="h-48 md:h-full bg-gray-100 relative">
             <img
-              src={artisan.profilePic || "/profiles/default-artisan.jpg"}
-              alt={artisan.name || artisan.businessName}
+              src={profilePic}
+              alt={name}
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.target.onerror = null;
@@ -92,54 +112,42 @@ const ArtisanCard = ({ artisan }) => {
             <div className="flex justify-between items-start flex-wrap gap-2">
               <div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
-                  {artisan.businessName}
+                  {businessName}
                 </h3>
 
-                {/* Location */}
-                {artisan.location && (
-                  <div className="flex items-center text-gray-600 text-sm mt-1">
-                    <MapPin size={14} className="mr-1 text-blue-500" />
-                    {artisan.location}
-                  </div>
-                )}
+                <div className="flex items-center text-gray-600 text-sm mt-1">
+                  <MapPin size={14} className="mr-1 text-blue-500" />
+                  {location}
+                </div>
 
-                {/* Craft */}
-                {artisan.craft && (
-                  <div className="flex items-center text-gray-600 text-sm mt-1">
-                    <Hammer size={14} className="mr-1 text-emerald-500" />
-                    {artisan.craft}
-                  </div>
-                )}
+                <div className="flex items-center text-gray-600 text-sm mt-1">
+                  <Hammer size={14} className="mr-1 text-emerald-500" />
+                  {craft}
+                </div>
 
-                {/* Rating */}
                 <div className="flex items-center mt-1">
-                  <RatingStars rating={artisan.rating} />
+                  <RatingStars rating={rating} />
                   <span className="text-gray-600 text-sm ml-2">
-                    {artisan.rating?.toFixed(1)} ({artisan.reviewCount} reviews)
+                    {rating.toFixed(1)} ({reviewCount} reviews)
                   </span>
                 </div>
               </div>
 
-              {/* Hourly Rate */}
-              {artisan.hourlyRate && (
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">From</p>
-                  <p className="text-base font-medium text-gray-800">
-                    GHS {artisan.hourlyRate}/hr
-                  </p>
-                </div>
-              )}
+              <div className="text-right">
+                <p className="text-sm text-gray-500">From</p>
+                <p className="text-base font-medium text-gray-800">
+                  GHS {hourlyRate}/hr
+                </p>
+              </div>
             </div>
 
-            {/* Description */}
             <p className="mt-3 text-gray-600 text-sm sm:text-base line-clamp-3">
-              {artisan.description}
+              {description}
             </p>
 
-            {/* Specialties */}
-            {artisan.specialties?.length > 0 && (
+            {specialties.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
-                {artisan.specialties.map((specialty, idx) => (
+                {specialties.slice(0, 3).map((specialty, idx) => (
                   <span
                     key={idx}
                     className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
@@ -152,23 +160,24 @@ const ArtisanCard = ({ artisan }) => {
 
           {/* Action Buttons */}
           <div className="mt-4 flex flex-wrap gap-2">
-            {artisan.whatsapp && (
-              <button
-                onClick={handleWhatsApp}
-                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors">
-                <MessageCircle size={16} className="mr-1" /> WhatsApp
-              </button>
-            )}
-            {artisan.phone && (
-              <button
-                onClick={handlePhoneCall}
-                className="bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors">
-                <Phone size={16} className="mr-1" /> Call Now
-              </button>
-            )}
+            <button
+              onClick={handleWhatsApp}
+              className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
+              disabled={!whatsapp}
+            >
+              <MessageCircle size={16} className="mr-1" /> WhatsApp
+            </button>
+            <button
+              onClick={handlePhoneCall}
+              className="bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors"
+              disabled={!phone}
+            >
+              <Phone size={16} className="mr-1" /> Call Now
+            </button>
             <button
               onClick={handleViewProfile}
-              className="border border-neutral-300 hover:bg-neutral-100 text-neutral-700 px-3 py-1.5 rounded text-sm transition-colors">
+              className="border border-neutral-300 hover:bg-neutral-100 text-neutral-700 px-3 py-1.5 rounded text-sm transition-colors"
+            >
               View Profile
             </button>
           </div>

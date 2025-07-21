@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import ArtisansCard from "../../components/ArtisansCard";
-import { publicArtisanProfiles as artisans } from "../../data/dummyData";
-import { Search, Star, CheckCircle } from "lucide-react";
+import { Search, Star, CheckCircle, Loader2 } from "lucide-react";
+import { useGetAllArtisans } from "../../queries/artisanQueries";
 
 const LOCATIONS = [
   "Greater Accra",
@@ -25,6 +25,9 @@ const CRAFTS = [
 const RATINGS = [5, 4, 3];
 
 const SearchPage = () => {
+  const [artisans, setArtisans] = useState([]);
+  const { data, isLoading, error } = useGetAllArtisans();
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -32,12 +35,29 @@ const SearchPage = () => {
   const [locationFilter, setLocationFilter] = useState(
     queryParams.get("location") || ""
   );
-  const [craftFilter, setCraftFilter] = useState(
-    queryParams.get("craft") || ""
-  );
+  const [craftFilter, setCraftFilter] = useState(queryParams.get("craft") || "");
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [filteredArtisans, setFilteredArtisans] = useState([]);
+
+  useEffect(() => {
+    if (data && data.success && Array.isArray(data.artisans)) {
+      console.log("Fetched all Artisan profiles:", data.artisans);
+  
+      const normalizedArtisans = data.artisans.map(artisan => ({
+        ...artisan,
+        id: artisan._id || artisan.id, 
+        rating: artisan.rating || 0,
+        reviewCount: artisan.reviewCount || 0,
+        verificationStatus: artisan.verificationStatus || "unverified",
+        hourlyRate: artisan.hourlyRate || "N/A",
+        specialties: Array.isArray(artisan.specialties) ? artisan.specialties : [],
+        services: Array.isArray(artisan.services) ? artisan.services : []
+      }));
+      setArtisans(normalizedArtisans);
+      setFilteredArtisans(normalizedArtisans);
+    }
+  }, [data]);
 
   const handleRatingToggle = (rating) => {
     setSelectedRatings((prev) =>
@@ -51,34 +71,39 @@ const SearchPage = () => {
     const lowerSearch = searchTerm.trim().toLowerCase();
 
     const results = artisans.filter((artisan) => {
+      // Safely access all properties with fallbacks
+      const businessName = (artisan.businessName || "").toLowerCase();
+      const craft = (artisan.craft || "").toLowerCase();
+      const specialties = artisan.specialties || [];
+      const artisanLocation = (artisan.location || "").toLowerCase();
+      const rating = artisan.rating || 0;
+      const verificationStatus = artisan.verificationStatus || "";
+
       // Search term matching
       const matchesSearch =
         lowerSearch === "" ||
-        artisan.businessName.toLowerCase().includes(lowerSearch) ||
-        artisan.craft?.toLowerCase().includes(lowerSearch) ||
-        (artisan.specialties &&
-          artisan.specialties.some((s) =>
-            s.toLowerCase().includes(lowerSearch)
-          ));
+        businessName.includes(lowerSearch) ||
+        craft.includes(lowerSearch) ||
+        specialties.some(s => s.toLowerCase().includes(lowerSearch));
 
       // Location matching
       const matchesLocation =
         !locationFilter ||
-        artisan.location?.toLowerCase().includes(locationFilter.toLowerCase());
+        artisanLocation.includes(locationFilter.toLowerCase());
 
       // Craft matching - exact match
       const matchesCraft =
         !craftFilter ||
-        artisan.craft?.toLowerCase() === craftFilter.toLowerCase();
+        craft === craftFilter.toLowerCase();
 
       // Verification status
       const matchesVerified =
-        !verifiedOnly || artisan.verificationStatus === "verified";
+        !verifiedOnly || verificationStatus === "verified";
 
       // Rating matching
       const matchesRating =
         selectedRatings.length === 0 ||
-        selectedRatings.some((rating) => Math.floor(artisan.rating) >= rating);
+        selectedRatings.some(r => Math.floor(rating) >= r);
 
       return (
         matchesSearch &&
@@ -103,7 +128,25 @@ const SearchPage = () => {
 
   useEffect(() => {
     handleApplyFilters();
-  }, [searchTerm, locationFilter, craftFilter, selectedRatings, verifiedOnly]);
+  }, [searchTerm, locationFilter, craftFilter, selectedRatings, verifiedOnly, artisans]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <Loader2 className="w-12 h-12 text-orange-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-red-500">
+          Error loading all artisan profiles.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
@@ -144,7 +187,8 @@ const SearchPage = () => {
               <select
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
                 value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}>
+                onChange={(e) => setLocationFilter(e.target.value)}
+              >
                 <option value="">All Locations</option>
                 {LOCATIONS.map((loc) => (
                   <option key={loc} value={loc}>
@@ -162,7 +206,8 @@ const SearchPage = () => {
               <select
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
                 value={craftFilter}
-                onChange={(e) => setCraftFilter(e.target.value)}>
+                onChange={(e) => setCraftFilter(e.target.value)}
+              >
                 <option value="">All Crafts</option>
                 {CRAFTS.map((craft) => (
                   <option key={craft} value={craft}>
@@ -181,7 +226,8 @@ const SearchPage = () => {
                 {RATINGS.map((rating) => (
                   <label
                     key={rating}
-                    className="flex items-center space-x-2 cursor-pointer">
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
                     <input
                       type="checkbox"
                       checked={selectedRatings.includes(rating)}
@@ -230,12 +276,14 @@ const SearchPage = () => {
             <div className="space-y-2 pt-2">
               <button
                 onClick={handleApplyFilters}
-                className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center">
+                className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center"
+              >
                 Apply Filters
               </button>
               <button
                 onClick={handleResetFilters}
-                className="w-full bg-gray-100 text-gray-700 py-2 rounded-md hover:bg-gray-200 transition">
+                className="w-full bg-gray-100 text-gray-700 py-2 rounded-md hover:bg-gray-200 transition"
+              >
                 Reset All
               </button>
             </div>
@@ -260,7 +308,10 @@ const SearchPage = () => {
           <div className="space-y-4">
             {filteredArtisans.length > 0 ? (
               filteredArtisans.map((artisan) => (
-                <ArtisansCard key={artisan.id} artisan={artisan} />
+                <ArtisansCard 
+                  key={artisan.id} 
+                  artisan={artisan} 
+                />
               ))
             ) : (
               <div className="flex flex-col items-center justify-center bg-white rounded-xl border border-gray-200 p-8 text-center space-y-3">
@@ -273,7 +324,8 @@ const SearchPage = () => {
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
+                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                >
                   Reset Filters
                 </button>
               </div>
