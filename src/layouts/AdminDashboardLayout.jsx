@@ -15,10 +15,12 @@ import {
   ChevronDown,
   Briefcase,
 } from "lucide-react";
+import { useAuth } from "../services/hooks";
 
 function AdminDashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
@@ -73,7 +75,11 @@ function AdminDashboardLayout() {
     },
   ];
 
-  const handleLogout = () => navigate("/login");
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className="flex h-screen bg-white text-gray-900 font-sans overflow-hidden">

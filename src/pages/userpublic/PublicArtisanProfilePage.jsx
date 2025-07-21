@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import RatingStars from "../../components/RatingStars";
-import { publicArtisanProfiles } from "../../data/dummyData";
-import { BadgeCheck, MapPin, ToolCase, Wallet } from "lucide-react";
+import { BadgeCheck, Loader2, MapPin, ToolCase, Wallet } from "lucide-react";
+import { useGetAllArtisans } from "../../queries/artisanQueries";
 
 const PublicArtisanProfilePage = () => {
   const { id } = useParams();
@@ -12,6 +11,7 @@ const PublicArtisanProfilePage = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isJobRequestModalOpen, setIsJobRequestModalOpen] = useState(false);
+  const [publicArtisanProfiles, setPublicArtisanProfiles] = useState(null);
 
   const {
     register,
@@ -20,37 +20,76 @@ const PublicArtisanProfilePage = () => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm();
 
-  // Sample data - in a real app this would come from an API
+  const { data, isLoading, error } = useGetAllArtisans();
 
-  const artisan = publicArtisanProfiles.find((profile) => profile.id === id);
+  useEffect(() => {
+    if (data && data.artisans) {
+      console.log("Fetched all Artisan profiles:", data.artisans);
+    
+      const normalizedArtisans = data.artisans.map(artisan => ({
+        ...artisan,
+        id: artisan._id || artisan.id
+      }));
+      setPublicArtisanProfiles(normalizedArtisans);
+    }
+  }, [data]);
 
-  // Calculate rating distribution
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <Loader2 className="w-12 h-12 text-orange-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-red-500">
+          Error loading all artisan profiles.
+        </p>
+      </div>
+    );
+  }
+
+  if (!publicArtisanProfiles) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-gray-500">No profiles data found.</p>
+      </div>
+    );
+  }
+
+
+  const artisan = publicArtisanProfiles.find((profile) => 
+    profile.id === id || profile._id === id
+  );
+
+  if (!artisan) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-gray-500">Artisan not found.</p>
+      </div>
+    );
+  }
+
+  // Calculate rating distribution with proper null checks
   const ratingDistribution = {
-    5:
-      (artisan.reviews.filter((r) => r.rating === 5).length /
-        artisan.reviews.length) *
-      100,
-    4:
-      (artisan.reviews.filter((r) => r.rating === 4).length /
-        artisan.reviews.length) *
-      100,
-    3:
-      (artisan.reviews.filter((r) => r.rating === 3).length /
-        artisan.reviews.length) *
-      100,
-    2:
-      (artisan.reviews.filter((r) => r.rating === 2).length /
-        artisan.reviews.length) *
-      100,
-    1:
-      (artisan.reviews.filter((r) => r.rating === 1).length /
-        artisan.reviews.length) *
-      100,
+    5: artisan.reviews?.length ? 
+      (artisan.reviews.filter((r) => r.rating === 5).length / artisan.reviews.length) * 100 : 0,
+    4: artisan.reviews?.length ? 
+      (artisan.reviews.filter((r) => r.rating === 4).length / artisan.reviews.length) * 100 : 0,
+    3: artisan.reviews?.length ? 
+      (artisan.reviews.filter((r) => r.rating === 3).length / artisan.reviews.length) * 100 : 0,
+    2: artisan.reviews?.length ? 
+      (artisan.reviews.filter((r) => r.rating === 2).length / artisan.reviews.length) * 100 : 0,
+    1: artisan.reviews?.length ? 
+      (artisan.reviews.filter((r) => r.rating === 1).length / artisan.reviews.length) * 100 : 0
   };
 
   const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log("Review submitted:", { rating, comment: data.comment });
       reset();
       setRating(0);
@@ -70,14 +109,14 @@ const PublicArtisanProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Modern Gradient Header */}
-      <div className="loginpage  bg-gradient-to-r from-neutral-800  to-neutral-700  text-white py-8 md:py-12">
+      <div className="loginpage bg-gradient-to-r from-neutral-800 to-neutral-700 text-white py-8 md:py-12">
         <div className="container mx-auto pt-7 px-4 md:px-6 min-h-60">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
             {/* Profile Picture */}
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
-                src={artisan.profilePic}
-                alt={artisan.name}
+                src={artisan.profilePic || "/profiles/default-artisan.jpg"}
+                alt={artisan.name || artisan.businessName}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.onerror = null;
@@ -97,10 +136,9 @@ const PublicArtisanProfilePage = () => {
                 {/* Ratings and Verification */}
                 <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
                   <div className="flex items-center">
-                    <RatingStars rating={artisan.rating} size="md" />
+                    <RatingStars rating={artisan.rating || 0} size="md" />
                     <span className="ml-2 text-sm md:text-base text-gray-200">
-                      {artisan.rating.toFixed(1)} ({artisan.reviewCount}{" "}
-                      reviews)
+                      {(artisan.rating || 0).toFixed(1)} ({artisan.reviewCount || 0} reviews)
                     </span>
                   </div>
                   <span className="hidden md:inline text-gray-300">•</span>
@@ -123,15 +161,15 @@ const PublicArtisanProfilePage = () => {
               <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-5 text-sm md:text-base mt-3">
                 <div className="flex items-center text-gray-200">
                   <MapPin className="w-4 h-4 mr-1.5 md:mr-2" />
-                  <span>{artisan.location}</span>
+                  <span>{artisan.location || "Location not specified"}</span>
                 </div>
                 <div className="flex items-center text-gray-200">
                   <ToolCase className="w-4 h-4 mr-1.5 md:mr-2" />
-                  <span>{artisan.experience} experience</span>
+                  <span>{artisan.experience || "0"} years experience</span>
                 </div>
                 <div className="flex items-center text-gray-200">
                   <Wallet className="w-4 h-4 mr-1.5 md:mr-2" />
-                  <span> GHS {artisan.hourlyRate}/hr</span>
+                  <span> GHS {artisan.hourlyRate || "0"}/hr</span>
                 </div>
               </div>
 
@@ -144,7 +182,7 @@ const PublicArtisanProfilePage = () => {
                   <i className="fas fa-briefcase mr-1.5"></i> Request Service
                 </button>
                 <a
-                  href={`https://wa.me/${artisan.whatsapp}`}
+                  href={`https://wa.me/${artisan.whatsapp || artisan.phone}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
@@ -180,7 +218,7 @@ const PublicArtisanProfilePage = () => {
                   onClick={() => setActiveTab(tab)}
                 >
                   {tab === "reviews"
-                    ? `Reviews (${artisan.reviewCount})`
+                    ? `Reviews (${artisan.reviewCount || 0})`
                     : tab === "overview"
                     ? "Overview"
                     : tab === "portfolio"
@@ -202,10 +240,10 @@ const PublicArtisanProfilePage = () => {
                 {/* About */}
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-neutral-800">
-                    About {artisan.name}
+                    About {artisan.name || artisan.businessName}
                   </h2>
                   <p className="text-neutral-600 leading-relaxed text-sm md:text-base">
-                    {artisan.description}
+                    {artisan.description || "No description available"}
                   </p>
                 </div>
 
@@ -215,7 +253,7 @@ const PublicArtisanProfilePage = () => {
                     My Specialities
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                    {artisan.specialties.map((service, index) => (
+                    {(artisan.specialties || []).map((service, index) => (
                       <div
                         key={index}
                         className="border border-neutral-200 rounded-lg p-3 md:p-4 hover:shadow transition-all bg-white flex items-start gap-3"
@@ -240,7 +278,7 @@ const PublicArtisanProfilePage = () => {
                   Recent Projects
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {artisan.portfolio.map((image, index) => (
+                  {(artisan.portfolio || []).map((image, index) => (
                     <div
                       key={index}
                       className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer group"
@@ -249,13 +287,17 @@ const PublicArtisanProfilePage = () => {
                         src={image}
                         alt={`Project ${index + 1}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/profiles/default-project.jpg";
+                        }}
                       />
                     </div>
                   ))}
                 </div>
                 <div className="text-center">
                   <button className="text-blue-600 font-medium hover:text-blue-800">
-                    View Full Portfolio ({artisan.portfolio.length} Photos)
+                    View Full Portfolio ({(artisan.portfolio || []).length} Photos)
                   </button>
                 </div>
               </div>
@@ -272,13 +314,13 @@ const PublicArtisanProfilePage = () => {
                 <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-5 rounded-lg">
                   <div className="text-center md:text-left space-y-2">
                     <div className="text-4xl md:text-5xl font-bold text-blue-600">
-                      {artisan.rating.toFixed(1)}
+                      {(artisan.rating || 0).toFixed(1)}
                     </div>
                     <div className="text-amber-400">
-                      <RatingStars rating={artisan.rating} size="lg" />
+                      <RatingStars rating={artisan.rating || 0} size="lg" />
                     </div>
                     <div className="text-gray-500 text-sm">
-                      {artisan.reviewCount} reviews
+                      {artisan.reviewCount || 0} reviews
                     </div>
                   </div>
 
@@ -380,7 +422,7 @@ const PublicArtisanProfilePage = () => {
 
                 {/* Reviews List */}
                 <div className="space-y-6">
-                  {artisan.reviews.map((review) => {
+                  {(artisan.reviews || []).map((review) => {
                     const ratingLabel = getRatingLabel(review.rating);
                     const labelColor = {
                       Excellent: "bg-green-100 text-green-800",
@@ -392,7 +434,7 @@ const PublicArtisanProfilePage = () => {
 
                     return (
                       <div
-                        key={review.id}
+                        key={review.id || review._id}
                         className="border-b border-gray-100 pb-6 last:border-0"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
@@ -400,10 +442,10 @@ const PublicArtisanProfilePage = () => {
                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
                               <img
                                 src={
-                                  review.user.profilePic ||
+                                  review.user?.profilePic ||
                                   "/profiles/default-user.jpg"
                                 }
-                                alt={review.user.name}
+                                alt={review.user?.name || "Anonymous"}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                   e.target.onerror = null;
@@ -413,7 +455,7 @@ const PublicArtisanProfilePage = () => {
                             </div>
                             <div>
                               <h3 className="font-medium text-gray-800">
-                                {review.user.name}
+                                {review.user?.name || "Anonymous"}
                               </h3>
                               <div className="flex items-center mt-1">
                                 <RatingStars rating={review.rating} size="sm" />
@@ -444,50 +486,56 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-          {/* Pricing Tab */}
-{activeTab === "pricing" && (
-  <div className="space-y-6">
-    <h2 className="text-xl font-bold text-gray-800">Services & Pricing</h2>
+            {/* Pricing Tab */}
+            {activeTab === "pricing" && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-bold text-gray-800">
+                  Services & Pricing
+                </h2>
 
-    <div className="grid gap-4 sm:grid-cols-2">
-      {artisan.services.map((service, index) => (
-        <div
-          key={index}
-          className="bg-white rounded-xl shadow border border-gray-200 p-4 flex flex-col justify-between hover:shadow-md transition-shadow"
-        >
-          <div className="mb-3">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
-              {service.service}
-            </h3>
-            <p className="text-gray-600 text-sm">{service.description}</p>
-          </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {(artisan.services || []).map((service, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-xl shadow border border-gray-200 p-4 flex flex-col justify-between hover:shadow-md transition-shadow"
+                    >
+                      <div className="mb-3">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                          {service.service}
+                        </h3>
+                        <p className="text-gray-600 text-sm">
+                          {service.description}
+                        </p>
+                      </div>
 
-          <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100 text-sm text-gray-700">
-            <div>
-              <span className="block font-medium">Price</span>
-              <span>{service.price}</span>
-            </div>
-            <div>
-              <span className="block font-medium">Estimated Time</span>
-              <span>{service.estimatedTime}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+                      <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100 text-sm text-gray-700">
+                        <div>
+                          <span className="block font-medium">Price</span>
+                          <span>{service.price || "N/A"}</span>
+                        </div>
+                        <div>
+                          <span className="block font-medium">
+                            Estimated Time
+                          </span>
+                          <span>{service.estimatedTime || "N/A"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-    {artisan.pricingNotes && (
-      <div className="bg-blue-50 p-5 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">
-          Pricing Notes
-        </h3>
-        <p className="text-gray-700 whitespace-pre-line text-sm">
-          {artisan.pricingNotes}
-        </p>
-      </div>
-    )}
-  </div>
-)}
+                {artisan.pricingNotes && (
+                  <div className="bg-blue-50 p-5 rounded-lg">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      Pricing Notes
+                    </h3>
+                    <p className="text-gray-700 whitespace-pre-line text-sm">
+                      {artisan.pricingNotes}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Report Button */}
             <div className="text-right mt-6">
@@ -508,14 +556,6 @@ const PublicArtisanProfilePage = () => {
     </div>
   );
 };
-
-export default PublicArtisanProfilePage;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE
-
-
-
-
 
 const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const {
@@ -561,7 +601,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
 
   const onSubmit = async (data) => {
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log("Job request submitted:", data);
       onClose();
@@ -801,10 +840,4 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   );
 };
 
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// JOB REQUEST FORM HERE
+export default PublicArtisanProfilePage;

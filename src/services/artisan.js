@@ -6,7 +6,7 @@ export const getPersonalProfile = async () => {
 };
 
 export const updateArtisanProfile = async (payload) => {
-  const response = await apiClient.get("/api/artisans/me", payload);
+  const response = await apiClient.patch("/api/artisans/me", payload);
   return response.data;
 };
 
