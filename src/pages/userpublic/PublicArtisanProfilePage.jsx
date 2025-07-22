@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import RatingStars from "../../components/RatingStars";
 import { BadgeCheck, Loader2, MapPin, ToolCase, Wallet } from "lucide-react";
-import { useGetAllArtisans } from "../../queries/artisanQueries";
+import { useGetSingleArtisan } from "../../queries/artisanQueries";
 
 const PublicArtisanProfilePage = () => {
   const { id } = useParams();
@@ -11,8 +11,7 @@ const PublicArtisanProfilePage = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isJobRequestModalOpen, setIsJobRequestModalOpen] = useState(false);
-  const [publicArtisanProfiles, setPublicArtisanProfiles] = useState(null);
-
+ const { data, isLoading, error } = useGetSingleArtisan(id);
   const {
     register,
     handleSubmit,
@@ -20,71 +19,37 @@ const PublicArtisanProfilePage = () => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm();
 
-  const { data, isLoading, error } = useGetAllArtisans();
-
-  useEffect(() => {
-    if (data && data.artisans) {
-      console.log("Fetched all Artisan profiles:", data.artisans);
-    
-      const normalizedArtisans = data.artisans.map(artisan => ({
-        ...artisan,
-        id: artisan._id || artisan.id
-      }));
-      setPublicArtisanProfiles(normalizedArtisans);
-    }
-  }, [data]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <Loader2 className="w-12 h-12 text-orange-600 animate-spin" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <p className="text-center text-red-500">
-          Error loading all artisan profiles.
-        </p>
-      </div>
-    );
-  }
-
-  if (!publicArtisanProfiles) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <p className="text-center text-gray-500">No profiles data found.</p>
-      </div>
-    );
-  }
-
-
-  const artisan = publicArtisanProfiles.find((profile) => 
-    profile.id === id || profile._id === id
-  );
-
-  if (!artisan) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full">
-        <p className="text-center text-gray-500">Artisan not found.</p>
-      </div>
-    );
-  }
+  // Use single artisan query instead of fetching all
+ 
+  const artisan = data?.artisan;
 
   // Calculate rating distribution with proper null checks
   const ratingDistribution = {
-    5: artisan.reviews?.length ? 
-      (artisan.reviews.filter((r) => r.rating === 5).length / artisan.reviews.length) * 100 : 0,
-    4: artisan.reviews?.length ? 
-      (artisan.reviews.filter((r) => r.rating === 4).length / artisan.reviews.length) * 100 : 0,
-    3: artisan.reviews?.length ? 
-      (artisan.reviews.filter((r) => r.rating === 3).length / artisan.reviews.length) * 100 : 0,
-    2: artisan.reviews?.length ? 
-      (artisan.reviews.filter((r) => r.rating === 2).length / artisan.reviews.length) * 100 : 0,
-    1: artisan.reviews?.length ? 
-      (artisan.reviews.filter((r) => r.rating === 1).length / artisan.reviews.length) * 100 : 0
+    5: artisan?.reviews?.length
+      ? (artisan.reviews.filter((r) => r.rating === 5).length /
+          artisan.reviews.length) *
+        100
+      : 0,
+    4: artisan?.reviews?.length
+      ? (artisan.reviews.filter((r) => r.rating === 4).length /
+          artisan.reviews.length) *
+        100
+      : 0,
+    3: artisan?.reviews?.length
+      ? (artisan.reviews.filter((r) => r.rating === 3).length /
+          artisan.reviews.length) *
+        100
+      : 0,
+    2: artisan?.reviews?.length
+      ? (artisan.reviews.filter((r) => r.rating === 2).length /
+          artisan.reviews.length) *
+        100
+      : 0,
+    1: artisan?.reviews?.length
+      ? (artisan.reviews.filter((r) => r.rating === 1).length /
+          artisan.reviews.length) *
+        100
+      : 0,
   };
 
   const onSubmit = async (data) => {
@@ -98,6 +63,8 @@ const PublicArtisanProfilePage = () => {
     }
   };
 
+
+  
   const getRatingLabel = (rating) => {
     if (rating === 5) return "Excellent";
     if (rating === 4) return "Good";
@@ -105,6 +72,32 @@ const PublicArtisanProfilePage = () => {
     if (rating === 2) return "Poor";
     return "Bad";
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <Loader2 className="w-12 h-12 text-orange-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-red-500">
+          Error loading artisan profile: {error.message}
+        </p>
+      </div>
+    );
+  }
+
+  if (!artisan) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <p className="text-center text-gray-500">Artisan not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -138,7 +131,8 @@ const PublicArtisanProfilePage = () => {
                   <div className="flex items-center">
                     <RatingStars rating={artisan.rating || 0} size="md" />
                     <span className="ml-2 text-sm md:text-base text-gray-200">
-                      {(artisan.rating || 0).toFixed(1)} ({artisan.reviewCount || 0} reviews)
+                      {(artisan.rating || 0).toFixed(1)} (
+                      {artisan.reviewCount || 0} reviews)
                     </span>
                   </div>
                   <span className="hidden md:inline text-gray-300">•</span>
@@ -297,7 +291,8 @@ const PublicArtisanProfilePage = () => {
                 </div>
                 <div className="text-center">
                   <button className="text-blue-600 font-medium hover:text-blue-800">
-                    View Full Portfolio ({(artisan.portfolio || []).length} Photos)
+                    View Full Portfolio ({(artisan.portfolio || []).length}{" "}
+                    Photos)
                   </button>
                 </div>
               </div>

@@ -6,6 +6,11 @@ export const getUserProfile = async () => {
 };
 
 export const editUserProfile = async (payload) => {
-  const response = await apiClient.patch("/api/users/me", payload);
+  console.log("Updatin profile with:", payload);
+  const response = await apiClient.patch("/api/users/me", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
