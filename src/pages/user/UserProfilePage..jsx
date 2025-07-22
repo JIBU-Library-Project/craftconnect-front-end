@@ -1,17 +1,18 @@
-import React, { useState} from "react";
+
 import { Link } from "react-router-dom";
 import { useGetUserProfile } from "../../queries/userQueries";
 import { Loader2 } from "lucide-react";
 
 const UserProfilePage = () => {
-  const [userProfile, setUserProfile] = useState(null);
 
-  const { data, isLoading, error } = useGetUserProfile();
 
-  setUserProfile(data.user);
-      console.log("Fetched user profile:", data.user);
-     
-  
+  const { data: userProfile , isLoading, error } = useGetUserProfile();
+ 
+  if(error) {
+    return <h1> Error Fetching User</h1>
+  }
+
+  console.log("Fetched user profile:", userProfile);
 
   if (isLoading) {
     return (
@@ -52,18 +53,19 @@ const UserProfilePage = () => {
         <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
             src={userProfile.profilePic || "/default-profile.jpg"}
-            alt={userProfile.name  || "data not found"}
+            alt={userProfile.name || "data not found"}
             className="w-full h-full object-cover"
           />
         </div>
 
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            {userProfile.name  || "data not found"}
+            {userProfile.name || "data not found"}
           </h1>
           <p className="text-gray-600">{userProfile.email || "not found"}</p>
           <p className="text-gray-500 text-sm mt-1">
-            Member since {formatDate(userProfile.joinedDate)  || "data not found"}
+            Member since{" "}
+            {formatDate(userProfile.joinedDate) || "data not found"}
           </p>
         </div>
       </div>
@@ -104,19 +106,27 @@ const UserProfilePage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <h3 className="text-sm font-medium text-gray-500">Phone Number</h3>
-            <p className="text-gray-800">{userProfile.phone  || "data not found"}</p>
+            <p className="text-gray-800">
+              {userProfile.phone || "data not found"}
+            </p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Location</h3>
-            <p className="text-gray-800">{userProfile.location  || "data not found"}</p>
+            <p className="text-gray-800">
+              {userProfile.location || "data not found"}
+            </p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Account Type</h3>
-            <p className="text-gray-800 capitalize">{userProfile.role || "data not found"}</p>
+            <p className="text-gray-800 capitalize">
+              {userProfile.role || "data not found"}
+            </p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500">Last Login</h3>
-            <p className="text-gray-800">{formatDate(userProfile.lastLogin)  || "data not found"}</p>
+            <p className="text-gray-800">
+              {formatDate(userProfile.lastLogin) || "data not found"}
+            </p>
           </div>
         </div>
       </div>

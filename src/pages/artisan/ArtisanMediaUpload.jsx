@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   useGetPersonalProfile,
   usePostArtisanPortfolio,
@@ -13,18 +14,20 @@ const ArtisanMediaUpload = () => {
   const [portfolioPreviews, setPortfolioPreviews] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Fetch profile data
   const { data: profileData, isLoading } = useGetPersonalProfile();
-  const { mutateAsync: postPortfolio } = usePostArtisanPortfolio();
-  const { mutateAsync: updateProfile } = useUpdateArtisanProfile();
+  const updateProfileMutation = useUpdateArtisanProfile();
+  const updatePortfolioMutation = usePostArtisanPortfolio();
 
-  const { register, handleSubmit, watch, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
-  // Watch file inputs
   const profilePicFile = watch("profilePic");
   const portfolioFiles = watch("portfolio");
 
-  // Initialize form with fetched data
   useEffect(() => {
     if (profileData?.artisan) {
       setProfilePicPreview(profileData.artisan.profilePic || "");
@@ -32,61 +35,55 @@ const ArtisanMediaUpload = () => {
     }
   }, [profileData]);
 
-  // Handle profile picture preview
   useEffect(() => {
-    if (profilePicFile?.[0]) {
-      const reader = new FileReader();
-      reader.onload = () => setProfilePicPreview(reader.result);
-      reader.readAsDataURL(profilePicFile[0]);
+    if (profilePicFile && profilePicFile[0]) {
+      const file = profilePicFile[0];
+      setProfilePicPreview(URL.createObjectURL(file));
     }
   }, [profilePicFile]);
 
-  // Handle portfolio previews
   useEffect(() => {
-    if (portfolioFiles?.length > 0) {
-      const newPreviews = [];
-      Array.from(portfolioFiles).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          newPreviews.push(reader.result);
-          if (newPreviews.length === portfolioFiles.length) {
-            setPortfolioPreviews((prev) => [...prev, ...newPreviews]);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
+    if (portfolioFiles && portfolioFiles.length > 0) {
+      const previews = Array.from(portfolioFiles).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPortfolioPreviews((prev) => [...prev, ...previews]);
     }
   }, [portfolioFiles]);
 
   const removePortfolioImage = (index) => {
     setPortfolioPreviews((prev) => prev.filter((_, i) => i !== index));
-    setValue("portfolio", null); // Reset the file input
   };
 
   const onSubmit = async (data) => {
-    setIsUploading(true);
     try {
-      // Handle profile picture update if changed
-      if (data.profilePic?.[0]) {
-        const profilePicFormData = new FormData();
-        profilePicFormData.append("profilePic", data.profilePic[0]);
-        await updateProfile(profilePicFormData);
+      setIsUploading(true);
+
+      // Upload Profile Picture if selected
+      if (data.profilePic && data.profilePic.length > 0) {
+        const profilePayload = new FormData();
+        profilePayload.append("file", data.profilePic[0]);
+
+        const profileRes = await updateProfileMutation.mutateAsync(profilePayload);
+        toast.success("Profile picture updated successfully!");
       }
 
-      // Handle portfolio upload if new files added
-      if (data.portfolio?.length > 0) {
-        const portfolioFormData = new FormData();
+      // Upload Portfolio Images if selected
+      if (data.portfolio && data.portfolio.length > 0) {
+        const portfolioPayload = new FormData();
         Array.from(data.portfolio).forEach((file) => {
-          portfolioFormData.append("portfolio", file);
+          portfolioPayload.append("files", file);
         });
-        await postPortfolio(portfolioFormData);
+
+        const portfolioRes = await updatePortfolioMutation.mutateAsync(portfolioPayload);
+        toast.success("Portfolio images uploaded successfully!");
       }
 
-      alert("Media updated successfully!");
+      toast.success("Upload complete!");
       navigate("/artisan/profile");
     } catch (error) {
-      console.error("Upload failed:", error);
-      alert("Failed to update media. Please try again.");
+      console.error(error);
+      toast.error(error.response?.data?.error || "Upload failed, try again.");
     } finally {
       setIsUploading(false);
     }
@@ -113,9 +110,11 @@ const ArtisanMediaUpload = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        {/* Profile Picture Section */}
+        {/* Profile Picture */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-medium text-gray-800 mb-4">Profile Picture</h2>
+          <h2 className="text-lg font-medium text-gray-800 mb-4">
+            Profile Picture
+          </h2>
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200">
               {profilePicPreview ? (
@@ -145,16 +144,15 @@ const ArtisanMediaUpload = () => {
                   file:bg-indigo-50 file:text-indigo-700
                   hover:file:bg-indigo-100"
               />
-              <p className="text-xs text-gray-500 mt-2">
-                Recommended size: 500x500 pixels
-              </p>
             </div>
           </div>
         </div>
 
-        {/* Portfolio Section */}
+        {/* Portfolio */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-medium text-gray-800 mb-4">Portfolio Images</h2>
+          <h2 className="text-lg font-medium text-gray-800 mb-4">
+            Portfolio Images
+          </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6">
             {portfolioPreviews.map((preview, index) => (
               <div key={index} className="relative group">
@@ -168,23 +166,11 @@ const ArtisanMediaUpload = () => {
                   onClick={() => removePortfolioImage(index)}
                   className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  ✕
                 </button>
               </div>
             ))}
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Add More Portfolio Images
@@ -201,13 +187,10 @@ const ArtisanMediaUpload = () => {
                 file:bg-indigo-50 file:text-indigo-700
                 hover:file:bg-indigo-100"
             />
-            <p className="text-xs text-gray-500 mt-2">
-              Upload multiple images to showcase your work (JPEG, PNG)
-            </p>
           </div>
         </div>
 
-        {/* Submit Section */}
+        {/* Submit */}
         <div className="flex justify-end space-x-3">
           <button
             type="button"
@@ -247,18 +230,6 @@ const ArtisanMediaUpload = () => {
               </>
             ) : (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
                 Save Changes
               </>
             )}

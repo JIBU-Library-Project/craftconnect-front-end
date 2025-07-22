@@ -17,9 +17,10 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { useAuth } from "../services/hooks";
+import { FiUpload } from "react-icons/fi";
 
 const ArtisanDashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,10 +30,15 @@ const ArtisanDashboardLayout = () => {
     if (path === "/artisan") {
       return location.pathname === "/artisan"; // exact match only for dashboard
     }
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+    return (
+      location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
   };
 
-  const logout = () => navigate("/login");
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   const navItems = [
     {
@@ -56,11 +62,6 @@ const ArtisanDashboardLayout = () => {
       label: "Services",
     },
     {
-      path: "/artisan/services-edit",
-      icon: <Edit className="w-5 h-5" />,
-      label: "Manage Services",
-    },
-    {
       path: "/artisan/verification",
       icon: <ShieldCheck className="w-5 h-5" />,
       label: "Verification",
@@ -77,7 +78,7 @@ const ArtisanDashboardLayout = () => {
     },
     {
       path: "/artisan/media",
-      icon: <Star className="w-5 h-5" />,
+      icon: <FiUpload className="w-5 h-5" />,
       label: "Media Upload",
     },
     { path: "/artisan/contact" },
@@ -102,13 +103,17 @@ const ArtisanDashboardLayout = () => {
       {/* Sidebar */}
       <div
         className={`fixed md:relative z-40 w-64 bg-indigo-900 text-white transition-all duration-300 ease-in-out 
-        ${mobileMenuOpen ? "left-0" : "-left-full"} md:left-0 h-full flex flex-col`}
+        ${
+          mobileMenuOpen ? "left-0" : "-left-full"
+        } md:left-0 h-full flex flex-col`}
       >
         <div className="p-6 flex items-center">
           <div className="w-10 h-10 rounded-md bg-indigo-700 flex items-center justify-center text-white font-bold text-lg">
             A
           </div>
-          <span className="ml-3 text-xl font-semibold text-white">ArtisanHub</span>
+          <span className="ml-3 text-xl font-semibold text-white">
+            ArtisanHub
+          </span>
         </div>
 
         {/* Navigation Links */}
@@ -171,7 +176,7 @@ const ArtisanDashboardLayout = () => {
                 Back to Main Site
               </button>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="w-full flex items-center px-4 py-2 text-sm text-red-200 hover:bg-indigo-700/50"
               >
                 <LogOut className="w-4 h-4 mr-3" />
