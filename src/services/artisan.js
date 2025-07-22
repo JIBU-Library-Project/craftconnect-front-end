@@ -5,15 +5,15 @@ export const getPersonalProfile = async () => {
   return response.data;
 };
 
-export const updateArtisanProfile = async (payload) => {
-  const response = await apiClient.patch("/api/artisans/me", payload);
-  return response.data;
-};
+// export const updateArtisanProfile = async (payload) => {
+//   const response = await apiClient.patch("/api/artisans/me", payload);
+//   return response.data;
+// };
 
-export const postArtisanPortfolio = async (payload) => {
-  const response = await apiClient.post("/api/artisans/portfolio", payload);
-  return response.data;
-};
+// export const postArtisanPortfolio = async (payload) => {
+//   const response = await apiClient.post("/api/artisans/portfolio", payload);
+//   return response.data;
+// };
 
 export const getAllArtisans = async () => {
   const response = await apiClient.get("/api/artisans");
@@ -28,8 +28,33 @@ export const getSingleArtisan = async (id) => {
 export const verifyRequest = async (payload) => {
   const response = await apiClient.post(
     "/api/artisans/verify-request",
-    payload
+    payload,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
+  return response.data;
+};
+
+export const updateArtisanProfile = async (payload) => {
+  console.log("Updating profile with:", payload);
+  const response = await apiClient.patch("/api/artisans/me", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const postArtisanPortfolio = async (payload) => {
+  console.log("Posting portfolio with:", payload);
+  const response = await apiClient.post("/api/artisans/portfolio", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };

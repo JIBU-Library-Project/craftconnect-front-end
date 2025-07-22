@@ -1,228 +1,221 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { FiCamera, FiTrash2, FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { FiCamera, FiTrash2 } from "react-icons/fi";
+import { useGetUserProfile, useEditUserProfile } from "../../queries/userQueries";
+import { toast } from "react-toastify";
 
 const UserProfileEditPage = () => {
   const fileInputRef = useRef(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState("");
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
-  // Sample user data
-  const userData = {
-    name: "Kwame Asare",
-    profilePic: "/profiles/user1.jpg",
-    phone: "0244123456",
-    location: "Accra, Osu"
-  };
+  const navigate = useNavigate();
+  const { data: profileData, isLoading, isError } = useGetUserProfile();
+  const editProfileMutation = useEditUserProfile();
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      name: userData.name,
-      phone: userData.phone,
-      location: userData.location
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    if (profileData?.user) {
+      reset({
+        name: profileData.user.name || "",
+        location: profileData.user.location || "",
+        phone: profileData.user.phone || "",
+      });
+      setPreviewImage(profileData.user.profilePic || "");
     }
-  });
+  }, [profileData, reset]);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setProfileImageFile(file);
+
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
+      reader.onload = (event) => setPreviewImage(event.target.result);
       reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveImage = () => {
-    setPreviewImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    setPreviewImage("");
+    setProfileImageFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setShowRemoveConfirm(false);
   };
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-    // Handle form submission
+  const onSubmit = async (formData) => {
+    setIsSubmitting(true);
+    const payload = new FormData();
+    payload.append("name", formData.name);
+    payload.append("location", formData.location);
+    payload.append("phone", formData.phone);
+
+    if (profileImageFile) {
+      payload.append("file", profileImageFile); // Change to "profilePic" if your backend expects it
+    }
+
+    try {
+      await editProfileMutation.mutateAsync(payload);
+      toast.success("Profile updated successfully!");
+      navigate("/homeowner/user-profile");
+    } catch (error) {
+      console.error("Profile update failed:", error);
+      toast.error(error.response?.data?.error || "Profile update failed.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500">Error loading profile data</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Edit Profile</h1>
-        <Link
-          to="/user/profile"
-          className="flex items-center gap-1 text-gray-600 hover:text-gray-900 text-sm font-medium"
-        >
-          <FiX size={18} /> Cancel
-        </Link>
+    <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800">Edit Profile</h1>
+        <div className="flex gap-2">
+          <button
+            onClick={() => navigate("/user-profile")}
+            className="px-4 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="profile-form"
+            disabled={isSubmitting}
+            className="px-4 py-2 text-sm rounded-md bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-70"
+          >
+            {isSubmitting ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Profile Picture */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Profile Picture
-          </label>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative group">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg relative">
+      <form id="profile-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Profile Image */}
+        <div>
+          <h2 className="text-lg font-medium text-gray-800 mb-4">Profile Picture</h2>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              {previewImage ? (
                 <img
-                  src={previewImage || userData.profilePic}
+                  src={previewImage}
                   alt="Profile"
-                  className="w-full h-full object-cover"
+                  className="w-32 h-32 rounded-full object-cover border"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <FiCamera className="text-white text-2xl" />
+              ) : (
+                <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border">
+                  <FiCamera className="w-8 h-8 text-gray-400" />
                 </div>
-              </div>
-              
+              )}
+              <label className="absolute bottom-0 right-0 bg-indigo-600 p-2 rounded-full cursor-pointer hover:bg-indigo-700">
+                <FiCamera className="text-white" />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
               {previewImage && (
                 <button
                   type="button"
                   onClick={() => setShowRemoveConfirm(true)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-md"
+                  className="absolute -top-2 -right-2 bg-red-500 p-1.5 rounded-full text-white hover:bg-red-600"
                 >
                   <FiTrash2 size={16} />
                 </button>
               )}
             </div>
-
-            <div className="flex-1 w-full">
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-                id="profile-upload"
-              />
-              <label
-                htmlFor="profile-upload"
-                className="block w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-indigo-500 transition-colors text-center"
-              >
-                <div className="flex flex-col items-center justify-center gap-1">
-                  <FiCamera className="text-gray-400 text-xl" />
-                  <span className="text-sm font-medium text-gray-700">
-                    {previewImage ? "Change photo" : "Upload new photo"}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    JPG, PNG up to 2MB
-                  </span>
-                </div>
-              </label>
-            </div>
+            <p className="text-sm text-gray-500">
+              Upload a clear photo (JPG, PNG, GIF, max 5MB)
+            </p>
           </div>
         </div>
 
-        {/* Name */}
-        <div className="space-y-2">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            Full Name
-          </label>
-          <div className="relative">
+        {/* Personal Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Name */}
+          <div>
+            <label className="text-sm text-gray-700">Full Name</label>
             <input
-              id="name"
               type="text"
-              className={`block w-full px-4 py-3 rounded-lg border ${
-                errors.name ? "border-red-500" : "border-gray-300"
-              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
               {...register("name", { required: "Name is required" })}
+              className={`w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-indigo-200 ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
           </div>
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-          )}
-        </div>
 
-        {/* Phone */}
-        <div className="space-y-2">
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-            Phone Number
-          </label>
-          <div className="relative">
+          {/* Phone */}
+          <div>
+            <label className="text-sm text-gray-700">Phone Number</label>
             <input
-              id="phone"
               type="tel"
-              className={`block w-full px-4 py-3 rounded-lg border ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
               {...register("phone", {
                 required: "Phone number is required",
                 pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Please enter a valid 10-digit phone number"
-                }
+                  value: /^\+?\d{10,15}$/,
+                  message: "Enter a valid phone number",
+                },
               })}
+              className={`w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-indigo-200 ${
+                errors.phone ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
           </div>
-          {errors.phone && (
-            <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-          )}
-        </div>
 
-        {/* Location */}
-        <div className="space-y-2">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-            Location
-          </label>
-          <div className="relative">
+          {/* Location */}
+          <div>
+            <label className="text-sm text-gray-700">Location</label>
             <input
-              id="location"
               type="text"
-              className={`block w-full px-4 py-3 rounded-lg border ${
-                errors.location ? "border-red-500" : "border-gray-300"
-              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
               {...register("location", { required: "Location is required" })}
+              className={`w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-indigo-200 ${
+                errors.location ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.location && <p className="text-sm text-red-500">{errors.location.message}</p>}
           </div>
-          {errors.location && (
-            <p className="mt-1 text-sm text-red-600">{errors.location.message}</p>
-          )}
-        </div>
-
-        {/* Form Actions */}
-        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6">
-          <Link
-            to="/homeowner/user-profile"
-            className="px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 text-center"
-          >
-            Cancel
-          </Link>
-          <button
-            type="submit"
-            className="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:orange-indigo-500"
-          >
-            Save Changes
-          </button>
         </div>
       </form>
 
-      {/* Remove Image Confirmation Modal */}
+      {/* Remove Confirmation */}
       {showRemoveConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Remove Profile Picture?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to remove your profile picture?
-            </p>
-            <div className="flex justify-end gap-3">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 shadow-xl w-80">
+            <h3 className="text-lg font-semibold mb-2">Remove Profile Picture?</h3>
+            <p className="text-sm text-gray-600 mb-4">Are you sure you want to remove it?</p>
+            <div className="flex justify-end gap-2">
               <button
-                type="button"
                 onClick={() => setShowRemoveConfirm(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
               >
                 Cancel
               </button>
               <button
-                type="button"
                 onClick={handleRemoveImage}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+                className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white"
               >
                 Remove
               </button>

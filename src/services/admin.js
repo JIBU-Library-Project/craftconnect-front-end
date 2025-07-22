@@ -1,4 +1,4 @@
-import { apiClient } from "./axiosInstance";
+import { apiClient } from "./config";
 
 export const getSingleUser = async (id) => {
   const response = await apiClient.get(`/api/admin/users/${id}`);
