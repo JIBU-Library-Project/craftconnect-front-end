@@ -19,8 +19,8 @@ function AdminReviewListPage() {
     const matchesFilter = filter === "all" || status === filter;
 
     const matchesSearch =
-      review.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.artisan.businessName
+      review.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.businessName
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
 
@@ -87,8 +87,8 @@ function AdminReviewListPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
-                            src={review.user.profilePic}
-                            alt={review.user.name}
+                            src={review.userProfilePic}
+                            alt={review.userName}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = "/profiles/default-user.jpg";
@@ -97,7 +97,7 @@ function AdminReviewListPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {review.user.name}
+                            {review.userName}
                           </div>
                           <div className="text-sm text-gray-500">
                             {new Date(review.date).toLocaleDateString()}
@@ -110,8 +110,8 @@ function AdminReviewListPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
-                            src={review.artisan.profilePic}
-                            alt={review.artisan.businessName}
+                            src={review.artisanProfilePic}
+                            alt={review.businessName}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = "/profiles/default-artisan.jpg";
@@ -120,7 +120,7 @@ function AdminReviewListPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {review.artisan.businessName}
+                            {review.businessName}
                           </div>
                         </div>
                       </div>

@@ -5,76 +5,17 @@ const UserReviewsPage = () => {
   const userReviews = [
     {
       id: "rev_006",
+      artisanId: "art_792",
+      userId: "user_120",
       jobId: "job-4",
       rating: 4,
       comment: "Very good, minor finishing issues but overall nice.",
       date: "2024-07-02T08:20:00Z",
-      artisan: {
-        id: "art_789",
-        name: "Yaw Boateng",
-        profilePic: "/profiles/artisan1.jpg",
-      },
+      artisanName: "Yaw Boateng",
+      artisanProfilePic: "/profiles/artisan1.jpg",
+      businessName: "Co and Business",
     },
-    {
-      id: "rev_007",
-      jobId: "job-5",
-      rating: 1,
-      comment: "Terrible service, would not recommend.",
-      date: "2024-08-15T12:40:00Z",
-      artisan: {
-        id: "art_987",
-        name: "Abena Darko",
-        profilePic: "/profiles/artisan2.jpg",
-      },
-    },
-    {
-      id: "rev_010",
-      jobId: "job-8",
-      rating: 5,
-      comment: "Outstanding work! The piece exceeded my expectations.",
-      date: "2024-09-10T14:55:00Z",
-      artisan: {
-        id: "art_123",
-        name: "Kofi Mensah",
-        profilePic: "/profiles/artisan4.jpg",
-      },
-    },
-    {
-      id: "rev_011",
-      jobId: "job-9",
-      rating: 2,
-      comment: "Delivery was late, and the finishing was below standard.",
-      date: "2024-10-01T11:30:00Z",
-      artisan: {
-        id: "art_234",
-        name: "Adwoa Nyarko",
-        profilePic: "/profiles/artisan5.jpg",
-      },
-    },
-    {
-      id: "rev_012",
-      jobId: "job-10",
-      rating: 3,
-      comment: "Average service, communication could be better.",
-      date: "2024-11-20T17:45:00Z",
-      artisan: {
-        id: "art_345",
-        name: "Kojo Asante",
-        profilePic: "/profiles/artisan6.jpg",
-      },
-    },
-    {
-      id: "rev_013",
-      jobId: "job-11",
-      rating: 5,
-      comment: "Fantastic experience, will definitely order again!",
-      date: "2024-12-05T09:10:00Z",
-      artisan: {
-        id: "art_456",
-        name: "Akosua Agyemang",
-        profilePic: "/profiles/artisan3.jpg",
-      },
-    },
+    
   ];
 
   const formatDate = (dateString) => {
@@ -140,14 +81,14 @@ const UserReviewsPage = () => {
           >
             <div className="flex items-start gap-3 mb-2">
               <img
-                src={review.artisan.profilePic}
-                alt={review.artisan.name}
+                src={review.artisanProfilePic}
+                alt={review.artisanName}
                 className="w-12 h-12 rounded-full object-cover border border-gray-200"
               />
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start">
                   <h3 className="font-medium text-gray-800 truncate">
-                    {review.artisan.name}
+                    {review.artisanName}
                   </h3>
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${getRatingColor(

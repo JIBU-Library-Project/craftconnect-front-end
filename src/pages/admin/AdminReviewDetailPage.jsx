@@ -106,8 +106,8 @@ function AdminReviewDetailPage() {
               <div className="flex items-center">
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
                   <img
-                    src={review.user.profilePic}
-                    alt={review.user.name}
+                    src={review.userProfilePic}
+                    alt={review.userName}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -116,7 +116,7 @@ function AdminReviewDetailPage() {
                   />
                 </div>
                 <div className="ml-4">
-                  <p className="font-medium">{review.user.name}</p>
+                  <p className="font-medium">{review.userName}</p>
                   <p className="text-sm text-gray-500">
                     Posted on {new Date(review.date).toLocaleDateString()}
                   </p>
@@ -130,8 +130,8 @@ function AdminReviewDetailPage() {
               <div className="flex items-center">
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
                   <img
-                    src={review.artisan.profilePic}
-                    alt={review.artisan.businessName}
+                    src={review.artisanProfilePic}
+                    alt={review.businessName}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -140,7 +140,7 @@ function AdminReviewDetailPage() {
                   />
                 </div>
                 <div className="ml-4">
-                  <p className="font-medium">{review.artisan.businessName}</p>
+                  <p className="font-medium">{review.businessName}</p>
                   <p className="text-sm text-gray-500">
                     Job ID: {review.jobId}
                   </p>

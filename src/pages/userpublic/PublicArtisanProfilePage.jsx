@@ -437,10 +437,10 @@ const PublicArtisanProfilePage = () => {
                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
                               <img
                                 src={
-                                  review.user?.profilePic ||
+                                  review.userProfilePic ||
                                   "/profiles/default-user.jpg"
                                 }
-                                alt={review.user?.name || "Anonymous"}
+                                alt={review.userName || "Anonymous"}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                   e.target.onerror = null;
@@ -450,7 +450,7 @@ const PublicArtisanProfilePage = () => {
                             </div>
                             <div>
                               <h3 className="font-medium text-gray-800">
-                                {review.user?.name || "Anonymous"}
+                                {review.userName || "Anonymous"}
                               </h3>
                               <div className="flex items-center mt-1">
                                 <RatingStars rating={review.rating} size="sm" />
