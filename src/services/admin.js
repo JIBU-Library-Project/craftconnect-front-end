@@ -25,6 +25,11 @@ export const getVerificationRequests = async () => {
   return response.data;
 };
 
+export const getSingleVerification = async (id) => {
+  const response = await apiClient.get(`/api/admin/verify-requests/${id}`);
+  return response.data;
+};
+
 export const modifyVerificationRequest = async (id, payload) => {
   const response = await apiClient.patch(
     `/api/admin/verify-requests/${id}`,

@@ -6,6 +6,7 @@ import {
   deleteArtisan,
   getVerificationRequests,
   modifyVerificationRequest,
+  getSingleVerification,
 } from "../services/admin";
 
 export const useGetSingleUser = (id) => {
@@ -47,6 +48,15 @@ export const useGetVerificationRequests = () => {
   return useQuery({
     queryKey: ["verificationRequests"],
     queryFn: getVerificationRequests,
+  });
+};
+
+// New One
+export const useGetSingleVerification = (id) => {
+  return useQuery({
+    queryKey: ["verficiationRequests", id],
+    queryFn: () => getSingleVerification(id),
+    enabled: !!id,
   });
 };
 

@@ -10,6 +10,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    logout();
     navigate("/");
     setMobileMenuOpen(false);
   };
@@ -38,8 +39,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl font-bold flex items-center text-gray-900"
-          >
+            className="text-xl font-bold flex items-center text-gray-900">
             CraftConnect
           </Link>
 
@@ -60,8 +60,7 @@ const Navbar = () => {
                       ? "bg-indigo-50 text-indigo-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`
-                }
-              >
+                }>
                 {label}
               </NavLink>
             ))}
@@ -79,15 +78,13 @@ const Navbar = () => {
                 </div>
                 <Link
                   to={dashboardLink}
-                  className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition shadow-md flex items-center gap-1"
-                >
+                  className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-full hover:bg-indigo-700 transition shadow-md flex items-center gap-1">
                   <FiUser size={16} />
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition flex items-center gap-1"
-                >
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition flex items-center gap-1">
                   <FiLogOut size={16} />
                   Logout
                 </button>
@@ -96,15 +93,13 @@ const Navbar = () => {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition"
-                >
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition">
                   Login
                 </Link>
 
                 <Link
                   to="/signup"
-                  className="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-gray-100 hover:text-gray-200 transition"
-                >
+                  className="px-4 py-2 text-sm font-medium rounded-xl bg-indigo-600 text-gray-100 hover:text-gray-200 transition">
                   Signup
                 </Link>
               </div>
@@ -115,8 +110,7 @@ const Navbar = () => {
           <button
             onClick={toggleMobileMenu}
             className="md:hidden p-2 rounded-md text-gray-700 hover:text-gray-900 focus:outline-none"
-            aria-label="Toggle menu"
-          >
+            aria-label="Toggle menu">
             {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
@@ -129,15 +123,13 @@ const Navbar = () => {
             <Link
               to="/"
               className="text-lg font-bold text-gray-900"
-              onClick={toggleMobileMenu}
-            >
+              onClick={toggleMobileMenu}>
               CraftConnect
             </Link>
             <button
               onClick={toggleMobileMenu}
               className="p-2 rounded-md text-gray-900 hover:text-gray-400 focus:outline-none"
-              aria-label="Close menu"
-            >
+              aria-label="Close menu">
               <FiX size={28} />
             </button>
           </div>
@@ -160,8 +152,7 @@ const Navbar = () => {
                       ? "bg-indigo-50 text-indigo-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`
-                }
-              >
+                }>
                 {label}
               </NavLink>
             ))}
@@ -175,14 +166,12 @@ const Navbar = () => {
                 <Link
                   to={dashboardLink}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
-                >
+                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md">
                   My Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md"
-                >
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 hover:bg-gray-50 rounded-md">
                   Logout
                 </button>
               </div>
@@ -191,16 +180,14 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
-                >
+                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md">
                   Login
                 </Link>
 
                 <Link
                   to="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md"
-                >
+                  className="block px-4 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 rounded-md">
                   Signup
                 </Link>
               </div>

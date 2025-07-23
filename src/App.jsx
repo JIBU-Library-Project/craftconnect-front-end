@@ -91,7 +91,7 @@ function App() {
             },
             { path: "artisan-reviews", element: <ArtisanReviewsPage /> },
             { path: "contact", element: <ArtisanContactPage /> },
-            { path: "media", element: <ArtisanMediaUpload/> },
+            { path: "media", element: <ArtisanMediaUpload /> },
           ],
         },
       ],

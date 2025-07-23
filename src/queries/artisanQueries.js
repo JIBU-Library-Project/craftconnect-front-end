@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getAllArtisans,
+  getArtisanJobs,
+  getArtisansReviews,
   getPersonalProfile,
   getSingleArtisan,
   postArtisanPortfolio,
@@ -53,5 +55,21 @@ export const useGetSingleArtisan = (id) => {
 export const useVerifyRequest = () => {
   return useMutation({
     mutationFn: verifyRequest,
+  });
+};
+
+// New one
+export const useGetArtisanJobs = () => {
+  return useQuery({
+    queryKey: ["artisanJobs"],
+    queryFn: getArtisanJobs,
+  });
+};
+
+// New one
+export const useGetArtisanReviews = () => {
+  return useQuery({
+    queryKey: ["artisanReviews"],
+    queryFn: getArtisansReviews,
   });
 };
