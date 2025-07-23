@@ -137,8 +137,8 @@ function AdminVerificationPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                            {request.artisanProfilePic ? (
-                              <img src={request.artisanProfilePic} alt={request.artisanName} className="h-full w-full object-cover" />
+                            {request.profilePic ? (
+                              <img src={request.profilePic} alt={request.artisanName} className="h-full w-full object-cover" />
                             ) : (
                               <div className="h-full w-full flex items-center justify-center text-gray-400">
                                 <User className="h-5 w-5" />
