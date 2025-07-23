@@ -1,14 +1,18 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../services/hooks";
 
 export default function PrivateRoute({ roles = [] }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const location = useLocation();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  // ✅ Optional: role check
+  if (!user) {
+    return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  }
+
   if (roles.length && !roles.includes(user.role)) {
     return <Navigate to="/" replace />;
   }

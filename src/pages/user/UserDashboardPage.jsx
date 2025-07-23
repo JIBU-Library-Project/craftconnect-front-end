@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router";
 
 const UserDashboardPage = () => {
@@ -42,8 +41,7 @@ const UserDashboardPage = () => {
         {cards.map((card, idx) => (
           <div
             key={idx}
-            className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-indigo-300 transition"
-          >
+            className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-indigo-300 transition">
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1">
                 {card.title}
@@ -54,8 +52,7 @@ const UserDashboardPage = () => {
             </div>
             <button
               onClick={card.onClick}
-              className="mt-4 bg-[#f05335] text-white text-sm sm:text-base px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors w-full text-center"
-            >
+              className="mt-4 bg-[#f05335] text-white text-sm sm:text-base px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors w-full text-center">
               {card.buttonText}
             </button>
           </div>

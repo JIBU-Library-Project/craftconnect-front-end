@@ -99,7 +99,7 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[#4b158d] flex justify-center text-white font-medium hover:bg-[#aa47bc] transition">
+            className="w-full py-3 rounded-lg flex justify-center bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition">
             {isSubmitting ? (
               <Loader2 className="animate-spin text-center" />
             ) : (
