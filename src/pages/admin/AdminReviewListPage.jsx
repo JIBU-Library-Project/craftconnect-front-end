@@ -1,11 +1,47 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { AdminReview } from "../../data/dummyData";
+// import { AdminReview } from "../../data/dummyData";
+import { useGetReviews } from "../../queries/reviewsQueries";
+import { AlertCircle, Loader2 } from "lucide-react";
 
 function AdminReviewListPage() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { data, isLoading, error } = useGetReviews();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <div className="text-center flex flex-col items-center">
+          <AlertCircle className="w-10 h-10 mb-2 text-indigo-500" />
+          <p className="text-indigo-500">Error loading reviews.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const AdminReview = data.reviews;
+
+  if (!AdminReview) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <div className="text-center flex flex-col items-center">
+          <AlertCircle className="w-10 h-10 mb-2 text-gray-500" />
+          <p className="text-gray-500">No Review data found.</p>
+        </div>
+      </div>
+    );
+  }
 
   const getStatus = (rating) => {
     if (rating === 1) return "Bad";
@@ -19,8 +55,8 @@ function AdminReviewListPage() {
     const matchesFilter = filter === "all" || status === filter;
 
     const matchesSearch =
-      review.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.artisan.businessName
+      review?.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review?.businessName
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
 
@@ -30,7 +66,9 @@ function AdminReviewListPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-indigo-600">Review Management</h1>
+        <h1 className="text-3xl font-bold text-indigo-600">
+          Review Management
+        </h1>
         <div className="flex gap-4">
           <input
             type="text"
@@ -87,8 +125,8 @@ function AdminReviewListPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
-                            src={review.user.profilePic}
-                            alt={review.user.name}
+                            src={review?.userProfilePic}
+                            alt={review?.userName}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = "/profiles/default-user.jpg";
@@ -97,7 +135,7 @@ function AdminReviewListPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {review.user.name}
+                            {review?.userName}
                           </div>
                           <div className="text-sm text-gray-500">
                             {new Date(review.date).toLocaleDateString()}
@@ -110,8 +148,8 @@ function AdminReviewListPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
-                            src={review.artisan.profilePic}
-                            alt={review.artisan.businessName}
+                            src={review?.artisanProfilePic}
+                            alt={review?.businessName}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = "/profiles/default-artisan.jpg";
@@ -120,7 +158,7 @@ function AdminReviewListPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {review.artisan.businessName}
+                            {review?.businessName}
                           </div>
                         </div>
                       </div>
@@ -164,7 +202,7 @@ function AdminReviewListPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
-                        onClick={() => navigate(`/admin/reviews/${review.id}`)}
+                        onClick={() => navigate(`/admin/reviews/${review._id}`)}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         View Details

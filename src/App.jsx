@@ -127,7 +127,7 @@ function App() {
           children: [
             { index: true, element: <AdminDashboardPage /> },
             { path: "verification", element: <AdminVerificationPage /> },
-            { path: "verify-detail", element: <AdminVerificationDetailPage /> },
+            { path: "verify-detail/:id", element: <AdminVerificationDetailPage /> },
             { path: "reviews", element: <AdminReviewListPage /> },
             { path: "reviews/:reviewId", element: <AdminReviewDetailPage /> },
             { path: "users", element: <AdminUsersListPage /> },
