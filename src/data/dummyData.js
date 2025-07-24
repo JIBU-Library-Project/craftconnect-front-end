@@ -156,11 +156,16 @@ export const publicArtisanProfiles = [
     role: "artisan",
     businessName: "Asante Plumbing Solutions",
     craft: "Plumber",
-    description: "Master plumber with 15 years experience in residential and commercial systems. Specializes in emergency repairs and pipe installations.",
+    description:
+      "Master plumber with 15 years experience in residential and commercial systems. Specializes in emergency repairs and pipe installations.",
     rating: 4.7,
     reviewCount: 68,
     hourlyRate: 45,
-    specialties: ["Pipe Installations", "Leak Detection", "Water Heater Repair"],
+    specialties: [
+      "Pipe Installations",
+      "Leak Detection",
+      "Water Heater Repair",
+    ],
     location: "Accra, Greater Accra Region",
     experience: "15 years",
     whatsapp: "+233201234568",
@@ -169,14 +174,14 @@ export const publicArtisanProfiles = [
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 142,
       acceptedJobs: 138,
       completedJobs: 132,
       pendingJobs: 6,
-      cancelledJobs: 4
+      cancelledJobs: 4,
     },
     reviews: [
       {
@@ -190,7 +195,7 @@ export const publicArtisanProfiles = [
           name: "Ama Serwaa",
           profilePic: "/profiles/user30.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -199,12 +204,12 @@ export const publicArtisanProfiles = [
         description: "24/7 emergency plumbing services",
         price: "GHS 350/hr",
         estimatedTime: "1-3 hours",
-      }
+      },
     ],
     pricingNotes: `Emergency service premium applies after hours.
 Minimum 1-hour charge.
 Pipe materials billed separately.
-Free leak detection with repair service.`
+Free leak detection with repair service.`,
   },
   {
     id: "art_el002",
@@ -214,7 +219,8 @@ Free leak detection with repair service.`
     role: "artisan",
     businessName: "Ampofo Electricals",
     craft: "Electrician",
-    description: "Certified electrician specializing in solar installations and smart home systems with 8 years experience.",
+    description:
+      "Certified electrician specializing in solar installations and smart home systems with 8 years experience.",
     rating: 4.9,
     reviewCount: 52,
     hourlyRate: 55,
@@ -227,28 +233,29 @@ Free leak detection with repair service.`
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 118,
       acceptedJobs: 115,
       completedJobs: 112,
       pendingJobs: 3,
-      cancelledJobs: 3
+      cancelledJobs: 3,
     },
     reviews: [
       {
         id: "rev_el002",
         jobId: "job-el72",
         rating: 5,
-        comment: "Installed our solar system perfectly - zero issues after 1 year!",
+        comment:
+          "Installed our solar system perfectly - zero issues after 1 year!",
         date: "2024-03-10T14:15:00Z",
         user: {
           id: "user_302",
           name: "Kwabena Yeboah",
           profilePic: "/profiles/user31.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -257,12 +264,12 @@ Free leak detection with repair service.`
         description: "Complete solar power system setup",
         price: "GHS 500/hr",
         estimatedTime: "8-12 hours",
-      }
+      },
     ],
     pricingNotes: `Solar components priced separately.
 Free energy audit included.
 10-year workmanship warranty.
-Payment plan available for large projects.`
+Payment plan available for large projects.`,
   },
   {
     id: "art_ca003",
@@ -272,7 +279,8 @@ Payment plan available for large projects.`
     role: "artisan",
     businessName: "Boateng Woodworks",
     craft: "Carpenter",
-    description: "Traditional carpenter specializing in custom furniture and home renovations using sustainable materials.",
+    description:
+      "Traditional carpenter specializing in custom furniture and home renovations using sustainable materials.",
     rating: 4.8,
     reviewCount: 47,
     hourlyRate: 40,
@@ -285,28 +293,29 @@ Payment plan available for large projects.`
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 156,
       acceptedJobs: 150,
       completedJobs: 145,
       pendingJobs: 5,
-      cancelledJobs: 5
+      cancelledJobs: 5,
     },
     reviews: [
       {
         id: "rev_ca003",
         jobId: "job-ca89",
         rating: 5,
-        comment: "Built custom cabinets that transformed our kitchen - exquisite craftsmanship!",
+        comment:
+          "Built custom cabinets that transformed our kitchen - exquisite craftsmanship!",
         date: "2024-05-22T11:20:00Z",
         user: {
           id: "user_303",
           name: "Esi Nyarko",
           profilePic: "/profiles/user32.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -315,12 +324,12 @@ Payment plan available for large projects.`
         description: "Handcrafted cabinets to your specifications",
         price: "GHS 380/hr",
         estimatedTime: "20-30 hours",
-      }
+      },
     ],
     pricingNotes: `50% deposit required for custom projects.
 Premium woods available at additional cost.
 Free 3D design consultation.
-1-year guarantee on all workmanship.`
+1-year guarantee on all workmanship.`,
   },
   {
     id: "art_pa004",
@@ -330,7 +339,8 @@ Free 3D design consultation.
     role: "artisan",
     businessName: "Mensah Painting Co.",
     craft: "Painter",
-    description: "Professional painter with expertise in decorative finishes, murals, and commercial painting projects.",
+    description:
+      "Professional painter with expertise in decorative finishes, murals, and commercial painting projects.",
     rating: 4.6,
     reviewCount: 39,
     hourlyRate: 35,
@@ -343,28 +353,29 @@ Free 3D design consultation.
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 128,
       acceptedJobs: 125,
       completedJobs: 120,
       pendingJobs: 5,
-      cancelledJobs: 3
+      cancelledJobs: 3,
     },
     reviews: [
       {
         id: "rev_pa004",
         jobId: "job-pa34",
         rating: 5,
-        comment: "Painted our entire office complex ahead of schedule - beautiful work!",
+        comment:
+          "Painted our entire office complex ahead of schedule - beautiful work!",
         date: "2024-04-18T16:45:00Z",
         user: {
           id: "user_304",
           name: "Kwame Osei",
           profilePic: "/profiles/user33.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -373,12 +384,12 @@ Free 3D design consultation.
         description: "Professional painting for offices and businesses",
         price: "GHS 300/hr",
         estimatedTime: "Varies by space",
-      }
+      },
     ],
     pricingNotes: `Price includes surface preparation.
 Premium paints available at additional cost.
 Free color consultation.
-Weekend rates 25% higher.`
+Weekend rates 25% higher.`,
   },
   {
     id: "art_ta005",
@@ -388,7 +399,8 @@ Weekend rates 25% higher.`
     role: "artisan",
     businessName: "Owusu Couture",
     craft: "Tailor",
-    description: "Master tailor specializing in bespoke African print garments and formal wear with 14 years experience.",
+    description:
+      "Master tailor specializing in bespoke African print garments and formal wear with 14 years experience.",
     rating: 4.9,
     reviewCount: 72,
     hourlyRate: 30,
@@ -401,28 +413,29 @@ Weekend rates 25% higher.`
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 230,
       acceptedJobs: 225,
       completedJobs: 220,
       pendingJobs: 5,
-      cancelledJobs: 5
+      cancelledJobs: 5,
     },
     reviews: [
       {
         id: "rev_ta005",
         jobId: "job-ta12",
         rating: 5,
-        comment: "Made my wedding dress from scratch - perfect fit and stunning design!",
+        comment:
+          "Made my wedding dress from scratch - perfect fit and stunning design!",
         date: "2024-02-14T10:10:00Z",
         user: {
           id: "user_305",
           name: "Adwoa Fosu",
           profilePic: "/profiles/user34.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -431,12 +444,12 @@ Weekend rates 25% higher.`
         description: "Custom-made dress from your chosen fabric",
         price: "GHS 250/hr",
         estimatedTime: "15-20 hours",
-      }
+      },
     ],
     pricingNotes: `Fabric cost not included.
 Free initial consultation.
 3 fittings included in price.
-Rush orders available at 30% premium.`
+Rush orders available at 30% premium.`,
   },
   {
     id: "art_ma006",
@@ -446,7 +459,8 @@ Rush orders available at 30% premium.`
     role: "artisan",
     businessName: "Anane Masonry",
     craft: "Mason",
-    description: "Expert bricklayer specializing in structural masonry, stonework, and heritage restoration projects.",
+    description:
+      "Expert bricklayer specializing in structural masonry, stonework, and heritage restoration projects.",
     rating: 4.7,
     reviewCount: 41,
     hourlyRate: 42,
@@ -459,28 +473,29 @@ Rush orders available at 30% premium.`
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 178,
       acceptedJobs: 175,
       completedJobs: 170,
       pendingJobs: 5,
-      cancelledJobs: 3
+      cancelledJobs: 3,
     },
     reviews: [
       {
         id: "rev_ma006",
         jobId: "job-ma56",
         rating: 5,
-        comment: "Restored our 100-year-old family house perfectly - true craftsman!",
+        comment:
+          "Restored our 100-year-old family house perfectly - true craftsman!",
         date: "2024-01-05T09:30:00Z",
         user: {
           id: "user_306",
           name: "Nana Kwame",
           profilePic: "/profiles/user35.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -489,12 +504,12 @@ Rush orders available at 30% premium.`
         description: "Traditional masonry restoration for historical buildings",
         price: "GHS 400/hr",
         estimatedTime: "Varies by project",
-      }
+      },
     ],
     pricingNotes: `Specialized materials may require sourcing time.
 Free structural assessment.
 Historical accuracy guaranteed.
-10% discount for non-profit heritage projects.`
+10% discount for non-profit heritage projects.`,
   },
   {
     id: "art_wc007",
@@ -504,11 +519,16 @@ Historical accuracy guaranteed.
     role: "artisan",
     businessName: "Asantewaa Carvings",
     craft: "Wood Carver",
-    description: "Master wood carver creating traditional Ashanti stools and contemporary sculptures with 20 years experience.",
+    description:
+      "Master wood carver creating traditional Ashanti stools and contemporary sculptures with 20 years experience.",
     rating: 4.9,
     reviewCount: 58,
     hourlyRate: 60,
-    specialties: ["Royal Stools", "Contemporary Sculptures", "Wood Restoration"],
+    specialties: [
+      "Royal Stools",
+      "Contemporary Sculptures",
+      "Wood Restoration",
+    ],
     location: "Manhyia, Kumasi",
     experience: "20 years",
     whatsapp: "+233207890123",
@@ -517,28 +537,29 @@ Historical accuracy guaranteed.
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 198,
       acceptedJobs: 195,
       completedJobs: 190,
       pendingJobs: 5,
-      cancelledJobs: 3
+      cancelledJobs: 3,
     },
     reviews: [
       {
         id: "rev_wc007",
         jobId: "job-wc78",
         rating: 5,
-        comment: "Carved a magnificent chief's stool that became the centerpiece of our festival!",
+        comment:
+          "Carved a magnificent chief's stool that became the centerpiece of our festival!",
         date: "2023-12-20T13:15:00Z",
         user: {
           id: "user_307",
           name: "Osei Tutu",
           profilePic: "/profiles/user36.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -547,12 +568,12 @@ Historical accuracy guaranteed.
         description: "Traditional hand-carved Ashanti stool",
         price: "GHS 550/hr",
         estimatedTime: "30-40 hours",
-      }
+      },
     ],
     pricingNotes: `Only uses sacred Odum wood for royal pieces.
 50% deposit required.
 Certificate of authenticity provided.
-Can source rare woods upon request.`
+Can source rare woods upon request.`,
   },
   {
     id: "art_el008",
@@ -562,11 +583,16 @@ Can source rare woods upon request.`
     role: "artisan",
     businessName: "Ampofo Electrical Works",
     craft: "Electrician",
-    description: "Industrial electrician with expertise in high-voltage systems, factory wiring, and energy efficiency solutions.",
+    description:
+      "Industrial electrician with expertise in high-voltage systems, factory wiring, and energy efficiency solutions.",
     rating: 4.8,
     reviewCount: 45,
     hourlyRate: 60,
-    specialties: ["Industrial Wiring", "Generator Installation", "Energy Audits"],
+    specialties: [
+      "Industrial Wiring",
+      "Generator Installation",
+      "Energy Audits",
+    ],
     location: "Tema Industrial Area",
     experience: "13 years",
     whatsapp: "+233208901234",
@@ -575,28 +601,29 @@ Can source rare woods upon request.`
     verificationStatus: "verified",
     portfolio: [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea"
+      "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
     ],
     stats: {
       totalJobs: 165,
       acceptedJobs: 160,
       completedJobs: 155,
       pendingJobs: 5,
-      cancelledJobs: 5
+      cancelledJobs: 5,
     },
     reviews: [
       {
         id: "rev_el008",
         jobId: "job-el90",
         rating: 5,
-        comment: "Rewired our entire factory with zero downtime - incredible planning!",
+        comment:
+          "Rewired our entire factory with zero downtime - incredible planning!",
         date: "2024-07-05T17:20:00Z",
         user: {
           id: "user_308",
           name: "Nana Yaw",
           profilePic: "/profiles/user37.jpg",
         },
-      }
+      },
     ],
     services: [
       {
@@ -605,13 +632,13 @@ Can source rare woods upon request.`
         description: "Heavy-duty electrical systems for factories",
         price: "GHS 450/hr",
         estimatedTime: "Varies by project",
-      }
+      },
     ],
     pricingNotes: `After-hours work available at 50% premium.
 Free energy efficiency assessment.
 Complimentary safety inspection.
-10% discount for repeat customers.`
-  }
+10% discount for repeat customers.`,
+  },
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -632,7 +659,7 @@ export const userProfile = {
     acceptedJobs: 5,
     completedJobs: 3,
     pendingJobs: 1,
-    cancelledJobs: 1
+    cancelledJobs: 1,
   },
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -825,7 +852,8 @@ export const userJobs = [
   {
     id: "job-1",
     title: "Fix leaking kitchen sink",
-    description: "The kitchen sink has been leaking near the pipe joint for 2 days. Need urgent assistance. The leak is causing water damage to the cabinet below. Looking for a professional plumber with experience in pipe repairs.",
+    description:
+      "The kitchen sink has been leaking near the pipe joint for 2 days. Need urgent assistance. The leak is causing water damage to the cabinet below. Looking for a professional plumber with experience in pipe repairs.",
     budget: "GHS 250",
     scheduledAt: "2023-10-25T10:00:00Z",
     createdAt: "2023-10-20T08:30:00Z",
@@ -837,19 +865,20 @@ export const userJobs = [
     cancellationReason: "I have an urgent meeting to attend",
     images: [
       "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
-      "https://images.unsplash.com/photo-1621544402532-78c290378588"
+      "https://images.unsplash.com/photo-1621544402532-78c290378588",
     ],
     artisan: {
       businessName: "Kofi Plumbing Services",
       rating: 4.7,
       phone: "+233 24 123 4567",
       email: "kofi.plumbing@example.com",
-    }
+    },
   },
   {
     id: "job-2",
     title: "Install new ceiling fan",
-    description: "Need a qualified electrician to install a new ceiling fan in my living room. I already purchased the fan unit. Requires proper wiring and secure mounting. The ceiling is concrete.",
+    description:
+      "Need a qualified electrician to install a new ceiling fan in my living room. I already purchased the fan unit. Requires proper wiring and secure mounting. The ceiling is concrete.",
     budget: "GHS 180",
     scheduledAt: "2023-11-02T14:00:00Z",
     createdAt: "2023-10-28T09:15:00Z",
@@ -861,39 +890,42 @@ export const userJobs = [
     cancellationReason: "",
     images: [
       "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae",
-      "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91"
+      "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91",
     ],
     artisan: {
       businessName: "Ama Electrical Works",
       rating: 4.9,
       phone: "+233 55 987 6543",
       email: "ama.electrical@example.com",
-    }
+    },
   },
+
   {
     id: "job-3",
     title: "Repair broken bedroom window",
-    description: "The wooden window frame in my master bedroom is broken and needs replacement. Looking for a carpenter who can match the existing design and install weatherproofing.",
+    description:
+      "The wooden window frame in my master bedroom is broken and needs replacement. Looking for a carpenter who can match the existing design and install weatherproofing.",
     budget: "GHS 320",
     scheduledAt: "2023-11-10T09:30:00Z",
     createdAt: "2023-11-05T11:45:00Z",
     location: "Accra, Cantonments",
     userId: "user_123",
     artisanId: "art_321",
-    jobStatus: "pending",
-    declineReason: "",
+    jobStatus: "cancelled",
+    declineReason:
+      "I have a meeting coming up on the dude date of the job requested",
     cancellationReason: "",
     images: [
       "https://images.unsplash.com/photo-1622372738946-62e02505feb3",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
     ],
     artisan: {
       businessName: "Yaw Carpentry Solutions",
       rating: 4.5,
       phone: "+233 27 456 7890",
       email: "yaw.carpentry@example.com",
-    }
-  }
+    },
+  },
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -930,31 +962,59 @@ export const artisanJobs = [
     },
   },
   {
-    id: "job-102",
-    businessName: "Morla Electrical Works",
-    artisanName: "Yaw Boateng",
-    artisanLocation: "Kumasi, Adum",
-    title: "Ceiling Fan Installation",
+    id: "job-101",
+    businessName: "Babs Plumbing Services",
+    artisanName: "Kwame Asante",
+    artisanLocation: "Accra, East Legon",
+    title: "Kitchen Plumbing Repair",
     description:
-      "Client needs installation of 3 ceiling fans in the living room and bedrooms. Needs clean, professional installation without damaging existing ceiling decor.",
-    budget: "GHS 450",
-    scheduledAt: "2023-12-02T14:00:00Z",
-    createdAt: "2023-11-28T10:15:00Z",
-    location: "Kumasi, Amakom",
-    userId: "user_502",
-    artisanId: "art_002",
+      "Client needs help with a leaking kitchen sink pipe. The leak is causing water damage to cabinets below. Requires pipe joint repair or replacement.",
+    budget: "GHS 300",
+    scheduledAt: "2023-11-10T09:00:00Z",
+    createdAt: "2023-11-05T14:20:00Z",
+    location: "Accra, Osu",
+    userId: "user_501",
+    artisanId: "art_001",
     jobStatus: "pending",
     declineReason: "",
     cancellationReason: "",
     images: [
-      "https://images.unsplash.com/photo-1622801751514-810e16a3a836?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1558008258-327a9d1e1d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1600566752227-82f1f1a71d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1583337130417-3346a1c353b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     ],
     user: {
-      name: "Kojo Mensah",
-      phone: "+233 20 123 4567",
-      email: "kojo.mensah@example.com",
-      location: "Kumasi, Amakom",
+      name: "Ama Serwaa",
+      phone: "+233 24 765 4321",
+      email: "ama.serwaa@example.com",
+      location: "Accra, Osu",
+    },
+  },
+
+  {
+    id: "job-103",
+    businessName: "Esi Paintworks",
+    artisanName: "Esi Appiah",
+    artisanLocation: "Takoradi, Anaji",
+    title: "Room Painting and Wall Repairs",
+    description:
+      "Client requires painting of two bedrooms with minor wall crack repairs before painting. Preference for white and cream colours.",
+    budget: "GHS 600",
+    scheduledAt: "2023-11-20T09:30:00Z",
+    createdAt: "2023-11-15T12:00:00Z",
+    location: "Takoradi, Anaji",
+    userId: "user_503",
+    artisanId: "art_001",
+    jobStatus: "completed",
+    declineReason: "",
+    cancellationReason: "",
+    images: [
+      "https://images.unsplash.com/photo-1600585154516-1f23f0c2f03d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+    ],
+    user: {
+      name: "Akua Badu",
+      phone: "+233 27 654 3210",
+      email: "akua.badu@example.com",
+      location: "Takoradi, Anaji",
     },
   },
   {
@@ -970,9 +1030,10 @@ export const artisanJobs = [
     createdAt: "2023-11-15T12:00:00Z",
     location: "Takoradi, Anaji",
     userId: "user_503",
-    artisanId: "art_003",
-    jobStatus: "completed",
-    declineReason: "",
+    artisanId: "art_001",
+    jobStatus: "declined",
+    declineReason:
+      "I have a pending job, I can't take on this work at the moment",
     cancellationReason: "",
     images: [
       "https://images.unsplash.com/photo-1600585154516-1f23f0c2f03d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
@@ -1241,11 +1302,6 @@ Free quotes are available upon request.`,
 
 export default artisanServices;
 
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 export const adminUserProfiles = [
@@ -1347,7 +1403,6 @@ export const adminUserProfiles = [
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 export const adminArtisanProfiles = [
@@ -1368,7 +1423,7 @@ export const adminArtisanProfiles = [
       acceptedJobs: 27,
       completedJobs: 25,
       pendingJobs: 2,
-      cancelledJobs: 1
+      cancelledJobs: 1,
     },
     reviews: [
       {
@@ -1414,7 +1469,7 @@ export const adminArtisanProfiles = [
       acceptedJobs: 15,
       completedJobs: 14,
       pendingJobs: 1,
-      cancelledJobs: 0
+      cancelledJobs: 0,
     },
     reviews: [
       {
@@ -1428,7 +1483,7 @@ export const adminArtisanProfiles = [
           name: "Kofi Ansah",
           profilePic: "/profiles/user42.jpg",
         },
-      }
+      },
     ],
   },
   {
@@ -1448,7 +1503,7 @@ export const adminArtisanProfiles = [
       acceptedJobs: 40,
       completedJobs: 38,
       pendingJobs: 2,
-      cancelledJobs: 2
+      cancelledJobs: 2,
     },
     reviews: [
       {
@@ -1494,14 +1549,15 @@ export const adminArtisanProfiles = [
       acceptedJobs: 18,
       completedJobs: 17,
       pendingJobs: 1,
-      cancelledJobs: 1
+      cancelledJobs: 1,
     },
     reviews: [
       {
         id: "rev_506",
         jobId: "job-ma12",
         rating: 5,
-        comment: "Built a beautiful brick wall that's the talk of the neighborhood!",
+        comment:
+          "Built a beautiful brick wall that's the talk of the neighborhood!",
         date: "2023-06-30T09:15:00Z",
         user: {
           id: "user_406",
@@ -1522,8 +1578,7 @@ export const adminArtisanProfiles = [
         },
       },
     ],
-  }
+  },
 ];
-
 
 /////////////////////////////////////////////////////////////////////////////////////////

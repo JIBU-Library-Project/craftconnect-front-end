@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import RatingStars from "../../components/RatingStars";
 import { BadgeCheck, Loader2, MapPin, ToolCase, Wallet } from "lucide-react";
 import { useGetSingleArtisan } from "../../queries/artisanQueries";
+import { usePostJobs } from "../../queries/jobQueries";
+import { usePostReviews } from "../../queries/reviewsQueries";
+import { toast } from "react-toastify";
 
 const PublicArtisanProfilePage = () => {
   const { id } = useParams();
@@ -11,7 +14,7 @@ const PublicArtisanProfilePage = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isJobRequestModalOpen, setIsJobRequestModalOpen] = useState(false);
- const { data, isLoading, error } = useGetSingleArtisan(id);
+  const { data, isLoading, error } = useGetSingleArtisan(id);
   const {
     register,
     handleSubmit,
@@ -19,8 +22,9 @@ const PublicArtisanProfilePage = () => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm();
 
+  const postReviewMutation = usePostReviews();
   // Use single artisan query instead of fetching all
- 
+
   const artisan = data?.artisan;
 
   // Calculate rating distribution with proper null checks
@@ -54,17 +58,31 @@ const PublicArtisanProfilePage = () => {
 
   const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Review submitted:", { rating, comment: data.comment });
+      // Prepare review data
+      const reviewData = {
+        artisanId: id,
+        rating: rating,
+        comment: data.comment,
+      };
+
+      // Submit review using the mutation
+      await postReviewMutation.mutateAsync(reviewData);
+
+      // Success handling
+      console.log("Review submitted successfully!");
       reset();
       setRating(0);
+      setHover(0);
+
+      // Optional: Show success message
+      // You can add a toast notification here
     } catch (error) {
       console.error("Error submitting review:", error);
+      // Optional: Show error message
+      // You can add error handling/toast here
     }
   };
 
-
-  
   const getRatingLabel = (rating) => {
     if (rating === 5) return "Excellent";
     if (rating === 4) return "Good";
@@ -138,13 +156,13 @@ const PublicArtisanProfilePage = () => {
                   <span className="hidden md:inline text-gray-300">•</span>
                   <span
                     className={`px-2 py-1 rounded-full text-xs md:text-sm ${
-                      artisan.verificationStatus === "verified"
+                      artisan.verificationStatus === "Verified"
                         ? "bg-green-100 text-green-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     <i className="fas fa-badge-check mr-1"></i>
-                    {artisan.verificationStatus === "verified"
+                    {artisan.verificationStatus === "Verified"
                       ? "Verified"
                       : "Not Verified"}
                   </span>
@@ -175,16 +193,29 @@ const PublicArtisanProfilePage = () => {
                 >
                   <i className="fas fa-briefcase mr-1.5"></i> Request Service
                 </button>
+                {artisan.phone ? (
+                  <a
+                    href={`https://wa.me/${artisan.phone.replace(
+                      /^\\+/,
+                      ""
+                    )}?text=${encodeURIComponent(
+                      `Hello! I'm interested in your services as a ${
+                        artisan.craft ?? "professional"
+                      }. I found your profile and would like to inquire about your work. Could you please provide more details about your services and availability? Thank you!`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
+                  >
+                    <i className="fab fa-whatsapp mr-1.5"></i> WhatsApp
+                  </a>
+                ) : (
+                  <p className="text-sm text-red-500 mt-2">
+                    Phone number not available for WhatsApp contact.
+                  </p>
+                )}
                 <a
-                  href={`https://wa.me/${artisan.whatsapp || artisan.phone}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
-                >
-                  <i className="fab fa-whatsapp mr-1.5"></i> WhatsApp
-                </a>
-                <a
-                  href={`tel:${artisan.phone}`}
+                  href={`tel:${artisan.whatsapp || artisan.phone}`}
                   className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
                 >
                   <i className="fas fa-phone mr-1.5"></i> Call
@@ -565,6 +596,9 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const [previewImages, setPreviewImages] = useState([]);
   const images = watch("images");
 
+  // Import and use the mutation hook
+  const postJobMutation = usePostJobs();
+
   useEffect(() => {
     if (images && images.length > 0) {
       const imageArray = Array.from(images).map((file) => ({
@@ -584,6 +618,15 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     }
   }, [isOpen, reset]);
 
+  // Cleanup function for preview URLs
+  useEffect(() => {
+    return () => {
+      previewImages.forEach((item) => {
+        URL.revokeObjectURL(item.preview);
+      });
+    };
+  }, [previewImages]);
+
   const removeImage = (index) => {
     const newFiles = Array.from(images);
     newFiles.splice(index, 1);
@@ -596,13 +639,40 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
 
   const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Job request submitted:", data);
+      // Create FormData for multipart/form-data
+      const formData = new FormData();
+
+      // Append text fields
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("budget", data.budget);
+      formData.append("scheduledAt", data.scheduledAt);
+      formData.append("location", data.location);
+      formData.append("artisanId", artisan._id); // Include artisan ID
+
+      // Append images
+      if (data.images && data.images.length > 0) {
+        Array.from(data.images).forEach((file, index) => {
+          formData.append("images", file);
+        });
+      }
+
+      // Submit using the mutation
+      await postJobMutation.mutateAsync(formData);
+
+      // Success handling
+      console.log("Job request submitted successfully!");
+      toast.success("Job Requested Successfully");
       onClose();
       reset();
       setPreviewImages([]);
+
+      // Optional: Show success message
+      // You can add a toast notification here
     } catch (error) {
       console.error("Error submitting job request:", error);
+      toast.error(error.response?.data?.error || "Job request failed");
+      // You can add error handling/toast here
     }
   };
 
@@ -620,6 +690,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
+              disabled={isSubmitting || postJobMutation.isPending}
             >
               <svg
                 className="w-6 h-6"
@@ -649,6 +720,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 type="text"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 placeholder="e.g., Fix leaking pipe in kitchen"
+                disabled={isSubmitting || postJobMutation.isPending}
               />
               {errors.title && (
                 <p className="text-xs text-red-500 mt-1">
@@ -669,6 +741,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 rows={4}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 placeholder="Describe the job in detail..."
+                disabled={isSubmitting || postJobMutation.isPending}
               />
               {errors.description && (
                 <p className="text-xs text-red-500 mt-1">
@@ -693,10 +766,15 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                       value: /^[0-9]+$/,
                       message: "Please enter a valid number",
                     },
+                    min: {
+                      value: 1,
+                      message: "Budget must be greater than 0",
+                    },
                   })}
-                  type="text"
+                  type="number"
                   className="w-full pl-12 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   placeholder="e.g., 250"
+                  disabled={isSubmitting || postJobMutation.isPending}
                 />
               </div>
               {errors.budget && (
@@ -714,9 +792,18 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               <input
                 {...register("scheduledAt", {
                   required: "Date and time are required",
+                  validate: (value) => {
+                    const selectedDate = new Date(value);
+                    const now = new Date();
+                    return (
+                      selectedDate > now ||
+                      "Please select a future date and time"
+                    );
+                  },
                 })}
                 type="datetime-local"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                disabled={isSubmitting || postJobMutation.isPending}
               />
               {errors.scheduledAt && (
                 <p className="text-xs text-red-500 mt-1">
@@ -735,6 +822,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 type="text"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 placeholder="e.g., East Legon, Accra"
+                disabled={isSubmitting || postJobMutation.isPending}
               />
               {errors.location && (
                 <p className="text-xs text-red-500 mt-1">
@@ -748,7 +836,13 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Images <span className="text-red-500">*</span>
               </label>
-              <label className="flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
+              <label
+                className={`flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg transition ${
+                  isSubmitting || postJobMutation.isPending
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer hover:border-blue-400"
+                }`}
+              >
                 <span className="text-sm text-gray-600">
                   Click to upload or drag & drop
                 </span>
@@ -758,11 +852,27 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 <input
                   {...register("images", {
                     required: "At least one image is required",
+                    validate: (files) => {
+                      if (!files || files.length === 0) {
+                        return "At least one image is required";
+                      }
+
+                      // Check file size (10MB = 10 * 1024 * 1024 bytes)
+                      const maxSize = 10 * 1024 * 1024;
+                      for (let file of files) {
+                        if (file.size > maxSize) {
+                          return `File ${file.name} is too large. Maximum size is 10MB.`;
+                        }
+                      }
+
+                      return true;
+                    },
                   })}
                   type="file"
                   multiple
                   accept="image/*"
                   className="hidden"
+                  disabled={isSubmitting || postJobMutation.isPending}
                 />
               </label>
               {errors.images && (
@@ -785,6 +895,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                         onClick={() => removeImage(idx)}
                         className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
                         title="Remove"
+                        disabled={isSubmitting || postJobMutation.isPending}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -807,25 +918,62 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               )}
             </div>
 
+            {/* Error Message */}
+            {/* {postJobMutation.isError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">
+                  {postJobMutation.error?.message ||
+                    "Failed to submit job request. Please try again."}
+                </p>
+              </div>
+            )} */}
+
             {/* Action Buttons */}
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                disabled={isSubmitting || postJobMutation.isPending}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || postJobMutation.isPending}
                 className={`px-4 py-2 rounded-lg text-sm font-medium text-white ${
-                  isSubmitting
-                    ? "bg-blue-400"
+                  isSubmitting || postJobMutation.isPending
+                    ? "bg-blue-400 cursor-not-allowed"
                     : "bg-indigo-600 hover:bg-indigo-700"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+                {isSubmitting || postJobMutation.isPending ? (
+                  <div className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Submitting...
+                  </div>
+                ) : (
+                  "Submit Request"
+                )}
               </button>
             </div>
           </form>

@@ -14,7 +14,7 @@ const LOCATIONS = [
 
 const CRAFTS = [
   "Plumber",
-  "Electrician",
+  "Electrican",
   "Carpenter",
   "Painter",
   "Tailor",
@@ -67,56 +67,105 @@ const SearchPage = () => {
     );
   };
 
+  // const handleApplyFilters = () => {
+  //   const lowerSearch = searchTerm.trim().toLowerCase();
+
+  //   const results = artisans.filter((artisan) => {
+  //     // Safely access all properties with fallbacks
+  //     const businessName = (artisan.businessName || "").toLowerCase();
+  //     const craft = (artisan.craft || "").toLowerCase();
+  //     const specialties = artisan.specialties || [];
+  //     const artisanLocation = (artisan.location || "").toLowerCase();
+  //     const rating = artisan.rating || 0;
+  //     const verificationStatus = artisan.verificationStatus || "";
+
+  //     // Search term matching
+  //     const matchesSearch =
+  //       lowerSearch === "" ||
+  //       businessName.includes(lowerSearch) ||
+  //       craft.includes(lowerSearch) ||
+  //       specialties.some(s => s.toLowerCase().includes(lowerSearch));
+
+  //     // Location matching
+  //     const matchesLocation =
+  //       !locationFilter ||
+  //       artisanLocation.includes(locationFilter.toLowerCase());
+
+  //     // Craft matching - exact match
+  //     const matchesCraft =
+  //       !craftFilter ||
+  //       craft === craftFilter.toLowerCase();
+
+  //     // Verification status
+  //     const matchesVerified =
+  //       !verifiedOnly || verificationStatus === "verified";
+
+  //     // Rating matching
+  //     const matchesRating =
+  //       selectedRatings.length === 0 ||
+  //       selectedRatings.some(r => Math.floor(rating) >= r);
+
+  //     return (
+  //       matchesSearch &&
+  //       matchesLocation &&
+  //       matchesCraft &&
+  //       matchesVerified &&
+  //       matchesRating
+  //     );
+  //   });
+
+  //   setFilteredArtisans(results);
+  // };
+
   const handleApplyFilters = () => {
-    const lowerSearch = searchTerm.trim().toLowerCase();
+  const lowerSearch = searchTerm.trim().toLowerCase();
 
-    const results = artisans.filter((artisan) => {
-      // Safely access all properties with fallbacks
-      const businessName = (artisan.businessName || "").toLowerCase();
-      const craft = (artisan.craft || "").toLowerCase();
-      const specialties = artisan.specialties || [];
-      const artisanLocation = (artisan.location || "").toLowerCase();
-      const rating = artisan.rating || 0;
-      const verificationStatus = artisan.verificationStatus || "";
+  const results = artisans.filter((artisan) => {
+    // Safely access all properties with fallbacks
+    const businessName = (artisan.businessName || "").toLowerCase();
+    const artisanCraft = (artisan.craft || "").toLowerCase();
+    const specialties = artisan.specialties || [];
+    const artisanLocation = (artisan.location || "").toLowerCase();
+    const rating = artisan.rating || 0;
+    const verificationStatus = artisan.verificationStatus || "";
 
-      // Search term matching
-      const matchesSearch =
-        lowerSearch === "" ||
-        businessName.includes(lowerSearch) ||
-        craft.includes(lowerSearch) ||
-        specialties.some(s => s.toLowerCase().includes(lowerSearch));
+    // Search term matching
+    const matchesSearch =
+      lowerSearch === "" ||
+      businessName.includes(lowerSearch) ||
+      artisanCraft.includes(lowerSearch) ||
+      specialties.some(s => s.toLowerCase().includes(lowerSearch));
 
-      // Location matching
-      const matchesLocation =
-        !locationFilter ||
-        artisanLocation.includes(locationFilter.toLowerCase());
+    // Location matching
+    const matchesLocation =
+      !locationFilter ||
+      artisanLocation.includes(locationFilter.toLowerCase());
 
-      // Craft matching - exact match
-      const matchesCraft =
-        !craftFilter ||
-        craft === craftFilter.toLowerCase();
+    // Craft matching - FIXED THIS PART
+    const matchesCraft =
+      !craftFilter ||
+      artisanCraft === craftFilter.toLowerCase();
 
-      // Verification status
-      const matchesVerified =
-        !verifiedOnly || verificationStatus === "verified";
+    // Verification status
+    const matchesVerified =
+      !verifiedOnly || verificationStatus === "verified";
 
-      // Rating matching
-      const matchesRating =
-        selectedRatings.length === 0 ||
-        selectedRatings.some(r => Math.floor(rating) >= r);
+    // Rating matching
+    const matchesRating =
+      selectedRatings.length === 0 ||
+      selectedRatings.some(r => Math.floor(rating) >= r);
 
-      return (
-        matchesSearch &&
-        matchesLocation &&
-        matchesCraft &&
-        matchesVerified &&
-        matchesRating
-      );
-    });
+    return (
+      matchesSearch &&
+      matchesLocation &&
+      matchesCraft &&
+      matchesVerified &&
+      matchesRating
+    );
+  });
 
-    setFilteredArtisans(results);
-  };
-
+  setFilteredArtisans(results);
+};
   const handleResetFilters = () => {
     setSearchTerm("");
     setLocationFilter("");

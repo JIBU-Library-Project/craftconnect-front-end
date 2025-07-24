@@ -75,12 +75,12 @@ const ArtisanJobsPage = () => {
   };
 
   const filteredJobs = jobs.filter((job) => {
-    if (activeTab === "completed") return job.jobStatus === "completed";
-    if (activeTab === "active") return job.jobStatus === "accepted";
-    if (activeTab === "cancelled") return job.jobStatus === "cancelled";
-    if (activeTab === "declined") return job.jobStatus === "declined";
-    return job.jobsStatus === "pending";
-  });
+  if (activeTab === "completed") return job.jobStatus === "completed";
+  if (activeTab === "active") return job.jobStatus === "accepted"; // Maps 'active' tab to 'accepted' status
+  if (activeTab === "cancelled") return job.jobStatus === "cancelled";
+  if (activeTab === "declined") return job.jobStatus === "declined";
+  return job.jobStatus === "pending";
+});
 
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800",

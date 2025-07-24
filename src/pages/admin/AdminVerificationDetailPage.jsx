@@ -1,30 +1,40 @@
-// VerificationDetailPage.jsx
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
+import {
+  useGetSingleVerification,
+  useModifyVerificationRequest,
+} from "../../queries/adminQueries";
+import { toast } from "react-toastify";
 
 function AdminVerificationDetailPage() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const [actionLoading, setActionLoading] = useState(false);
+
+  const verifyMutation = useModifyVerificationRequest();
+  const [isVeryfying, setIsVeryfying] = useState(false);
   const [expandedImage, setExpandedImage] = useState(null);
 
-  // Get request from navigation state
-  const request = location.state?.request;
+  const { data, isLoading, error } = useGetSingleVerification(id);
 
-  // Watch for decision changes
   const watchDecision = watch("decision");
 
-  if (!request) {
+  const request = data?.verficationRequest;
+
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading...</div>;
+  }
+
+  if (error) {
     return (
       <div className="max-w-2xl mx-auto p-8 text-center">
-        <p className="text-gray-500">No verification request selected.</p>
+        <p className="text-gray-500">Failed to load verification request.</p>
         <button
           onClick={() => navigate("/admin/verification")}
           className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
@@ -35,18 +45,31 @@ function AdminVerificationDetailPage() {
     );
   }
 
-  // Prepare document list with proper names
+  if (!request) {
+    return (
+      <div className="max-w-2xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Verification request not found.</p>
+        <button
+          onClick={() => navigate("/admin/verification")}
+          className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+        >
+          Back to Requests
+        </button>
+      </div>
+    );
+  }
+
   const documents = [
-    { type: "id_front", url: request.frontId.url, name: "Front of ID" },
-    { type: "id_back", url: request.backId.url, name: "Back of ID" },
+    { type: "id_front", url: request.frontId?.url, name: "Front of ID" },
+    { type: "id_back", url: request.backId?.url, name: "Back of ID" },
     {
       type: "address_proof",
-      url: request.addressProof.url,
+      url: request.addressProof?.url,
       name: "Proof of Address",
     },
     {
       type: "business_reg",
-      url: request.businessReg.url,
+      url: request.businessReg?.url,
       name: "Business Registration",
     },
     ...(request.additionalDocs || []).map((doc, index) => ({
@@ -54,28 +77,26 @@ function AdminVerificationDetailPage() {
       type: "additional",
       name: doc.name || `Additional Document ${index + 1}`,
     })),
-  ];
+  ].filter((doc) => doc.url);
 
-  const onSubmit = async (data) => {
-    setActionLoading(true);
+  const onSubmit = async (payload) => {
+    setIsVeryfying(true);
+
     try {
+      await verifyMutation.mutateAsync({ id, payload });
       console.log("Verification action:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/admin/verify");
+      toast.success("verified successfully!");
+      navigate("/admin/verification");
     } catch (error) {
-      console.error("Action failed:", error);
+      console.error("Artisan verification error:", error);
+      toast.error(error.response?.data?.error || "Verification update failed.");
     } finally {
-      setActionLoading(false);
+      setIsVeryfying(false);
     }
   };
 
-  const openImage = (url) => {
-    setExpandedImage(url);
-  };
-
-  const closeImage = () => {
-    setExpandedImage(null);
-  };
+  const openImage = (url) => setExpandedImage(url);
+  const closeImage = () => setExpandedImage(null);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -107,7 +128,7 @@ function AdminVerificationDetailPage() {
             <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Artisan</h3>
-                <p className="text-lg">{request.artisanName}</p>
+                <p className="text-lg">{request.name}</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Business</h3>
@@ -116,13 +137,15 @@ function AdminVerificationDetailPage() {
               <div>
                 <h3 className="text-sm font-medium text-gray-500">ID Type</h3>
                 <p className="text-lg capitalize">
-                  {request.idType.replace("_", " ")}
+                  {request.idType ? request.idType.replace("_", " ") : "N/A"}
                 </p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Submitted</h3>
                 <p className="text-lg">
-                  {new Date(request.submittedAt).toLocaleDateString()}
+                  {request.submittedAt
+                    ? new Date(request.submittedAt).toLocaleDateString()
+                    : "N/A"}
                 </p>
               </div>
             </div>
@@ -132,53 +155,59 @@ function AdminVerificationDetailPage() {
             <h3 className="text-lg font-medium text-gray-800 mb-4">
               Verification Documents
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {documents.map((doc, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-                >
+            {documents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {documents.map((doc, index) => (
                   <div
-                    className="bg-gray-100 p-4 h-48 flex items-center justify-center cursor-pointer"
-                    onClick={() => openImage(doc.url)}
+                    key={index}
+                    className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    {doc.url.endsWith(".pdf") ? (
-                      <div className="text-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-16 w-16 text-red-500 mx-auto"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                        <span className="text-sm text-gray-700 mt-2">
-                          PDF Document
-                        </span>
-                      </div>
-                    ) : (
-                      <img
-                        src={doc.url}
-                        alt={doc.name}
-                        className="object-contain h-full w-full"
-                      />
-                    )}
+                    <div
+                      className="bg-gray-100 p-4 h-48 flex items-center justify-center cursor-pointer"
+                      onClick={() => openImage(doc.url)}
+                    >
+                      {doc.url.endsWith(".pdf") ? (
+                        <div className="text-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-16 w-16 text-red-500 mx-auto"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                          <span className="text-sm text-gray-700 mt-2">
+                            PDF Document
+                          </span>
+                        </div>
+                      ) : (
+                        <img
+                          src={doc.url}
+                          alt={doc.name}
+                          className="object-contain h-full w-full"
+                        />
+                      )}
+                    </div>
+                    <div className="p-3 bg-white border-t border-gray-200">
+                      <p className="text-sm font-medium">{doc.name}</p>
+                      <p className="text-xs text-gray-500 capitalize">
+                        {doc.type.replace("_", " ")}
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-3 bg-white border-t border-gray-200">
-                    <p className="text-sm font-medium">{doc.name}</p>
-                    <p className="text-xs text-gray-500 capitalize">
-                      {doc.type.replace("_", " ")}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No documents available for this verification request.
+              </div>
+            )}
           </div>
 
           {expandedImage && (
@@ -235,7 +264,7 @@ function AdminVerificationDetailPage() {
                   <input
                     type="radio"
                     value="approve"
-                    {...register("decision", {
+                    {...register("action", {
                       required: "Decision is required",
                     })}
                     className="text-indigo-600 focus:ring-indigo-500"
@@ -254,7 +283,7 @@ function AdminVerificationDetailPage() {
                   <input
                     type="radio"
                     value="reject"
-                    {...register("decision", {
+                    {...register("action", {
                       required: "Decision is required",
                     })}
                     className="text-indigo-600 focus:ring-indigo-500"
@@ -307,21 +336,21 @@ function AdminVerificationDetailPage() {
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
-                onClick={() => navigate("/admin/verify")}
+                onClick={() => navigate("/admin/verification")}
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                disabled={actionLoading}
+                disabled={isVeryfying}
                 className={`px-6 py-3 rounded-lg font-medium ${
-                  actionLoading
+                  isVeryfying
                     ? "bg-indigo-400 cursor-not-allowed"
                     : "bg-indigo-600 hover:bg-indigo-700"
                 } text-white transition-colors`}
               >
-                {actionLoading ? "Processing..." : "Submit Decision"}
+                {isVeryfying ? "Processing..." : "Submit Decision"}
               </button>
             </div>
           </form>

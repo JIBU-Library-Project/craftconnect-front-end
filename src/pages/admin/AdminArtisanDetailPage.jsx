@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
-import { adminArtisanProfiles as artisans } from "../../data/dummyData";
+import { useGetSingleArtisan } from "../../queries/artisanQueries";
+import { Loader2, AlertCircle } from "lucide-react";
 
 function AdminArtisansDetailPage() {
   const navigate = useNavigate();
@@ -11,21 +12,30 @@ function AdminArtisansDetailPage() {
     formState: { errors },
   } = useForm();
 
-  // Find artisan in artisans data
-  const artisan = artisans.find((a) => a.id === artisanId);
+  const { data, isLoading, error } = useGetSingleArtisan(artisanId);
+  const artisan = data?.artisan;
 
-  if (!artisan) {
+  if (isLoading) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Artisan Not Found
-        </h2>
-        <button
-          onClick={() => navigate("/admin/artisans")}
-          className="px-4 py-2 bg-[#272822] text-white rounded hover:bg-[#3E3D32]"
-        >
-          Back to Artisans
-        </button>
+      <div className="flex items-center justify-center h-screen w-full">
+        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error || !artisan) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full">
+        <div className="text-center flex flex-col items-center">
+          <AlertCircle className="w-10 h-10 mb-2 text-indigo-500" />
+          <p className="text-indigo-500">Artisan not found or failed to load.</p>
+          <button
+            onClick={() => navigate("/admin/artisans")}
+            className="mt-4 px-4 py-2 bg-[#272822] text-white rounded hover:bg-[#3E3D32]"
+          >
+            Back to Artisans
+          </button>
+        </div>
       </div>
     );
   }
@@ -60,22 +70,30 @@ function AdminArtisansDetailPage() {
         <div className="p-6 md:p-8">
           <div className="flex items-center mb-8">
             <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-200">
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-10 w-10"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
+              {artisan.profilePic ? (
+                <img
+                  src={artisan.profilePic}
+                  alt={artisan.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
             <div className="ml-6">
               <h2 className="text-2xl font-bold text-gray-800">{artisan.name}</h2>
@@ -86,21 +104,21 @@ function AdminArtisansDetailPage() {
                 </span>
                 <span
                   className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
-                    artisan.accountStatus.toLowerCase() === "active"
+                    (artisan.accountStatus || '').toLowerCase() === "active"
                       ? "bg-green-100 text-green-800"
                       : "bg-red-100 text-red-800"
                   }`}
                 >
-                  {artisan.accountStatus}
+                  {artisan.accountStatus || 'Unknown'}
                 </span>
                 <span
                   className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
-                    artisan.verificationStatus.toLowerCase() === "verified"
+                    (artisan.verificationStatus || '').toLowerCase() === "verified"
                       ? "bg-green-100 text-green-800"
                       : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {artisan.verificationStatus}
+                  {artisan.verificationStatus || 'Unverified'}
                 </span>
               </div>
             </div>
@@ -120,15 +138,11 @@ function AdminArtisansDetailPage() {
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-500">Joined Date</dt>
-                  <dd className="text-sm text-gray-900">
-                    {new Date(artisan.joinedDate).toLocaleDateString()}
-                  </dd>
+                  <dd className="text-sm text-gray-900">{new Date(artisan.joinedDate).toLocaleDateString()}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-500">Last Login</dt>
-                  <dd className="text-sm text-gray-900">
-                    {new Date(artisan.lastLogin).toLocaleDateString()}
-                  </dd>
+                  <dd className="text-sm text-gray-900">{new Date(artisan.lastLogin).toLocaleDateString()}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-sm text-gray-500">Location</dt>
@@ -145,9 +159,7 @@ function AdminArtisansDetailPage() {
               <h3 className="font-medium text-gray-800 mb-3">Account Management</h3>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2 text-sm">
-                    Account Status
-                  </label>
+                  <label className="block text-gray-700 mb-2 text-sm">Account Status</label>
                   <select
                     {...register("accountStatus", { required: "Status is required" })}
                     defaultValue={artisan.accountStatus}
@@ -181,27 +193,19 @@ function AdminArtisansDetailPage() {
                 </div>
                 <div className="bg-green-900 p-3 rounded-lg">
                   <p className="text-sm text-gray-100">Completed Jobs</p>
-                  <p className="text-xl font-semibold text-yellow-300">
-                    {artisan.stats.completedJobs}
-                  </p>
+                  <p className="text-xl font-semibold text-yellow-300">{artisan.stats.completedJobs}</p>
                 </div>
                 <div className="bg-blue-900 p-3 rounded-lg">
                   <p className="text-sm text-gray-100">Accepted Jobs</p>
-                  <p className="text-xl font-semibold text-yellow-300">
-                    {artisan.stats.acceptedJobs}
-                  </p>
+                  <p className="text-xl font-semibold text-yellow-300">{artisan.stats.acceptedJobs}</p>
                 </div>
                 <div className="bg-yellow-900 p-3 rounded-lg">
                   <p className="text-sm text-gray-100">Pending Jobs</p>
-                  <p className="text-xl font-semibold text-yellow-300">
-                    {artisan.stats.pendingJobs}
-                  </p>
+                  <p className="text-xl font-semibold text-yellow-300">{artisan.stats.pendingJobs}</p>
                 </div>
                 <div className="bg-red-900 p-3 rounded-lg">
                   <p className="text-sm text-gray-100">Cancelled Jobs</p>
-                  <p className="text-xl font-semibold text-yellow-300">
-                    {artisan.stats.cancelledJobs}
-                  </p>
+                  <p className="text-xl font-semibold text-yellow-300">{artisan.stats.cancelledJobs}</p>
                 </div>
               </div>
             </div>

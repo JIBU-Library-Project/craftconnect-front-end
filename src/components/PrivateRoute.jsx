@@ -10,7 +10,7 @@ export default function PrivateRoute({ roles = [] }) {
   }
 
   if (!user) {
-    return <Navigate to="/auth/login" replace state={{ from: location }} />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   if (roles.length && !roles.includes(user.role)) {

@@ -1,24 +1,27 @@
+// AdminArtisansListPage.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { adminArtisanProfiles as artisans } from "../../data/dummyData";
+import { Loader2, AlertCircle } from "lucide-react";
+import { useGetAllArtisans } from "../../queries/artisanQueries";
 
 function AdminArtisansListPage() {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredArtisans = artisans.filter((artisan) => {
-    const matchesStatus =
-      statusFilter === "all" || artisan.accountStatus === statusFilter;
-    const matchesSearch =
-      searchTerm === "" ||
-      artisan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      artisan.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      artisan.businessName.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+ const { data, isLoading, error } = useGetAllArtisans();
+const artisans = data?.artisans ?? [];
 
-  // Format date to display as "Month Day, Year"
+const filteredArtisans = artisans.filter((artisan) => {
+  const matchesStatus =
+    statusFilter === "all" || artisan.accountStatus === statusFilter;
+  const matchesSearch =
+    searchTerm === "" ||
+    (artisan.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (artisan.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (artisan.businessName || '').toLowerCase().includes(searchTerm.toLowerCase());
+  return matchesStatus && matchesSearch;
+});
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -28,6 +31,25 @@ function AdminArtisansListPage() {
       day: "numeric",
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen text-center">
+        <AlertCircle className="w-10 h-10 mb-2 text-red-500" />
+        <p className="text-red-500">
+          Failed to load artisans. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -56,7 +78,6 @@ function AdminArtisansListPage() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -83,7 +104,7 @@ function AdminArtisansListPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredArtisans.map((artisan) => (
-                <tr key={artisan.id} className="hover:bg-gray-50">
+                <tr key={artisan._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden">
@@ -114,27 +135,26 @@ function AdminArtisansListPage() {
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
-                          {artisan.name}
+                          {artisan.name || '-'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {artisan.email}
+                          {artisan.email || '-'}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {artisan.businessName}
+                    {artisan.businessName || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         artisan.accountStatus === "Active"
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {artisan.accountStatus}
+                      {artisan.accountStatus || 'Unknown'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -145,7 +165,7 @@ function AdminArtisansListPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => navigate(`/admin/artisans/${artisan.id}`)}
+                      onClick={() => navigate(`/admin/artisans/${artisan._id}`)}
                       className="text-[#272822] hover:text-[#3E3D32]"
                     >
                       View
@@ -157,10 +177,9 @@ function AdminArtisansListPage() {
           </table>
         </div>
 
-        {/* Mobile Cards */}
         <div className="md:hidden divide-y divide-gray-200">
           {filteredArtisans.map((artisan) => (
-            <div key={artisan.id} className="p-4 hover:bg-gray-50">
+            <div key={artisan._id} className="p-4 hover:bg-gray-50">
               <div className="flex items-center">
                 <div className="flex-shrink-0 h-12 w-12 rounded-full overflow-hidden">
                   {artisan.profilePic ? (
@@ -192,21 +211,20 @@ function AdminArtisansListPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-sm font-medium text-gray-900">
-                        {artisan.name}
+                        {artisan.name || '-'}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        {artisan.businessName}
+                        {artisan.businessName || '-'}
                       </p>
                     </div>
                     <span
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         artisan.accountStatus === "Active"
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {artisan.accountStatus}
+                      {artisan.accountStatus || 'Unknown'}
                     </span>
                   </div>
                   <div className="mt-2 flex justify-between text-sm text-gray-500">
@@ -215,7 +233,7 @@ function AdminArtisansListPage() {
                       <p>Last active: {formatDate(artisan.lastLogin)}</p>
                     </div>
                     <button
-                      onClick={() => navigate(`/admin/artisans/${artisan.id}`)}
+                      onClick={() => navigate(`/admin/artisans/${artisan._id}`)}
                       className="text-[#272822] hover:text-[#3E3D32] self-end"
                     >
                       View
@@ -230,7 +248,9 @@ function AdminArtisansListPage() {
 
       {filteredArtisans.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-          <p className="text-gray-500">No artisans found matching your criteria</p>
+          <p className="text-gray-500">
+            No artisans found matching your criteria
+          </p>
         </div>
       )}
     </div>
