@@ -311,7 +311,7 @@ function AdminVerificationPage() {
                         <div>{statusBadge(request.verificationStatus)}</div>
                         <button
                           onClick={() => handleReview(request)}
-                          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition duration-200"
+                          className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition duration-200"
                         >
                           Review
                         </button>
@@ -395,7 +395,7 @@ function AdminVerificationPage() {
                       <div className="pt-2">
                         <button
                           onClick={() => handleReview(request)}
-                          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition duration-200"
+                          className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition duration-200"
                         >
                           Review Request
                         </button>

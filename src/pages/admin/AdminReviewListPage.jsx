@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-// import { AdminReview } from "../../data/dummyData";
 import { useGetReviews } from "../../queries/reviewsQueries";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, ChevronRight } from "lucide-react";
 
 function AdminReviewListPage() {
   const navigate = useNavigate();
@@ -65,20 +64,20 @@ function AdminReviewListPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-indigo-600">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-indigo-600">
           Review Management
         </h1>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <input
             type="text"
             placeholder="Search reviews..."
-            className="px-4 py-2 border border-gray-300 rounded-lg"
+            className="px-4 py-2 border border-gray-300 rounded-lg w-full"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <select
-            className="px-4 py-2 border border-gray-300 rounded-lg"
+            className="px-4 py-2 border border-gray-300 rounded-lg w-full sm:w-auto"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
@@ -90,7 +89,8 @@ function AdminReviewListPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {/* Desktop Table */}
+      <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -214,6 +214,81 @@ function AdminReviewListPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {filteredReviews.map((review) => {
+          const status = getStatus(review.rating);
+          return (
+            <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex items-center">
+                  <img
+                    className="h-10 w-10 rounded-full object-cover mr-3"
+                    src={review?.userProfilePic}
+                    alt={review?.userName}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/profiles/default-user.jpg";
+                    }}
+                  />
+                  <div>
+                    <h3 className="font-medium text-gray-900">{review?.userName}</h3>
+                    <p className="text-xs text-gray-500">
+                      {new Date(review.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className={`px-2 py-1 text-xs font-semibold rounded-full
+                  ${status === "Excellent" ? "bg-green-100 text-green-800" : ""}
+                  ${status === "Fair" ? "bg-yellow-100 text-yellow-800" : ""}
+                  ${status === "Bad" ? "bg-red-100 text-red-800" : ""}`}
+                >
+                  {status}
+                </span>
+              </div>
+
+              <div className="flex items-center mb-2">
+                <img
+                  className="h-8 w-8 rounded-full object-cover mr-2"
+                  src={review?.artisanProfilePic}
+                  alt={review?.businessName}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/profiles/default-artisan.jpg";
+                  }}
+                />
+                <span className="text-sm font-medium">{review?.businessName}</span>
+              </div>
+
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <span
+                      key={i}
+                      className={`text-lg ${
+                        i < review.rating ? "text-yellow-500" : "text-gray-300"
+                      }`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <span className="text-xs text-gray-500">Job ID: {review.jobId}</span>
+              </div>
+
+              <button
+                onClick={() => navigate(`/admin/reviews/${review._id}`)}
+                className="w-full flex items-center justify-between mt-2 p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg"
+              >
+                <span>View Details</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
