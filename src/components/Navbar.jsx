@@ -49,7 +49,7 @@ const Navbar = () => {
               { to: "/", label: "Home" },
               { to: "/search", label: "Find Artisans" },
               { to: "/contact", label: "Contact" },
-              { to: "/safety", label: "Safety Tips" },
+              // { to: "/safety", label: "Safety Tips" },
             ].map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -148,7 +148,7 @@ const Navbar = () => {
               { to: "/", label: "Home" },
               { to: "/search", label: "Find Artisans" },
               { to: "/contact", label: "Contact" },
-              { to: "/safety", label: "Safety Tips" },
+              // { to: "/safety", label: "Safety Tips" },
             ].map(({ to, label }) => (
               <NavLink
                 key={to}

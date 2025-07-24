@@ -136,7 +136,7 @@ function AdminVerificationPage() {
         </div>
       ) : error ? (
         <div className="text-center text-red-500">
-          Failed to load verification requests.
+          No Verifcation Request Found
         </div>
       ) : (
         <>

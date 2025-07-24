@@ -14,6 +14,7 @@ import {
   X,
   ChevronDown,
   Briefcase,
+  ArrowLeft,
 } from "lucide-react";
 import { useAuth } from "../services/hooks";
 
@@ -63,16 +64,16 @@ function AdminDashboardLayout() {
       icon: <CheckCircle className="w-5 h-5" />,
       label: "Verification",
     },
-    {
-      path: "/admin/reports",
-      icon: <BarChart2 className="w-5 h-5" />,
-      label: "Reports",
-    },
-    {
-      path: "/admin/settings",
-      icon: <Settings className="w-5 h-5" />,
-      label: "Settings",
-    },
+    // {
+    //   path: "/admin/reports",
+    //   icon: <BarChart2 className="w-5 h-5" />,
+    //   label: "Reports",
+    // },
+    // {
+    //   path: "/admin/settings",
+    //   icon: <Settings className="w-5 h-5" />,
+    //   label: "Settings",
+    // },
   ];
 
   const handleLogout = () => {
@@ -164,6 +165,13 @@ function AdminDashboardLayout() {
 
           {profileDropdownOpen && (
             <div className="mt-2 py-2 bg-white rounded-lg shadow-lg border border-gray-200">
+              <button
+                onClick={() => navigate("/")}
+                className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white group"
+              >
+                <ArrowLeft className="w-4 h-4 mr-3 text-gray-500 group-hover:text-white" />
+                Back to Main Site
+              </button>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white group"
