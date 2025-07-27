@@ -4,6 +4,7 @@ import { useLogin } from "../../queries/authQueries";
 import { toast } from "react-toastify";
 import { useAuth } from "../../services/hooks";
 import { Loader2 } from "lucide-react";
+import logo from "../../assets/logo.png"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
+          <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
           <p className="text-gray-600">Login with your credentials</p>
         </div>
 
@@ -50,7 +51,8 @@ export default function LoginPage() {
           <div>
             <label
               className="block text-gray-700 font-medium mb-1"
-              htmlFor="email">
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -72,13 +74,15 @@ export default function LoginPage() {
             <div className="flex justify-between items-center mb-1">
               <label
                 className="block text-gray-700 font-medium"
-                htmlFor="password">
+                htmlFor="password"
+              >
                 Password
               </label>
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm  text-[#4b158d] hover:underline">
+                className="text-sm  text-[#4b158d] hover:underline"
+              >
                 Forgot password?
               </button>
             </div>
@@ -99,7 +103,8 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg flex justify-center bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition">
+            className="w-full py-3 rounded-lg flex justify-center bg-[#4b158d] text-white font-medium hover:bg-[#aa47bc] transition"
+          >
             {isSubmitting ? (
               <Loader2 className="animate-spin text-center" />
             ) : (
@@ -115,7 +120,8 @@ export default function LoginPage() {
             <button
               onClick={() => navigate("/signup")}
               type="button"
-              className=" text-[#4b158d] font-medium hover:underline">
+              className=" text-[#4b158d] font-medium hover:underline"
+            >
               Sign up here
             </button>
           </p>

@@ -81,7 +81,7 @@ const CategorySection = () => {
 
         <div className="text-center mt-12">
           <Link
-            to="/categories"
+            to="/search"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 shadow-sm"
           >
             View All Categories

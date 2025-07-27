@@ -64,6 +64,11 @@ function AdminDashboardLayout() {
       icon: <CheckCircle className="w-5 h-5" />,
       label: "Verification",
     },
+    {
+      path: "/admin/user/jobs",
+      icon: <Briefcase className="w-5 h-5" />,
+      label: "User Jobs",
+    },
     // {
     //   path: "/admin/reports",
     //   icon: <BarChart2 className="w-5 h-5" />,

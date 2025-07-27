@@ -60,17 +60,17 @@ const ArtisanCard = ({ artisan }) => {
     return (
       <div
         className={`absolute top-2 right-2 text-white px-2 py-1 rounded-full flex items-center text-xs font-medium shadow-sm ${
-          artisan.verificationStatus === "verified"
+          artisan.verificationStatus === "Pending"
             ? "bg-[#432dd7]"
             : "bg-[#e1a816]"
         }`}
       >
-        {artisan.verificationStatus === "verified" ? (
+        {artisan.verificationStatus === "Pending" ? (
           <BadgeCheck size={14} className="mr-1" />
         ) : (
           <ShieldAlert size={14} className="mr-1" />
         )}
-        {artisan.verificationStatus === "verified" ? "Verified" : "Unverified"}
+        {artisan.verificationStatus === "Pending" ? "Verified" : "Unverified"}
       </div>
     );
   };

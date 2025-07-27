@@ -156,13 +156,13 @@ const PublicArtisanProfilePage = () => {
                   <span className="hidden md:inline text-gray-300">•</span>
                   <span
                     className={`px-2 py-1 rounded-full text-xs md:text-sm ${
-                      artisan.verificationStatus === "Verified"
+                      artisan.verificationStatus === "Pending"
                         ? "bg-green-100 text-green-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     <i className="fas fa-badge-check mr-1"></i>
-                    {artisan.verificationStatus === "Verified"
+                    {artisan.verificationStatus === "Pending"
                       ? "Verified"
                       : "Not Verified"}
                   </span>
