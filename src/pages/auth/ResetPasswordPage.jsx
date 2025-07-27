@@ -4,6 +4,7 @@ import { useResetPassword } from "../../queries/authQueries";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
 import { useQueryState } from "nuqs";
+import logo from "../../assets/logo.png"
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
+            <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
           <p className="text-gray-600">Reset your password</p>
         </div>
 

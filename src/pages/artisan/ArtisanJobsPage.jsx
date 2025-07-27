@@ -9,49 +9,91 @@ const ArtisanJobsPage = () => {
   const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
   const [showDeclineModal, setShowDeclineModal] = useState(false);
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
-  const { register, handleSubmit, reset } = useForm();
+  const [isDeclineChecked, setIsDeclineChecked] = useState(false);
+  const [isAcceptChecked, setIsAcceptChecked] = useState(false);
+  const [isCompleteChecked, setIsCompleteChecked] = useState(false);
+  const { register, handleSubmit, reset, watch } = useForm();
 
   const currentArtisanId = "art_001";
 
   useEffect(() => {
+    // Filter jobs for the current artisan and deduplicate by job ID
     const artisanJobsData = artisanJobs.filter(
       (job) => job.artisanId === currentArtisanId
     );
-    setJobs(artisanJobsData);
+    // Deduplicate jobs based on job ID
+    const uniqueJobs = Array.from(
+      new Map(artisanJobsData.map((job) => [job.id, job])).values()
+    );
+    setJobs(uniqueJobs);
   }, []);
 
-  const handleDecline = (data) => {
+  const handleDecline = async (data) => {
     if (!selectedJobId) return;
 
-    const updatedJobs = jobs.map((job) =>
-      job.id === selectedJobId
-        ? {
-            ...job,
-            jobStatus: "declined",
-            declineReason: data.reason,
-          }
-        : job
+    // Backend integration point: Send decline request to the server
+    // Example: await axios.post(`/api/jobs/${selectedJobId}/decline`, { declineReason: data.declineReason });
+    // This updates jobStatus to "declined" and sets declineReason in the backend
+    setJobs((prevJobs) =>
+      prevJobs.map((job) =>
+        job.id === selectedJobId
+          ? {
+              ...job,
+              jobStatus: "declined",
+              declineReason: data.declineReason,
+            }
+          : job
+      )
     );
-
-    setJobs(updatedJobs);
     setShowDeclineModal(false);
     setSelectedJobId(null);
+    setIsDeclineChecked(false);
     reset();
   };
 
-  const handleAcceptJob = (jobId) => {
-    const updatedJobs = jobs.map((job) =>
-      job.id === jobId ? { ...job, jobStatus: "accepted" } : job
+  const handleAccept = async () => {
+    if (!selectedJobId || !isAcceptChecked) return;
+
+    // Backend integration point: Send accept request to the server
+    // Example: await axios.post(`/api/jobs/${selectedJobId}/accept`);
+    // This updates jobStatus to "accepted" in the backend
+    setJobs((prevJobs) =>
+      prevJobs.map((job) =>
+        job.id === selectedJobId
+          ? {
+              ...job,
+              jobStatus: "accepted",
+            }
+          : job
+      )
     );
-    setJobs(updatedJobs);
+    setShowAcceptModal(false);
+    setSelectedJobId(null);
+    setIsAcceptChecked(false);
   };
 
-  const handleCompleteJob = (jobId) => {
-    const updatedJobs = jobs.map((job) =>
-      job.id === jobId ? { ...job, jobStatus: "completed" } : job
+  const handleComplete = async () => {
+    if (!selectedJobId || !isCompleteChecked) return;
+
+    // Backend integration point: Send complete request to the server
+    // Example: await axios.post(`/api/jobs/${selectedJobId}/complete`);
+    // This updates jobStatus to "completed" in the backend
+    setJobs((prevJobs) =>
+      prevJobs.map((job) =>
+        job.id === selectedJobId
+          ? {
+              ...job,
+              jobStatus: "completed",
+            }
+          : job
+      )
     );
-    setJobs(updatedJobs);
+    setShowCompleteModal(false);
+    setSelectedJobId(null);
+    setIsCompleteChecked(false);
   };
 
   const statusIcons = {
@@ -75,12 +117,12 @@ const ArtisanJobsPage = () => {
   };
 
   const filteredJobs = jobs.filter((job) => {
-  if (activeTab === "completed") return job.jobStatus === "completed";
-  if (activeTab === "active") return job.jobStatus === "accepted"; // Maps 'active' tab to 'accepted' status
-  if (activeTab === "cancelled") return job.jobStatus === "cancelled";
-  if (activeTab === "declined") return job.jobStatus === "declined";
-  return job.jobStatus === "pending";
-});
+    if (activeTab === "completed") return job.jobStatus === "completed";
+    if (activeTab === "active") return job.jobStatus === "accepted";
+    if (activeTab === "cancelled") return job.jobStatus === "orcancelled";
+    if (activeTab === "declined") return job.jobStatus === "declined";
+    return job.jobStatus === "pending";
+  });
 
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800",
@@ -100,10 +142,10 @@ const ArtisanJobsPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
-      {/* Decline Job Modal - Consistent with UserJobsPage */}
+      {/* Decline Job Modal */}
       {showDeclineModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xs">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
                 Decline Job Request
@@ -111,6 +153,7 @@ const ArtisanJobsPage = () => {
               <button
                 onClick={() => {
                   setShowDeclineModal(false);
+                  setIsDeclineChecked(false);
                   reset();
                 }}
                 className="text-gray-500 hover:text-gray-700"
@@ -133,18 +176,37 @@ const ArtisanJobsPage = () => {
             </div>
             <form onSubmit={handleSubmit(handleDecline)}>
               <div className="mb-4">
+                <div className="flex items-start mb-3">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="confirmDecline"
+                      type="checkbox"
+                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                      checked={isDeclineChecked}
+                      onChange={(e) => setIsDeclineChecked(e.target.checked)}
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label
+                      htmlFor="confirmDecline"
+                      className="font-medium text-gray-700"
+                    >
+                      I confirm I want to decline this job
+                    </label>
+                  </div>
+                </div>
                 <label
-                  htmlFor="reason"
+                  htmlFor="declineReason"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Why are you declining this job?
+                  Reason for declining (required)
                 </label>
                 <textarea
-                  id="reason"
-                  rows={4}
+                  id="declineReason"
+                  rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                   placeholder="I need to decline because..."
-                  {...register("reason", { required: "Reason is required" })}
+                  {...register("declineReason", { required: "Reason is required" })}
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -152,15 +214,17 @@ const ArtisanJobsPage = () => {
                   type="button"
                   onClick={() => {
                     setShowDeclineModal(false);
+                    setIsDeclineChecked(false);
                     reset();
                   }}
                   className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition text-sm sm:text-base"
                 >
-                  Go Back
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition text-sm sm:text-base"
+                  disabled={!isDeclineChecked || !watch("declineReason")}
                 >
                   Confirm Decline
                 </button>
@@ -170,7 +234,156 @@ const ArtisanJobsPage = () => {
         </div>
       )}
 
-      {/* Header Section - Consistent Styling */}
+      {/* Accept Job Modal */}
+      {showAcceptModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Accept Job Request
+              </h3>
+              <button
+                onClick={() => {
+                  setShowAcceptModal(false);
+                  setIsAcceptChecked(false);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="mb-6">
+              <div className="flex items-start">
+                <div className="flex items-center h-5">
+                  <input
+                    id="terms"
+                    type="checkbox"
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    checked={isAcceptChecked}
+                    onChange={(e) => setIsAcceptChecked(e.target.checked)}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="terms" className="font-medium text-gray-700">
+                    I confirm that I can complete this job as requested
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAcceptModal(false);
+                  setIsAcceptChecked(false);
+                }}
+                className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition text-sm sm:text-base"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleAccept}
+                className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition text-sm sm:text-base"
+                disabled={!isAcceptChecked}
+              >
+                Confirm Acceptance
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Complete Job Modal */}
+      {showCompleteModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Mark Job as Completed
+              </h3>
+              <button
+                onClick={() => {
+                  setShowCompleteModal(false);
+                  setIsCompleteChecked(false);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="mb-6">
+              <div className="flex items-start">
+                <div className="flex items-center h-5">
+                  <input
+                    id="completionConfirmed"
+                    type="checkbox"
+                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                    checked={isCompleteChecked}
+                    onChange={(e) => setIsCompleteChecked(e.target.checked)}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label
+                    htmlFor="completionConfirmed"
+                    className="font-medium text-gray-700"
+                  >
+                    I confirm that I have fully completed this job
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCompleteModal(false);
+                  setIsCompleteChecked(false);
+                }}
+                className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition text-sm sm:text-base"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleComplete}
+                className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition text-sm sm:text-base"
+                disabled={!isCompleteChecked}
+              >
+                Confirm Completion
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header Section */}
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
@@ -178,7 +391,8 @@ const ArtisanJobsPage = () => {
               My Job Requests
             </h1>
             <p className="text-gray-600 text-sm sm:text-base mt-1">
-              Kwame's Plumbing Services • kwame.plumbing@example.com
+              {jobs[0]?.artisan?.businessName || "Business Name"} •{" "}
+              {jobs[0]?.artisan?.email || "artisan@example.com"}
             </p>
           </div>
           <button
@@ -189,7 +403,7 @@ const ArtisanJobsPage = () => {
           </button>
         </div>
 
-        {/* Status Tabs - Same Scrollable Style */}
+        {/* Status Tabs */}
         <div className="relative">
           <div className="flex overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
             <div className="flex space-x-1">
@@ -221,9 +435,9 @@ const ArtisanJobsPage = () => {
         </div>
       </div>
 
-      {/* Job Cards - Consistent Card Design */}
+      {/* Job Cards */}
       {filteredJobs.length === 0 ? (
-        <div className="bg-white rounded-xl border  border-gray-200 p-6 sm:p-8 text-center">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 text-center">
           <div className="max-w-md mx-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -254,7 +468,7 @@ const ArtisanJobsPage = () => {
           {filteredJobs.map((job) => (
             <div
               key={job.id}
-              className="bg-white rounded-xl border border-gray-200 shadow-2xl hover:shadow-sm transition-shadow overflow-hidden"
+              className="bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-sm transition-shadow overflow-hidden"
             >
               <div className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
@@ -300,7 +514,48 @@ const ArtisanJobsPage = () => {
                   {job.description}
                 </p>
 
-                {/* Customer Information - Same Layout as UserJobsPage */}
+                {/* Job Images
+                {job.images && job.images.length > 0 && (
+                  <div className="mb-4 flex gap-2 overflow-x-auto">
+                    {job.images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Job image ${index + 1}`}
+                        className="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded-md"
+                      />
+                    ))}
+                  </div>
+                )} */}
+
+                {/* Completion Confirmation Status */}
+                {job.jobStatus === "completed" && (
+                  <div className="mb-4">
+                    <div
+                      className={`p-2 sm:p-3 rounded-lg text-sm ${
+                        job.confirmCompleted
+                          ? "bg-green-50 text-green-700"
+                          : "bg-yellow-50 text-yellow-700"
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        {job.confirmCompleted ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4 mr-2" />
+                            <span>Client has confirmed job completion</span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="h-4 w-4 mr-2" />
+                            <span>Waiting for client to confirm completion</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Customer Information */}
                 {job.user && (
                   <div className="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                     <div className="flex items-center mb-2 sm:mb-3">
@@ -375,7 +630,7 @@ const ArtisanJobsPage = () => {
                   </div>
                 )}
 
-                {/* Action Buttons - Same Style */}
+                {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 pt-3 sm:pt-4 border-t border-gray-100">
                   <button
                     onClick={() => navigate(`/artisan/jobs/view/${job.id}`)}
@@ -396,7 +651,10 @@ const ArtisanJobsPage = () => {
                         Decline Job
                       </button>
                       <button
-                        onClick={() => handleAcceptJob(job.id)}
+                        onClick={() => {
+                          setSelectedJobId(job.id);
+                          setShowAcceptModal(true);
+                        }}
                         className="px-2.5 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
                       >
                         Accept Job
@@ -406,10 +664,22 @@ const ArtisanJobsPage = () => {
 
                   {job.jobStatus === "accepted" && (
                     <button
-                      onClick={() => handleCompleteJob(job.id)}
+                      onClick={() => {
+                        setSelectedJobId(job.id);
+                        setShowCompleteModal(true);
+                      }}
                       className="px-2.5 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
                     >
                       Mark as Completed
+                    </button>
+                  )}
+
+                  {job.jobStatus === "completed" && job.reviewId && (
+                    <button
+                      onClick={() => navigate(`/artisan/jobs/${job.id}/review`)}
+                      className="px-2.5 py-1 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                    >
+                      View Review
                     </button>
                   )}
                 </div>

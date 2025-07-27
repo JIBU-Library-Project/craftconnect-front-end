@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForgotPassword } from "../../queries/authQueries";
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
+import logo from "../../assets/logo.png"
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#ffffff] /80">
         {/* Header */}
         <div className="flex flex-col items-center space-y-1 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">CraftConnect</h1>
+            <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
           <p className="text-gray-600">Forgot your password?</p>
           <p className="text-gray-600 text-sm text-center">
             Enter your email address below and we will send you a link to reset

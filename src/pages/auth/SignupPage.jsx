@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSignUp } from "../../queries/authQueries";
 import { toast } from "react-toastify";
+import logo from "../../assets/logo.png"
 
 export default function SignupPage() {
   const [role, setRole] = useState("User");
@@ -60,7 +61,7 @@ export default function SignupPage() {
       <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#fffffffe] /90">
         {/* Title */}
         <div className="flex flex-col items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-700">CraftConnect</h1>
+         <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
           <p className="text-gray-600">Create your account</p>
         </div>
 

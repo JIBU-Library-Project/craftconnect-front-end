@@ -863,6 +863,7 @@ export const userJobs = [
     jobStatus: "declined",
     declineReason: "",
     cancellationReason: "I have an urgent meeting to attend",
+    confirmCompleted: false,
     images: [
       "https://images.unsplash.com/photo-1600566752355-35792bedcfea",
       "https://images.unsplash.com/photo-1621544402532-78c290378588",
@@ -887,6 +888,7 @@ export const userJobs = [
     artisanId: "art_456",
     jobStatus: "completed",
     declineReason: "",
+    confirmCompleted: false,
     cancellationReason: "",
     images: [
       "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae",
@@ -911,9 +913,9 @@ export const userJobs = [
     location: "Accra, Cantonments",
     userId: "user_123",
     artisanId: "art_321",
-    jobStatus: "cancelled",
-    declineReason:
-      "I have a meeting coming up on the dude date of the job requested",
+    confirmCompleted: false,
+    jobStatus: "pending",
+    declineReason: "",
     cancellationReason: "",
     images: [
       "https://images.unsplash.com/photo-1622372738946-62e02505feb3",
@@ -947,7 +949,8 @@ export const artisanJobs = [
     location: "Accra, Osu",
     userId: "user_501",
     artisanId: "art_001",
-    jobStatus: "accepted",
+    confirmCompleted: false, // true or false
+    jobStatus: "accepted", // "declined", "accepted" , cancelled , completed
     declineReason: "",
     cancellationReason: "",
     images: [
@@ -962,11 +965,11 @@ export const artisanJobs = [
     },
   },
   {
-    id: "job-101",
+    id: "job-102",
     businessName: "Babs Plumbing Services",
     artisanName: "Kwame Asante",
     artisanLocation: "Accra, East Legon",
-    title: "Kitchen Plumbing Repair",
+    title: "Washroom Plumbing Repair",
     description:
       "Client needs help with a leaking kitchen sink pipe. The leak is causing water damage to cabinets below. Requires pipe joint repair or replacement.",
     budget: "GHS 300",
@@ -975,6 +978,7 @@ export const artisanJobs = [
     location: "Accra, Osu",
     userId: "user_501",
     artisanId: "art_001",
+    confirmCompleted: false,
     jobStatus: "pending",
     declineReason: "",
     cancellationReason: "",
@@ -999,6 +1003,7 @@ export const artisanJobs = [
     description:
       "Client requires painting of two bedrooms with minor wall crack repairs before painting. Preference for white and cream colours.",
     budget: "GHS 600",
+    confirmCompleted: true,
     scheduledAt: "2023-11-20T09:30:00Z",
     createdAt: "2023-11-15T12:00:00Z",
     location: "Takoradi, Anaji",
@@ -1018,7 +1023,7 @@ export const artisanJobs = [
     },
   },
   {
-    id: "job-103",
+    id: "job-104",
     businessName: "Esi Paintworks",
     artisanName: "Esi Appiah",
     artisanLocation: "Takoradi, Anaji",
@@ -1031,6 +1036,7 @@ export const artisanJobs = [
     location: "Takoradi, Anaji",
     userId: "user_503",
     artisanId: "art_001",
+    confirmCompleted: false,
     jobStatus: "declined",
     declineReason:
       "I have a pending job, I can't take on this work at the moment",

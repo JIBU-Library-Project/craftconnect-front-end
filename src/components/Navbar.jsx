@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
 import { useAuth } from "../services/hooks";
+import logo from "../assets/logo.png"
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -40,7 +41,11 @@ const Navbar = () => {
             to="/"
             className="text-xl font-bold flex items-center text-gray-900"
           >
-            CraftConnect
+            <img
+              src={logo} 
+              alt={`CraftConnect`}
+              className=" w-45 "
+            />
           </Link>
 
           {/* Desktop Nav Links */}
