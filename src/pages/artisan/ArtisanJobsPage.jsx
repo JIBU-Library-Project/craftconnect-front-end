@@ -206,7 +206,9 @@ const ArtisanJobsPage = () => {
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                   placeholder="I need to decline because..."
-                  {...register("declineReason", { required: "Reason is required" })}
+                  {...register("declineReason", {
+                    required: "Reason is required",
+                  })}
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -395,12 +397,6 @@ const ArtisanJobsPage = () => {
               {jobs[0]?.artisan?.email || "artisan@example.com"}
             </p>
           </div>
-          <button
-            onClick={() => navigate("/artisan/profile/edit")}
-            className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm text-sm sm:text-base text-center"
-          >
-            Edit Profile
-          </button>
         </div>
 
         {/* Status Tabs */}
@@ -547,7 +543,9 @@ const ArtisanJobsPage = () => {
                         ) : (
                           <>
                             <Clock className="h-4 w-4 mr-2" />
-                            <span>Waiting for client to confirm completion</span>
+                            <span>
+                              Waiting for client to confirm completion
+                            </span>
                           </>
                         )}
                       </div>

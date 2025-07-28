@@ -1,6 +1,7 @@
 // src/components/Footer.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png"
 
 const Footer = () => {
   return (
@@ -12,7 +13,11 @@ const Footer = () => {
           <div className="md:col-span-2 flex flex-col space-y-4">
             {/* PLACE YOUR LOGO HERE */}
             <div className="text-2xl font-bold text-indigo-500">
-              CraftConnect
+         <img
+                      src={logo} 
+                      alt={`CraftConnect`}
+                      className=" w-45 "
+                    />
             </div>
             <p className="text-sm text-gray-600 max-w-sm">
               Connecting you with trusted, verified artisans for all your home

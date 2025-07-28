@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSignUp } from "../../queries/authQueries";
 import { toast } from "react-toastify";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
 
 export default function SignupPage() {
   const [role, setRole] = useState("User");
@@ -23,20 +23,105 @@ export default function SignupPage() {
   const craftOptions = [
     "Plumber",
     "Electrician",
-    "Tailor",
     "Carpenter",
-    "Mason",
     "Painter",
+    "Tailor",
+    "Mason",
+    "Wood Carver",
     "Welder",
+    "Steel Bender",
+    "Tiler",
+    "POP Designer",
+    "Interior Decorator",
     "Hairdresser",
+    "Barber",
+    "Auto Mechanic",
+    "Spray Painter",
+    "Aluminum Fabricator",
+    "Glass Installer",
     "Shoe Maker",
+    "Bead Maker",
     "Blacksmith",
-    "Potter",
-    "Weaver",
-    "Jeweler",
-    "Baker",
-    "Mechanic",
-    "Cooker",
+    "Dry Cleaner",
+    "Satellite Installer",
+    "Phone Repairer",
+    "Computer Repairer",
+    "CCTV Installer",
+    "Fashion Designer",
+    "Upholsterer",
+    "Wallpaper Installer",
+    "Block Moulder",
+    "Ceiling Installer",
+    "Wig Maker",
+    "Tile Cleaner",
+    "Goldsmith",
+    "Sign Writer",
+    "Mechanic Electrician",
+    "Motorbike Repairer",
+    "Chainsaw Operator",
+    "Panel Beater",
+    "Ladder Fabricator",
+    "Leather Worker",
+    "Glass Cutter",
+    "Metal Gate Fabricator",
+    "DSTV Installer",
+    "Event Decorator",
+    "Generator Repairer",
+    "Laundry Worker",
+    "Roofer",
+    "Scaffolder",
+    "Truck Mechanic",
+    "Forklift Operator",
+    "Plasterboard Installer",
+    "Sound System Installer",
+    "DJ",
+    "Makeup Artist",
+    "Caterer",
+    "Pastry Baker",
+    "Butcher",
+    "Fish Smoker",
+    "Basket Weaver",
+    "Mat Weaver",
+    "Cane Furniture Maker",
+    "Grill Fabricator",
+    "Water Pump Installer",
+    "Car Air Conditioner Repairer",
+    "Window Blind Installer",
+    "Gate Installer",
+    "Fumigation Expert",
+    "Refrigeration Technician",
+    "Washing Machine Repairer",
+    "Electronic Technician",
+    "Mobile Money Agent",
+    "Printer Repairer",
+    "Auto Electrician",
+    "Sculptor",
+    "Portrait Artist",
+    "Bricklayer",
+    "Electric Fence Installer",
+    "Solar Panel Installer",
+    "Borehole Driller",
+    "Wallpaper Designer",
+    "Curtain Installer",
+    "Seamstress",
+    "Embroidery Designer",
+    "Hat Maker",
+    "Signboard Installer",
+    "LED Light Installer",
+    "Fuel Pump Technician",
+    "Septic Tank Cleaner",
+    "Tiles Designer",
+    "Charcoal Producer",
+    "Ice Block Producer",
+    "Candle Maker",
+    "Soaps & Detergent Maker",
+    "Pest Control Technician",
+    "Palm Kernel Oil Processor",
+    "Shea Butter Processor",
+    "Livestock Pen Builder",
+    "Greenhouse Builder",
+    "Gutter Cleaner",
+    "Other",
   ];
 
   const onSubmit = async (data) => {
@@ -61,7 +146,7 @@ export default function SignupPage() {
       <div className="w-full max-w-xl p-6 rounded-xl shadow-md backdrop-blur-3xl outline outline-amber-50 bg-[#fffffffe] /90">
         {/* Title */}
         <div className="flex flex-col items-center mb-6">
-         <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
+          <img src={logo} alt={`CraftConnect`} className=" w-45 pb-5 pt-5 " />
           <p className="text-gray-600">Create your account</p>
         </div>
 
@@ -75,7 +160,8 @@ export default function SignupPage() {
                 role === r
                   ? "bg-[#4b158d] text-white hover:bg-[#aa47bc] "
                   : "bg-[#262722]/15 text-gray-700 hover:bg-[#ddddddda] "
-              }`}>
+              }`}
+            >
               {r === "User" ? "User/HomeOwner" : "Artisan"}
             </button>
           ))}
@@ -145,7 +231,8 @@ export default function SignupPage() {
                   {...register("craft", {
                     required: "Please select your primary craft",
                   })}
-                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                  className="w-full px-4 py-3 rounded-lg bg-[#292b2a]/15  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
                   <option value="">Select your craft</option>
                   {craftOptions.map((craft) => (
                     <option key={craft} value={craft}>
@@ -242,7 +329,8 @@ export default function SignupPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition">
+            className="w-full bg-[#4b158d] text-white py-3 rounded-lg font-medium hover:bg-[#aa47bc] transition"
+          >
             Sign Up
           </button>
 
@@ -252,7 +340,8 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className=" text-[#4b158d] font-medium ">
+              className=" text-[#4b158d] font-medium "
+            >
               Login here
             </button>
           </p>

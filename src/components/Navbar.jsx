@@ -136,7 +136,11 @@ const Navbar = () => {
               className="text-lg font-bold text-gray-900"
               onClick={toggleMobileMenu}
             >
-              CraftConnect
+              <img
+              src={logo} 
+              alt={`CraftConnect`}
+              className=" w-45 "
+            />
             </Link>
             <button
               onClick={toggleMobileMenu}
