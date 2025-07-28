@@ -3,12 +3,22 @@ import { useNavigate } from "react-router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const locations = [
-  "Accra",
-  "Kumasi",
-  "Tema",
-  "Takoradi",
-  "Cape Coast",
-  // Easily add more here later
+  "Greater Accra",
+  "Ashanti",
+  "Eastern",
+  "Western",
+  "Central",
+  "Volta",
+  "Northern",
+  "Upper East",
+  "Upper West",
+  "Bono",
+  "Bono East",
+  "Ahafo",
+  "Western North",
+  "Oti",
+  "Savannah",
+  "North East",
 ];
 
 const SearchBar = () => {

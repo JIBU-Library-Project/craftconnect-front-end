@@ -101,7 +101,7 @@ const ArtisanReviewsPage = () => {
           <p className="text-gray-600 mt-2">Feedback from your clients</p>
         </div>
         <Link
-          to="/artisan/dashboard"
+          to="/artisan"
           className="mt-4 md:mt-0 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium text-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">

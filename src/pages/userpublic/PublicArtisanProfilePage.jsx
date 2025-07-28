@@ -14,6 +14,7 @@ const PublicArtisanProfilePage = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isJobRequestModalOpen, setIsJobRequestModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null); // State for lightbox
   const { data, isLoading, error } = useGetSingleArtisan(id);
   const {
     register,
@@ -23,8 +24,6 @@ const PublicArtisanProfilePage = () => {
   } = useForm();
 
   const postReviewMutation = usePostReviews();
-  // Use single artisan query instead of fetching all
-
   const artisan = data?.artisan;
 
   // Calculate rating distribution with proper null checks
@@ -58,28 +57,18 @@ const PublicArtisanProfilePage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Prepare review data
       const reviewData = {
         artisanId: id,
         rating: rating,
         comment: data.comment,
       };
-
-      // Submit review using the mutation
       await postReviewMutation.mutateAsync(reviewData);
-
-      // Success handling
       console.log("Review submitted successfully!");
       reset();
       setRating(0);
       setHover(0);
-
-      // Optional: Show success message
-      // You can add a toast notification here
     } catch (error) {
       console.error("Error submitting review:", error);
-      // Optional: Show error message
-      // You can add error handling/toast here
     }
   };
 
@@ -89,6 +78,16 @@ const PublicArtisanProfilePage = () => {
     if (rating === 3) return "Fair";
     if (rating === 2) return "Poor";
     return "Bad";
+  };
+
+  // Handle image click to open lightbox
+  const openLightbox = (image) => {
+    setSelectedImage(image);
+  };
+
+  // Close lightbox
+  const closeLightbox = () => {
+    setSelectedImage(null);
   };
 
   if (isLoading) {
@@ -123,7 +122,6 @@ const PublicArtisanProfilePage = () => {
       <div className="loginpage bg-gradient-to-r from-neutral-800 to-neutral-700 text-white py-8 md:py-12">
         <div className="container mx-auto pt-7 px-4 md:px-6 min-h-60">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            {/* Profile Picture */}
             <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
                 src={artisan.profilePic || "/profiles/default-artisan.jpg"}
@@ -135,16 +133,11 @@ const PublicArtisanProfilePage = () => {
                 }}
               />
             </div>
-
-            {/* Profile Info */}
             <div className="text-center md:text-left flex-1 space-y-4">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-6">
-                {/* Business Name */}
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-center md:text-left">
                   {artisan.businessName}
                 </h1>
-
-                {/* Ratings and Verification */}
                 <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
                   <div className="flex items-center">
                     <RatingStars rating={artisan.rating || 0} size="md" />
@@ -168,8 +161,6 @@ const PublicArtisanProfilePage = () => {
                   </span>
                 </div>
               </div>
-
-              {/* Meta Info */}
               <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-5 text-sm md:text-base mt-3">
                 <div className="flex items-center text-gray-200">
                   <MapPin className="w-4 h-4 mr-1.5 md:mr-2" />
@@ -184,12 +175,10 @@ const PublicArtisanProfilePage = () => {
                   <span> GHS {artisan.hourlyRate || "0"}/hr</span>
                 </div>
               </div>
-
-              {/* Action Buttons */}
               <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3 pt-2">
                 <button
                   onClick={() => setIsJobRequestModalOpen(true)}
-                  className="bg-neutral-100 hover:bg-neutral-200 text-neutral-800 px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
+                  className="bg-neutral-100 hover:bg-neutral-200 hover:cursor-pointer  text-neutral-800 px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
                 >
                   <i className="fas fa-briefcase mr-1.5"></i> Request Service
                 </button>
@@ -205,7 +194,7 @@ const PublicArtisanProfilePage = () => {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
+                    className="bg-green-500 hover:bg-green-600 hover:cursor-pointer  text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
                   >
                     <i className="fab fa-whatsapp mr-1.5"></i> WhatsApp
                   </a>
@@ -216,7 +205,7 @@ const PublicArtisanProfilePage = () => {
                 )}
                 <a
                   href={`tel:${artisan.whatsapp || artisan.phone}`}
-                  className="bg-neutral-900 hover:bg-neutral-800 text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
+                  className="bg-neutral-900 border-[#686868] border hover:bg-neutral-800 hover:cursor-pointer text-white px-3 py-1.5 rounded-md flex items-center text-sm md:text-base font-medium transition-colors"
                 >
                   <i className="fas fa-phone mr-1.5"></i> Call
                 </a>
@@ -229,7 +218,6 @@ const PublicArtisanProfilePage = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          {/* Modern Tabs */}
           <div className="border-b border-gray-100">
             <nav className="flex overflow-x-auto no-scrollbar">
               {["overview", "portfolio", "reviews", "pricing"].map((tab) => (
@@ -257,12 +245,9 @@ const PublicArtisanProfilePage = () => {
             </nav>
           </div>
 
-          {/* Tab Content */}
           <div className="p-5 md:p-7">
-            {/* Overview Tab */}
             {activeTab === "overview" && (
               <div className="space-y-8">
-                {/* About */}
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-neutral-800">
                     About {artisan.name || artisan.businessName}
@@ -271,8 +256,6 @@ const PublicArtisanProfilePage = () => {
                     {artisan.description || "No description available"}
                   </p>
                 </div>
-
-                {/* Services Offered */}
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-neutral-800">
                     My Specialities
@@ -296,7 +279,6 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-            {/* Portfolio Tab */}
             {activeTab === "portfolio" && (
               <div className="space-y-6">
                 <h2 className="text-xl font-bold text-gray-800">
@@ -307,6 +289,7 @@ const PublicArtisanProfilePage = () => {
                     <div
                       key={index}
                       className="aspect-square bg-gray-100 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer group"
+                      onClick={() => openLightbox(image)}
                     >
                       <img
                         src={image}
@@ -329,14 +312,134 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-            {/* Reviews Tab */}
+            {/* Lightbox Modal */}
+            {/* {selectedImage && (
+              <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+                <div className="relative max-w-4xl w-full">
+                  <img
+                    src={selectedImage}
+                    alt="Full view"
+                    className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/profiles/default-project.jpg";
+                    }}
+                  />
+                  <button
+                    onClick={closeLightbox}
+                    className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )} */}
+
+            {selectedImage && (
+  <div
+    className="fixed inset-0 bg-[#2b2b2b]/90 backdrop-blur-xl bg-opacity-75 flex items-center justify-center z-50 p-4"
+    onClick={closeLightbox}
+  >
+    <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
+      <img
+        src={selectedImage}
+        alt="Full view"
+        className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "/profiles/default-project.jpg";
+        }}
+      />
+      <button
+        onClick={closeLightbox}
+        className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      {/* Navigation Arrows */}
+      {artisan.portfolio && artisan.portfolio.length > 1 && (
+        <>
+          <button
+            onClick={() => {
+              const currentIndex = artisan.portfolio.indexOf(selectedImage);
+              const prevIndex =
+                (currentIndex - 1 + artisan.portfolio.length) %
+                artisan.portfolio.length;
+              setSelectedImage(artisan.portfolio[prevIndex]);
+            }}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => {
+              const currentIndex = artisan.portfolio.indexOf(selectedImage);
+              const nextIndex = (currentIndex + 1) % artisan.portfolio.length;
+              setSelectedImage(artisan.portfolio[nextIndex]);
+            }}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
             {activeTab === "reviews" && (
               <div className="space-y-8">
                 <h2 className="text-xl font-bold text-gray-800">
                   Customer Reviews
                 </h2>
-
-                {/* Rating Summary */}
                 <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-50 p-5 rounded-lg">
                   <div className="text-center md:text-left space-y-2">
                     <div className="text-4xl md:text-5xl font-bold text-blue-600">
@@ -349,7 +452,6 @@ const PublicArtisanProfilePage = () => {
                       {artisan.reviewCount || 0} reviews
                     </div>
                   </div>
-
                   <div className="flex-grow w-full space-y-2">
                     {[5, 4, 3, 2, 1].map((rating) => (
                       <div key={rating} className="flex items-center gap-2">
@@ -371,8 +473,6 @@ const PublicArtisanProfilePage = () => {
                     ))}
                   </div>
                 </div>
-
-                {/* Review Form */}
                 <div className="bg-gray-50 p-5 rounded-lg space-y-4">
                   <h3 className="text-lg font-semibold text-gray-800">
                     Write a Review
@@ -406,7 +506,6 @@ const PublicArtisanProfilePage = () => {
                         </p>
                       )}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Your Review <span className="text-red-500">*</span>
@@ -425,7 +524,6 @@ const PublicArtisanProfilePage = () => {
                         </p>
                       )}
                     </div>
-
                     <button
                       type="submit"
                       disabled={isSubmitting || rating === 0}
@@ -437,7 +535,6 @@ const PublicArtisanProfilePage = () => {
                     >
                       {isSubmitting ? "Submitting..." : "Submit Review"}
                     </button>
-
                     {isSubmitSuccessful && (
                       <p className="text-green-600 text-sm">
                         Review submitted successfully!
@@ -445,8 +542,6 @@ const PublicArtisanProfilePage = () => {
                     )}
                   </form>
                 </div>
-
-                {/* Reviews List */}
                 <div className="space-y-6">
                   {(artisan.reviews || []).map((review) => {
                     const ratingLabel = getRatingLabel(review.rating);
@@ -501,7 +596,6 @@ const PublicArtisanProfilePage = () => {
                             })}
                           </span>
                         </div>
-
                         <div className="pl-0 sm:pl-13">
                           <p className="text-gray-600 mt-2">{review.comment}</p>
                         </div>
@@ -512,13 +606,11 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-            {/* Pricing Tab */}
             {activeTab === "pricing" && (
               <div className="space-y-6">
                 <h2 className="text-xl font-bold text-gray-800">
                   Services & Pricing
                 </h2>
-
                 <div className="grid gap-4 sm:grid-cols-2">
                   {(artisan.services || []).map((service, index) => (
                     <div
@@ -533,7 +625,6 @@ const PublicArtisanProfilePage = () => {
                           {service.description}
                         </p>
                       </div>
-
                       <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100 text-sm text-gray-700">
                         <div>
                           <span className="block font-medium">Price</span>
@@ -549,7 +640,6 @@ const PublicArtisanProfilePage = () => {
                     </div>
                   ))}
                 </div>
-
                 {artisan.pricingNotes && (
                   <div className="bg-blue-50 p-5 rounded-lg">
                     <h3 className="text-lg font-semibold text-gray-800 mb-2">
@@ -563,7 +653,6 @@ const PublicArtisanProfilePage = () => {
               </div>
             )}
 
-            {/* Report Button */}
             <div className="text-right mt-6">
               <button className="text-red-600 hover:text-red-800 text-sm flex items-center">
                 <i className="fas fa-flag mr-2"></i>Report Profile
@@ -573,7 +662,6 @@ const PublicArtisanProfilePage = () => {
         </div>
       </div>
 
-      {/* Job Request Modal */}
       <JobRequestModal
         isOpen={isJobRequestModalOpen}
         onClose={() => setIsJobRequestModalOpen(false)}
@@ -583,6 +671,7 @@ const PublicArtisanProfilePage = () => {
   );
 };
 
+// JobRequestModal remains unchanged
 const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const {
     register,
@@ -595,8 +684,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
 
   const [previewImages, setPreviewImages] = useState([]);
   const images = watch("images");
-
-  // Import and use the mutation hook
   const postJobMutation = usePostJobs();
 
   useEffect(() => {
@@ -618,7 +705,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     }
   }, [isOpen, reset]);
 
-  // Cleanup function for preview URLs
   useEffect(() => {
     return () => {
       previewImages.forEach((item) => {
@@ -630,49 +716,34 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
   const removeImage = (index) => {
     const newFiles = Array.from(images);
     newFiles.splice(index, 1);
-
     const dataTransfer = new DataTransfer();
     newFiles.forEach((file) => dataTransfer.items.add(file));
-
     setValue("images", dataTransfer.files, { shouldValidate: true });
   };
 
   const onSubmit = async (data) => {
     try {
-      // Create FormData for multipart/form-data
       const formData = new FormData();
-
-      // Append text fields
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("budget", data.budget);
       formData.append("scheduledAt", data.scheduledAt);
       formData.append("location", data.location);
-      formData.append("artisanId", artisan._id); // Include artisan ID
-
-      // Append images
+      formData.append("artisanId", artisan._id);
       if (data.images && data.images.length > 0) {
         Array.from(data.images).forEach((file, index) => {
           formData.append("images", file);
         });
       }
-
-      // Submit using the mutation
       await postJobMutation.mutateAsync(formData);
-
-      // Success handling
       console.log("Job request submitted successfully!");
       toast.success("Job Requested Successfully");
       onClose();
       reset();
       setPreviewImages([]);
-
-      // Optional: Show success message
-      // You can add a toast notification here
     } catch (error) {
       console.error("Error submitting job request:", error);
       toast.error(error.response?.data?.error || "Job request failed");
-      // You can add error handling/toast here
     }
   };
 
@@ -682,14 +753,13 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-6 md:p-8">
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+            <h2 className="text-lg md:text-xl font-semibold  text-gray-800">
               Request Service from {artisan.businessName || "Artisan"}
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-gray-600 "
               disabled={isSubmitting || postJobMutation.isPending}
             >
               <svg
@@ -707,10 +777,7 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
               </svg>
             </button>
           </div>
-
-          {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Job Title */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Job Title <span className="text-red-500">*</span>
@@ -728,8 +795,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </p>
               )}
             </div>
-
-            {/* Job Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Job Description <span className="text-red-500">*</span>
@@ -749,8 +814,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </p>
               )}
             </div>
-
-            {/* Budget */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Budget <span className="text-red-500">*</span>
@@ -783,8 +846,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </p>
               )}
             </div>
-
-            {/* Preferred Date & Time */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Preferred Date & Time <span className="text-red-500">*</span>
@@ -811,8 +872,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </p>
               )}
             </div>
-
-            {/* Location */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Location <span className="text-red-500">*</span>
@@ -830,8 +889,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </p>
               )}
             </div>
-
-            {/* Upload Images */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload Images <span className="text-red-500">*</span>
@@ -856,15 +913,12 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                       if (!files || files.length === 0) {
                         return "At least one image is required";
                       }
-
-                      // Check file size (10MB = 10 * 1024 * 1024 bytes)
                       const maxSize = 10 * 1024 * 1024;
                       for (let file of files) {
                         if (file.size > maxSize) {
                           return `File ${file.name} is too large. Maximum size is 10MB.`;
                         }
                       }
-
                       return true;
                     },
                   })}
@@ -880,7 +934,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                   {errors.images.message}
                 </p>
               )}
-
               {previewImages.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {previewImages.map((item, idx) => (
@@ -917,18 +970,6 @@ const JobRequestModal = ({ isOpen, onClose, artisan }) => {
                 </div>
               )}
             </div>
-
-            {/* Error Message */}
-            {/* {postJobMutation.isError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm text-red-600">
-                  {postJobMutation.error?.message ||
-                    "Failed to submit job request. Please try again."}
-                </p>
-              </div>
-            )} */}
-
-            {/* Action Buttons */}
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 type="button"

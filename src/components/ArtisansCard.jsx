@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BadgeCheck,
@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 const ArtisanCard = ({ artisan }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null); // State for lightbox
 
   if (!artisan || typeof artisan !== "object") {
     console.error("Invalid artisan data:", artisan);
@@ -52,6 +53,16 @@ const ArtisanCard = ({ artisan }) => {
     if (artisanId) {
       navigate(`/artisan/${artisanId}`);
     }
+  };
+
+  // Handle image click to open lightbox
+  const openLightbox = () => {
+    setSelectedImage(profilePic);
+  };
+
+  // Close lightbox
+  const closeLightbox = () => {
+    setSelectedImage(null);
   };
 
   const renderVerificationBadge = () => {
@@ -100,7 +111,8 @@ const ArtisanCard = ({ artisan }) => {
             <img
               src={profilePic}
               alt={name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover cursor-pointer"
+              onClick={openLightbox}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "/profiles/default-artisan.jpg";
@@ -118,17 +130,14 @@ const ArtisanCard = ({ artisan }) => {
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
                   {businessName}
                 </h3>
-
                 <div className="flex items-center text-gray-600 text-sm mt-1">
                   <MapPin size={14} className="mr-1 text-blue-500" />
                   {location}
                 </div>
-
                 <div className="flex items-center text-gray-600 text-sm mt-1">
                   <Hammer size={14} className="mr-1 text-emerald-500" />
                   {craft}
                 </div>
-
                 <div className="flex items-center mt-1">
                   <RatingStars rating={rating} />
                   <span className="text-gray-600 text-sm ml-2">
@@ -136,7 +145,6 @@ const ArtisanCard = ({ artisan }) => {
                   </span>
                 </div>
               </div>
-
               <div className="text-right">
                 <p className="text-sm text-gray-500">From</p>
                 <p className="text-base font-medium text-gray-800">
@@ -144,11 +152,9 @@ const ArtisanCard = ({ artisan }) => {
                 </p>
               </div>
             </div>
-
             <p className="mt-3 text-gray-600 text-sm sm:text-base line-clamp-3">
               {description}
             </p>
-
             {specialties.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
                 {specialties.slice(0, 3).map((specialty, idx) => (
@@ -162,7 +168,6 @@ const ArtisanCard = ({ artisan }) => {
               </div>
             )}
           </div>
-
           {/* Action Buttons */}
           <div className="mt-4 flex flex-wrap gap-2">
             <button
@@ -188,6 +193,47 @@ const ArtisanCard = ({ artisan }) => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={closeLightbox}
+        >
+          <div
+            className="relative max-w-2xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedImage}
+              alt="Full view profile picture"
+              className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/profiles/default-artisan.jpg";
+              }}
+            />
+            <button
+              onClick={closeLightbox}
+              className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
